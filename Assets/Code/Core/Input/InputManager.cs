@@ -22,8 +22,8 @@ namespace Core.Input
                 
             return UniTask.CompletedTask;
         }
-
-        public void GameUpdate()
+        
+        public void GameUpdate(float deltaTime)
         {
             Direction = new Vector2(
                 UnityEngine.Input.GetAxisRaw("Horizontal"),

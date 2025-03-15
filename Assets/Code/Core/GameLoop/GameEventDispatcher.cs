@@ -2,6 +2,7 @@
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
+using UnityEngine;
 
 namespace Core.GameLoop
 {
@@ -10,7 +11,8 @@ namespace Core.GameLoop
         private readonly HashSet<IInitializeListener> _initListeners = new();
         private readonly HashSet<ILoadListener> _loadListeners = new();
         private readonly HashSet<IStartListener> _startListeners = new();
-        private readonly HashSet<IUpdateListener> _tickListeners = new();
+        private readonly HashSet<IUpdateListener> _updateListeners = new();
+        private readonly HashSet<IFixedUpdateListener> _fixedUpdateListeners = new();
         private readonly HashSet<IExitListener> _exitListeners = new();
         private readonly HashSet<ISubscriber> _subscribers = new();
 
@@ -26,7 +28,15 @@ namespace Core.GameLoop
         {
             if (_isGameBooted)
             {
-                _notifyGameUpdate();
+                _notifyGameUpdate(Time.deltaTime);
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            if (_isGameBooted)
+            {
+                _notifyGameFixedUpdate(Time.fixedDeltaTime);
             }
         }
 
@@ -38,51 +48,52 @@ namespace Core.GameLoop
             }
         }
 
-        public async void AddListener(IGameListener listener)
+        public async void AddSpawnableListener(IGameListener listener)
         {
-            ProfilerMarker marker = new ProfilerMarker($"RuntimeListener: {listener.GetType().Name}");
+            ProfilerMarker marker = new($"AddSpawnableListener: {listener.GetType().Name}");
             marker.Begin();
             
-            if (listener is IInitializeListener initListener)
-            {
-                await initListener.GameInitialize();
-            }
+            if (listener is IInitializeListener initListener) await initListener.GameInitialize();
 
             if (listener is ISubscriber subscriber)
             {
                 await subscriber.Subscribe();
+                
                 _subscribers.Add(subscriber);
             }
 
-            if (listener is ILoadListener loadListener)
-            {
-                await loadListener.GameLoad();
-            }
+            if (listener is ILoadListener loadListener) await loadListener.GameLoad();
 
-            if (listener is IStartListener startListener)
-            {
-                await startListener.GameStart();
-            }
+            if (listener is IStartListener startListener) await startListener.GameStart();
 
-            if (listener is IUpdateListener tickListener) _tickListeners.Add(tickListener);
+            if (listener is IUpdateListener updateListener) _updateListeners.Add(updateListener);
+            
+            if (listener is IFixedUpdateListener fixedUpdateListener) _fixedUpdateListeners.Add(fixedUpdateListener);
 
             if (listener is IExitListener exitListener) _exitListeners.Add(exitListener);
 
             marker.End();
         }
 
-        public void RemoveListener(IGameListener listener)
+        public void RemoveSpawnableListener(IGameListener listener)
         {
-            if (listener is IUpdateListener tickListener) _tickListeners.Remove(tickListener);
+            if (listener is IUpdateListener updateListener) _updateListeners.Remove(updateListener);
+            
+            if (listener is IFixedUpdateListener fixedUpdateListener) _fixedUpdateListeners.Remove(fixedUpdateListener);
 
             if (listener is IExitListener exitListener) _exitListeners.Remove(exitListener);
 
-            if (listener is ISubscriber subscriber) subscriber.Unsubscribe();
+            if (listener is ISubscriber subscriber)
+            {
+                subscriber.Unsubscribe();
+
+                _subscribers.Remove(subscriber);
+            }
         }
-        
+
         private async void _bootGame()
         {
-            ProfilerMarker marker = new ProfilerMarker("_bootGame");
+            ProfilerMarker marker = new("_bootGame");
             marker.Begin();
 
             await _notifyGameInitialize();
@@ -109,7 +120,9 @@ namespace Core.GameLoop
 
                 if (listener is IStartListener startListener) _startListeners.Add(startListener);
 
-                if (listener is IUpdateListener tickListener) _tickListeners.Add(tickListener);
+                if (listener is IUpdateListener updateListener) _updateListeners.Add(updateListener);
+                
+                if (listener is IFixedUpdateListener fixedUpdateListener) _fixedUpdateListeners.Add(fixedUpdateListener);
 
                 if (listener is IExitListener exitListener) _exitListeners.Add(exitListener);
             }
@@ -117,7 +130,7 @@ namespace Core.GameLoop
 
         private async UniTask _notifyGameInitialize()
         {
-            ProfilerMarker marker = new ProfilerMarker("_notifyGameInitialize");
+            ProfilerMarker marker = new("_notifyGameInitialize");
             marker.Begin();
 
             foreach (IInitializeListener listener in _initListeners)
@@ -130,7 +143,7 @@ namespace Core.GameLoop
 
         private async UniTask _notifyGameLoad()
         {
-            ProfilerMarker marker = new ProfilerMarker("_notifyGameLoad");
+            ProfilerMarker marker = new("_notifyGameLoad");
             marker.Begin();
 
             foreach (ILoadListener listener in _loadListeners)
@@ -143,7 +156,7 @@ namespace Core.GameLoop
 
         private async UniTask _notifySubscribe()
         {
-            ProfilerMarker marker = new ProfilerMarker("_notifySubscribe");
+            ProfilerMarker marker = new("_notifySubscribe");
             marker.Begin();
 
             foreach (ISubscriber subscriber in _subscribers)
@@ -156,7 +169,7 @@ namespace Core.GameLoop
 
         private async UniTask _notifyGameStart()
         {
-            ProfilerMarker marker = new ProfilerMarker("_notifyGameStart");
+            ProfilerMarker marker = new("_notifyGameStart");
             marker.Begin();
 
             foreach (IStartListener listener in _startListeners)
@@ -167,15 +180,27 @@ namespace Core.GameLoop
             marker.End();
         }
 
-        private void _notifyGameUpdate()
+        private void _notifyGameUpdate(float deltaTime)
         {
-            foreach (IUpdateListener listener in _tickListeners)
+            foreach (IUpdateListener listener in _updateListeners)
             {
-                string listenerName = listener.GetType().Name;
-                ProfilerMarker marker = new ProfilerMarker($"GameUpdate: {listenerName}");
+                ProfilerMarker marker = new($"_notifyGameUpdate: {listener.GetType().Name}");
                 marker.Begin();
                 
-                listener.GameUpdate();
+                listener.GameUpdate(deltaTime);
+
+                marker.End();
+            }
+        }
+
+        private void _notifyGameFixedUpdate(float fixedDeltaTime)
+        {
+            foreach (IFixedUpdateListener listener in _fixedUpdateListeners)
+            {
+                ProfilerMarker marker = new($"_notifyGameFixedUpdate: {listener.GetType().Name}");
+                marker.Begin();
+                
+                listener.GameFixedUpdate(fixedDeltaTime);
 
                 marker.End();
             }
@@ -183,7 +208,7 @@ namespace Core.GameLoop
 
         private void _notifyGameExit()
         {
-            ProfilerMarker marker = new ProfilerMarker("_notifyGameExit");
+            ProfilerMarker marker = new("_notifyGameExit");
             marker.Begin();
 
             foreach (ISubscriber subscriber in _subscribers)

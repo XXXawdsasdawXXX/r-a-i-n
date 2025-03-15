@@ -7,13 +7,12 @@ using UnityEngine;
 
 namespace Game.Entities
 {
-    public class HeroMovement : NetworkBehaviour, IInitializeListener
+    public class HeroMovement : NetworkBehaviour, IInitializeListener, IFixedUpdateListener
     {
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private float _cameraYOffset = 4;
       
-        private Vector2 _inputDirection;
         private Camera _camera;
         private InputManager _inputManager;
         
@@ -38,17 +37,14 @@ namespace Game.Entities
             }
         }
 
-        private void Update()
+        public UniTask GameInitialize()
         {
-            if (!IsOwner)
-            {
-                return;
-            }
-
-            _inputDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            _inputManager = Container.Instance.GetService<InputManager>();
+            
+            return UniTask.CompletedTask;
         }
 
-        private void FixedUpdate()
+        public void GameFixedUpdate(float fixedDeltaTime)
         {
             if (!IsOwner)
             {
@@ -56,13 +52,6 @@ namespace Game.Entities
             }
        
             _rigidbody2D.velocity = _inputManager.Direction.normalized * _moveSpeed * (float)TimeManager.TickDelta;
-        }
-
-        public UniTask GameInitialize()
-        {
-            _inputManager = Container.Instance.GetService<InputManager>();
-            
-            return UniTask.CompletedTask;
         }
     }
 }

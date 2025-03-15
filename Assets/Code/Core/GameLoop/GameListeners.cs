@@ -29,7 +29,12 @@ namespace Core.GameLoop
 
     public interface IUpdateListener : IGameListener
     {
-        void GameUpdate();
+        void GameUpdate(float deltaTime);
+    }
+    
+    public interface IFixedUpdateListener : IGameListener
+    {
+        void GameFixedUpdate(float fixedDeltaTime);
     }
     
     public interface IExitListener : IGameListener

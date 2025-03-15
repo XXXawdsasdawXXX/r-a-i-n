@@ -888,7 +888,7 @@ GameObject:
   - component: {fileID: 469407320}
   - component: {fileID: 469407321}
   m_Layer: 0
-  m_Name: services
+  m_Name: services_local
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -942,8 +942,8 @@ MonoBehaviour:
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
-  _isNetworked: 1
-  _isSpawnable: 1
+  _isNetworked: 0
+  _isSpawnable: 0
   _isGlobal: 0
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
