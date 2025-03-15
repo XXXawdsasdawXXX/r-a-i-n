@@ -13,13 +13,13 @@ namespace Game.InteractionObjects.Activators
         [SerializeField] private GameObject _viewDisplay;
 
         private ActivatorBroadcast _activatorBroadcast;
-        
+
         public override void StartInteraction()
         {
             _viewDisplay.SetActive(!_activatorBroadcast.IsActive);
-            
+
             Log.Info($"change display state {!_activatorBroadcast.IsActive}", this);
-            
+
             base.StartInteraction();
         }
 
@@ -50,14 +50,20 @@ namespace Game.InteractionObjects.Activators
         private void OnClientRequestChanged(NetworkConnection networkConnection, ActivatorBroadcast broadcast, Channel channel)
         {
             Log.Info("On Client Request Changed", this);
-            InstanceFinder.ServerManager.Broadcast(broadcast);
-    
+            if (InstanceFinder.IsClientStarted)
+            {
+                InstanceFinder.ClientManager.Broadcast(broadcast);
+            }
+            else if (InstanceFinder.IsServerStarted)
+            {
+                InstanceFinder.ServerManager.Broadcast(broadcast);
+            }
         }
 
         private void OnServerSendChanged(ActivatorBroadcast broadcast, Channel channel)
         {
             Log.Info("On Server Send Changed", this);
-            
+
             _activatorBroadcast = broadcast;
 
             StartInteraction();
