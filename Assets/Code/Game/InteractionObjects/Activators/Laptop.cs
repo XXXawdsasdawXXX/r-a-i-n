@@ -1,68 +1,81 @@
-﻿using Core;
-using Core.GameLoop;
-using Core.Input;
-using Core.ServiceLocator;
+﻿using Core.GameLoop;
 using Cysharp.Threading.Tasks;
 using Essential;
 using FishNet;
+using FishNet.Connection;
 using UnityEngine;
 using Channel = FishNet.Transporting.Channel;
 
 namespace Game.InteractionObjects.Activators
 {
-    public class Laptop : InteractionObject, IInitializeListener, ISubscriber
+    public class Laptop : InteractionObject, ISubscriber
     {
-        private InputManager _inputManager;
+        [SerializeField] private GameObject _viewDisplay;
+
         private ActivatorBroadcast _activatorBroadcast;
         
-        public UniTask GameInitialize()
-        {
-            _inputManager = Container.Instance.GetService<InputManager>();
-            
-            Log.Info($"{_inputManager != null}", Color.blue, this);
-            
-            return UniTask.CompletedTask;
-        }
-
         public override void StartInteraction()
         {
+            _viewDisplay.SetActive(!_activatorBroadcast.IsActive);
+            
+            Log.Info($"change display state {!_activatorBroadcast.IsActive}", this);
+            
             base.StartInteraction();
         }
 
         public UniTask Subscribe()
         {
-            SubscribeToEvents(true);
+            Trigger.InteractionPerformed += OnInteractionPerformed;
+            InstanceFinder.ClientManager.RegisterBroadcast<ActivatorBroadcast>(OnServerSendChanged);
+            InstanceFinder.ServerManager.RegisterBroadcast<ActivatorBroadcast>(OnClientRequestChanged);
 
+            Log.Info("subscribe", this);
             return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()
         {
-            SubscribeToEvents(false);
-        }
-        
-        private void SubscribeToEvents(bool flag)
-        {
-            if (flag)
-            {
-                InstanceFinder.ClientManager.RegisterBroadcast<ActivatorBroadcast>(OnActivatorChanged);
-                Trigger.InteractionPerformed += OnInteractionPerformed;
-            }
-            else
-            {
-                InstanceFinder.ClientManager.UnregisterBroadcast<ActivatorBroadcast>(OnActivatorChanged);
-
-            }
+            Trigger.InteractionPerformed -= OnInteractionPerformed;
+            InstanceFinder.ClientManager.UnregisterBroadcast<ActivatorBroadcast>(OnServerSendChanged);
+            InstanceFinder.ServerManager.UnregisterBroadcast<ActivatorBroadcast>(OnClientRequestChanged);
+            Log.Info("unsubscribe", this);
         }
 
         private void OnInteractionPerformed()
         {
-            throw new System.NotImplementedException();
+            Log.Info("OnInteractionPerformed", this);
+            InstanceFinder.ServerManager.Broadcast(GetActivatorBroadcast());
         }
 
-        private void OnActivatorChanged(ActivatorBroadcast broadcast, Channel channel)
+        private void OnClientRequestChanged(NetworkConnection networkConnection, ActivatorBroadcast broadcast, Channel channel)
         {
+            Log.Info("On Client Request Changed", this);
+            InstanceFinder.ServerManager.Broadcast(broadcast);
+    
+        }
+
+        private void OnServerSendChanged(ActivatorBroadcast broadcast, Channel channel)
+        {
+            Log.Info("On Server Send Changed", this);
             
+            _activatorBroadcast = broadcast;
+
+            StartInteraction();
+        }
+
+        private ActivatorBroadcast GetActivatorBroadcast()
+        {
+            return string.IsNullOrEmpty(_activatorBroadcast.ObjectID)
+                ? new ActivatorBroadcast()
+                {
+                    ObjectID = ID.Value,
+                    IsActive = true
+                }
+                : new ActivatorBroadcast()
+                {
+                    ObjectID = _activatorBroadcast.ObjectID,
+                    IsActive = !_activatorBroadcast.IsActive
+                };
         }
     }
 }
