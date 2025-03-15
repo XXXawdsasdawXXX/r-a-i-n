@@ -29,12 +29,12 @@ namespace Core.ServiceLocator
             
             _allObjects = FindObjectsOfType<Essential.Mono>(true);
             
-            InitList(ref _services);
+            _initializeTypedList(ref _services);
         }
 
         public List<IGameListener> GetGameListeners()
         {
-            return GetContainerComponents<IGameListener>();
+            return _getContainerComponents<IGameListener>();
         }
 
         public T GetConfig<T>() where T : ScriptableObject
@@ -63,7 +63,7 @@ namespace Core.ServiceLocator
             return default;
         }
 
-        private void InitList<T>(ref List<T> list)
+        private void _initializeTypedList<T>(ref List<T> list)
         {
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
@@ -87,7 +87,7 @@ namespace Core.ServiceLocator
             }
         }
 
-        private List<T> GetContainerComponents<T>()
+        private List<T> _getContainerComponents<T>()
         {
             List<T> list = new();
 
