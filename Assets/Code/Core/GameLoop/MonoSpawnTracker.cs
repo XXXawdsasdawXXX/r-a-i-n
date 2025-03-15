@@ -3,6 +3,7 @@ using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using Essential;
 using FishNet.Object;
+using UnityEngine;
 
 namespace Core.GameLoop
 {
@@ -49,6 +50,8 @@ namespace Core.GameLoop
                     Log.Info("is not owner", obj);
                     return;
                 }*/
+                
+                Log.Info("destroyed", Color.cyan, obj);
                 
                 _gameEventDispatcher.RemoveSpawnableListener(gameListener);
             }

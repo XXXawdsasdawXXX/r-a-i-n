@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
+using FishNet;
+using FishNet.Managing.Timing;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -77,16 +80,30 @@ namespace Core.GameLoop
 
         public void RemoveSpawnableListener(IGameListener listener)
         {
-            if (listener is IUpdateListener updateListener) _updateListeners.Remove(updateListener);
-            
-            if (listener is IFixedUpdateListener fixedUpdateListener) _fixedUpdateListeners.Remove(fixedUpdateListener);
+            if (listener is IUpdateListener updateListener)
+            {
+                _updateListeners.Remove(updateListener);
+                Log.Info("remove update listener", Color.cyan, this);
 
-            if (listener is IExitListener exitListener) _exitListeners.Remove(exitListener);
+            }
+
+            if (listener is IFixedUpdateListener fixedUpdateListener)
+            {
+                _fixedUpdateListeners.Remove(fixedUpdateListener);
+                Log.Info("remove fixed update listener", Color.cyan, this);
+            }
+
+            if (listener is IExitListener exitListener)
+            {
+                _exitListeners.Remove(exitListener);
+                Log.Info("remove exit listener", Color.cyan, this);
+            }
 
             if (listener is ISubscriber subscriber)
             {
                 subscriber.Unsubscribe();
 
+                Log.Info("remove subscribe listener", Color.cyan, this);
                 _subscribers.Remove(subscriber);
             }
         }

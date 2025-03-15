@@ -60,7 +60,7 @@ namespace Game.Entities
             }
             */
        
-            _rigidbody2D.velocity = _inputManager.Direction.normalized * _moveSpeed * (float)TimeManager.TickDelta;
+            _rigidbody2D.velocity = _inputManager.Direction.normalized * _moveSpeed * fixedDeltaTime;
         }
     }
 }
