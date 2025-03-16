@@ -2,8 +2,10 @@
 using Core.Network;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 using FishNet;
 using FishNet.Connection;
+using FishNet.Object;
 using FishNet.Transporting;
 using UnityEngine.Scripting;
 
@@ -15,12 +17,12 @@ namespace Core.GameLoop
         private GameEventDispatcher _gameEventDispatcher;
         private PlayerSpawner _playerSpawner;
 
-        private readonly HashSet<Essential.Mono> _observeMono  = new();
+        private readonly HashSet<Essential.Mono> _observeMono = new();
 
         public UniTask GameInitialize()
         {
             _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
-            
+
             return UniTask.CompletedTask;
         }
 
@@ -33,7 +35,7 @@ namespace Core.GameLoop
 
             return UniTask.CompletedTask;
         }
-        
+
         public void Unsubscribe()
         {
             Essential.Mono.Started -= _onMonoStarted;
@@ -44,7 +46,17 @@ namespace Core.GameLoop
 
         private void _onRemoteConnectionState(NetworkConnection connection, RemoteConnectionStateArgs args)
         {
-            connection.OnObjectRemoved += _onMonoDestroyed;
+            //connection.OnObjectRemoved += _onMonoDestroyed;
+
+            if (args.ConnectionState is RemoteConnectionState.Stopped)
+            {
+                Log.Info(
+                    $"_onRemoteConnectionState {args.ConnectionId} {args.ConnectionState} {connection.Objects.Count}");
+                foreach (NetworkObject connectionObject in connection.Objects)
+                {
+                    _onMonoDestroyed(connectionObject);
+                }
+            }
         }
 
         private void _onMonoStarted(Essential.Mono obj)
