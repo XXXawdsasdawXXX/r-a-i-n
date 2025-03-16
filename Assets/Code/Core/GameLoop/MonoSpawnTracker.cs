@@ -30,9 +30,11 @@ namespace Core.GameLoop
         {
             Essential.Mono.Started += _onMonoStarted;
             Essential.Mono.Destroyed -= _onMonoDestroyed;
-            InstanceFinder.ServerManager.OnRemoteConnectionState += _onRemoteConnectionState;
-            InstanceFinder.ClientManager.OnRemoteConnectionState += _onRemoteConnectionState;
+            /*InstanceFinder.ServerManager.OnRemoteConnectionState += _onRemoteConnectionState;
+            InstanceFinder.ClientManager.OnRemoteConnectionState += _onRemoteConnectionState;*/
 
+            InstanceFinder.ServerManager.OnSpawn += _onMonoStarted;
+            InstanceFinder.ServerManager.OnDespawn += _onMonoDestroyed;
             return UniTask.CompletedTask;
         }
 
@@ -40,8 +42,10 @@ namespace Core.GameLoop
         {
             Essential.Mono.Started -= _onMonoStarted;
             Essential.Mono.Destroyed -= _onMonoDestroyed;
-            InstanceFinder.ServerManager.OnRemoteConnectionState -= _onRemoteConnectionState;
-            InstanceFinder.ClientManager.OnRemoteConnectionState -= _onRemoteConnectionState;
+            InstanceFinder.ServerManager.OnSpawn += _onMonoStarted;
+            InstanceFinder.ServerManager.OnDespawn -= _onMonoDestroyed;
+            /*InstanceFinder.ServerManager.OnRemoteConnectionState -= _onRemoteConnectionState;
+            InstanceFinder.ClientManager.OnRemoteConnectionState -= _onRemoteConnectionState;*/
         }
 
         private void _onRemoteConnectionState(NetworkConnection connection, RemoteConnectionStateArgs args)

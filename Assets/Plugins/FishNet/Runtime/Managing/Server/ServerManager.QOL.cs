@@ -151,13 +151,14 @@ namespace FishNet.Managing.Server
         /// <param name="despawnType">Despawn override type.</param>
         public void Despawn(NetworkObject networkObject, DespawnType? despawnType = null)
         {
+            OnDespawn?.Invoke(networkObject);
+            
             DespawnType resolvedDespawnType = (!despawnType.HasValue)
                 ? networkObject.GetDefaultDespawnType()
                 : despawnType.Value;
             
-            Log.Info($"Despawn {gameObject.name}", Color.red, this);
+            Log.Info($"Despawn {networkObject.name}", Color.red, this);
             
-            OnDespawn?.Invoke(networkObject);
             
             Objects.Despawn(networkObject, resolvedDespawnType, asServer: true);
         }
