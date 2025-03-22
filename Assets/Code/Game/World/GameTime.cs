@@ -6,6 +6,7 @@ using Essential;
 using FishNet;
 using FishNet.Broadcast;
 using FishNet.Connection;
+using Game.Data.Settings;
 using UnityEngine;
 using UnityEngine.Scripting;
 using Channel = FishNet.Transporting.Channel;
@@ -13,7 +14,7 @@ using Channel = FishNet.Transporting.Channel;
 namespace Game.World
 {
     [Preserve]
-    public class GameTime : IService, ISubscriber, IUpdateListener
+    public class GameTime : IService, ISubscriber, IInitializeListener, IUpdateListener
     {
         public struct GameTimeBroadcast : IBroadcast
         {
@@ -26,10 +27,17 @@ namespace Game.World
 
         public TimeSpan Current { get; private set; }
         
-        private const float TIME_SCALE = 6000f;
+        private float _timeScale;
         
         private double _lastUpdateTime;
 
+
+        public UniTask GameInitialize()
+        {
+            _timeScale = Container.Instance.GetConfig<GameTimeSettings>().TimeScale;
+            
+            return UniTask.CompletedTask;
+        }
 
         public UniTask Subscribe()
         {
@@ -60,7 +68,7 @@ namespace Game.World
         private void _updateServerTime(float deltaTime)
         {
             // Учитываем множитель времени
-            Current += TimeSpan.FromSeconds(deltaTime * TIME_SCALE);
+            Current += TimeSpan.FromSeconds(deltaTime * _timeScale);
 
             if (Time.time - _lastUpdateTime >= 1.0f)
             {
@@ -77,7 +85,7 @@ namespace Game.World
         private void _updateClientTime(float deltaTime)
         {
             // Клиент обновляет время локально, пока не получит синхронизацию с сервера
-            Current += TimeSpan.FromSeconds(deltaTime * TIME_SCALE);
+            Current += TimeSpan.FromSeconds(deltaTime * _timeScale);
             
             Log.ClientInfo($"[local] _updateClientTime {Current.TotalSeconds}", this);
         }
@@ -93,7 +101,7 @@ namespace Game.World
             // Клиент получил обновление от сервера и синхронизировал время
             TimeSpan serverTime = TimeSpan.FromSeconds(broadcast.TotalSeconds);
            
-            Log.ClientInfo($"[net] _onServerSendChanged {broadcast.TotalSeconds}", this);
+            Log.ServerInfo($"[net] _onServerSendChanged {broadcast.TotalSeconds}", this);
 
             Current = serverTime;
         }
