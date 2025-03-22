@@ -69,6 +69,8 @@ namespace Game.World
                 double totalSeconds = Current.TotalSeconds;
                         
                 InstanceFinder.ServerManager.Broadcast(new GameTimeBroadcast(totalSeconds));
+                
+                Log.ServerInfo($"[net] _updateServerTime {totalSeconds}", this);
             }
         }
 
@@ -76,11 +78,14 @@ namespace Game.World
         {
             // Клиент обновляет время локально, пока не получит синхронизацию с сервера
             Current += TimeSpan.FromSeconds(deltaTime * TIME_SCALE);
+            
+            Log.ClientInfo($"[local] _updateClientTime {Current.TotalSeconds}", this);
         }
 
         private void _onClientRequestChanged(NetworkConnection _, GameTimeBroadcast broadcast, Channel _2)
         {
             // Сервер получил от клиента (можно игнорировать, так как сервер сам управляет временем)
+            Log.ServerInfo($"[net] _onClientRequestChanged {broadcast.TotalSeconds}", this);
         }
 
         private void _onServerSendChanged(GameTimeBroadcast broadcast, Channel _)
@@ -88,13 +93,8 @@ namespace Game.World
             // Клиент получил обновление от сервера и синхронизировал время
             TimeSpan serverTime = TimeSpan.FromSeconds(broadcast.TotalSeconds);
            
-            Log.Info($"_onServerSendChanged {serverTime}", this);
-            
-            /*if (Current > serverTime)
-            {
-                return;
-            }*/
-            
+            Log.ClientInfo($"[net] _onServerSendChanged {serverTime}", this);
+
             Current = serverTime;
         }
     }

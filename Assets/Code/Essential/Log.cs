@@ -5,6 +5,9 @@ namespace Essential
 {
     public static class Log
     {
+        private static readonly Color SERVER_COLOR = new Color(0.3f, 0.4f, 0.6f);
+        private static readonly Color CLIENT_COLOR = new Color(0.4f, 0.3f, 0.4f);
+        
         public static void Info(string message, object context = null)
         {
             if (context != null)
@@ -26,7 +29,29 @@ namespace Essential
             
             Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>" + message + "</color>");
         }
+        
+        public static void ServerInfo(string message, object context = null)
+        {
+            if (context != null)
+            {
+                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(SERVER_COLOR)}>{context.GetType().Name}: {message}</color>");
+                return;
+            }
+            
+            Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(SERVER_COLOR)}>" + message + "</color>");
+        }
 
+        public static void ClientInfo(string message, object context = null)
+        {
+            if (context != null)
+            {
+                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(CLIENT_COLOR)}>{context.GetType().Name}: {message}</color>");
+                return;
+            }
+            
+            Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(CLIENT_COLOR)}>" + message + "</color>");
+        }
+        
         public static void Error(string message, object context = null)
         {
             if (context != null)
