@@ -26,3 +26,9 @@ MonoBehaviour:
         Data3: -1694325606
         Data4: 594222296
       Path: event:/UI/ButtonUp
+    - Guid:
+        Data1: 259255192
+        Data2: 1116196855
+        Data3: 688835251
+        Data4: -1778260678
+      Path: event:/Entity/Step

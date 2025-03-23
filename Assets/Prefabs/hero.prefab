@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1047437175584240034}
   - component: {fileID: 2001166040625178806}
   - component: {fileID: 69949965107314698}
+  - component: {fileID: 4642680964179895088}
   m_Layer: 0
   m_Name: view
   m_TagString: Untagged
@@ -106,6 +107,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4642680964179895088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4326856643688120662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab25c2744adf4fc2a963d1a1e852f6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5483374850134618058
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +139,7 @@ GameObject:
   - component: {fileID: -227475778803773201}
   - component: {fileID: 4774697951357296534}
   - component: {fileID: 4172023190012156737}
-  - component: {fileID: 7836177950104749426}
+  - component: {fileID: 7102317373915660470}
   m_Layer: 0
   m_Name: hero
   m_TagString: Untagged
@@ -428,7 +441,7 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 8329376548906989968}
   _networkObjectCache: {fileID: 8329376548906989968}
---- !u!114 &7836177950104749426
+--- !u!114 &7102317373915660470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

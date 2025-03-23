@@ -113,7 +113,7 @@ namespace Core.Network
             if (_addToDefaultScene)
                 _networkManager.SceneManager.AddOwnerToDefaultScene(nob);
             
-            Log.Info("Player Spawner spawn ",Color.yellow, this);
+            Log.Info($"spawn hero {nob.gameObject.name} {nob.OwnerId}", Color.yellow, this);
 
             OnSpawned?.Invoke(nob);
         }

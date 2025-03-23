@@ -19,10 +19,12 @@ namespace Core.Audio
             return UniTask.CompletedTask;
         }
 
+        /*
         public void OneShot(EventReference eventReference)
         {
             RuntimeManager.PlayOneShot(eventReference);
         }
+        */
 
         public void OneShot(string eventKey)
         {

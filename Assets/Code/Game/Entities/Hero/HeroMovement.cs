@@ -2,6 +2,7 @@ using Core.GameLoop;
 using Core.Input;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 using FishNet.Object;
 using UnityEngine;
 
@@ -36,11 +37,15 @@ namespace Game.Entities
 
                 cameraTransform.SetParent(playerTransform);
                 cameraTransform.position = cameraPosition;
+                
+                
+                Log.Info("spawn",Color.magenta, this);
             }
         }
 
         public UniTask GameInitialize()
         {
+                Log.Info("initialize",Color.magenta, this);
             _inputManager = Container.Instance.GetService<InputManager>();
             
             return UniTask.CompletedTask;
