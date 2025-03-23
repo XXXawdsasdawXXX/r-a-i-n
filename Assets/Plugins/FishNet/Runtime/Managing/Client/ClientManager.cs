@@ -13,6 +13,7 @@ using FishNet.Transporting.Multipass;
 using GameKit.Dependencies.Utilities;
 using System;
 using System.Collections.Generic;
+using Essential;
 using UnityEngine;
 
 namespace FishNet.Managing.Client
@@ -341,6 +342,8 @@ namespace FishNet.Managing.Client
 
             NetworkManager.UpdateFramerate();
             OnClientConnectionState?.Invoke(args);
+            
+            Log.ClientInfo($"OnClientConnectionState {args}", this);
         }
 
         /// <summary>
@@ -453,9 +456,15 @@ namespace FishNet.Managing.Client
                 if (spawnOrDespawn)
                 {
                     if (packetId == PacketId.ObjectSpawn)
+                    {
                         Objects.ReadSpawn(reader);
+                        Log.ClientInfo("Objects.ReadSpawn",this);
+                    }
                     else if (packetId == PacketId.ObjectDespawn)
+                    {
                         Objects.CacheDespawn(reader);
+                        Log.ClientInfo("Objects.CacheDespawn",this);
+                    }
                 }
                 //Not spawn or despawn.
                 else
@@ -635,6 +644,8 @@ namespace FishNet.Managing.Client
             //Mark as authenticated.
             Connection.ConnectionAuthenticated();
             OnAuthenticated?.Invoke();
+            
+            Log.ClientInfo("OnAuthenticated",this);
             /* Register scene objects for all scenes
              * after being authenticated. This is done after
              * authentication rather than when the connection
