@@ -62,7 +62,7 @@ namespace Core.GameLoop
 
         public async void AddSpawnableListener(IGameListener listener)
         {
-            if (!_listeners.Add(listener))
+            if (CanAddListener(listener))
             {
                 return;
             }
@@ -95,6 +95,16 @@ namespace Core.GameLoop
             if (listener is IExitListener exitListener) _exitListeners.Add(exitListener);
 
             marker.End();
+        }
+
+        private bool CanAddListener(IGameListener listener)
+        {
+            if (listener is INetworkOwnership ownership)
+            {
+                return ownership.IsOwnedByClient && _listeners.Add(listener);
+            }
+
+            return _listeners.Add(listener);
         }
 
         public void RemoveSpawnableListener(IGameListener listener)
@@ -133,7 +143,7 @@ namespace Core.GameLoop
 
             foreach (IGameListener listener in gameListeners)
             {
-                if (!_listeners.Add(listener)) continue;
+                if (!CanAddListener(listener)) continue;
 
                 if (listener is IInitializeListener initListener) _initListeners.Add(initListener);
 
