@@ -26,11 +26,11 @@ namespace Core.GameLoop
             _initializeListeners();
             
             await _notifyGameInitialize();
-            await _notifySubscribe();
             await _notifyGameLoad();
 
             await UniTask.WaitUntil(() => InstanceFinder.IsServerStarted || InstanceFinder.IsClientStarted);
 
+            await _notifySubscribe();
             await _notifyGameStart();
             
             _isGameBooted = true;
