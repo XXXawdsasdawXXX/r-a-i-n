@@ -6,20 +6,23 @@ using UnityEngine;
 
 namespace Game.Entities.Hero
 {
-    public class HeroAnimation : NetworkBehaviour, INetworkOwnership, IInitializeListener, IUpdateListener
+    public class HeroAnimation : NetworkBehaviour, IInitializeListener, IUpdateListener
     {
         private static readonly int _speedHash = Animator.StringToHash("Speed");
-        public bool IsOwnedByClient => IsOwner;
-
+        
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _viewBody;
         [SerializeField] private Rigidbody2D _rigidbody2D;
 
         private Cache<Vector3> _velocityCache;
 
-
         public UniTask GameInitialize()
         {
+            if (!IsOwner)
+            {
+                return UniTask.CompletedTask;
+            }
+            
             _velocityCache = new Cache<Vector3>();
             
             return UniTask.CompletedTask;
@@ -27,6 +30,11 @@ namespace Game.Entities.Hero
 
         public void GameUpdate(float deltaTime)
         {
+            if (!IsOwner)
+            {
+                return;
+            }
+            
             if (_velocityCache.Update(_rigidbody2D.velocity))
             {
                 _animator.SetFloat(_speedHash, _rigidbody2D.velocity.magnitude);

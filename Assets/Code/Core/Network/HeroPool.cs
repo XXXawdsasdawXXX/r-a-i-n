@@ -30,6 +30,7 @@ namespace Core.Network
         private readonly Dictionary<NetworkConnection, NetworkObject> _heroes = new();
 
         [SerializeField] private NetworkObject _heroPrefab;
+        [SerializeField] private PrefabObjects _prefabObjects;
 
         [SerializeField] private Color _logColor;
         

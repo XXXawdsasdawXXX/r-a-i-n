@@ -28,7 +28,7 @@ namespace Game.Entities
             
             _camera = Camera.main;
 
-            if (_camera != null)//todo move to hero pool
+            if (_camera != null)
             {
                 Transform cameraTransform = _camera.transform;
                 Transform playerTransform = transform;
