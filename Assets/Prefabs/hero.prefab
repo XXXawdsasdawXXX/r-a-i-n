@@ -385,7 +385,7 @@ MonoBehaviour:
   _additionalSize: 0.1
   _layers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 4294967295
 --- !u!114 &6778264612898636302
 MonoBehaviour:
   m_ObjectHideFlags: 0
