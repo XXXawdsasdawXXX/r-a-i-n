@@ -2774,7 +2774,9 @@ namespace FishNet.Managing.Scened
         private void TryInvokeLoadedStartScenes(NetworkConnection connection, bool asServer)
         {
             if (connection.SetLoadedStartScenes(asServer))
+            {
                 OnClientLoadedStartScenes?.Invoke(connection, asServer);
+            }
         }
 
         /// <summary>

@@ -250,6 +250,7 @@ MonoBehaviour:
   - {fileID: -227475778803773201}
   - {fileID: 4774697951357296534}
   - {fileID: 4172023190012156737}
+  - {fileID: 7102317373915660470}
   InitializedParentNetworkBehaviour: {fileID: 0}
   InitializedNestedNetworkObjects: []
   RuntimeParentNetworkBehaviour: {fileID: 0}
@@ -259,7 +260,7 @@ MonoBehaviour:
   _isGlobal: 0
   _initializeOrder: 0
   _preventDespawnOnDisconnect: 0
-  _defaultDespawnType: 0
+  _defaultDespawnType: 1
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -453,9 +454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37a073f550349429827b0689c355b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 8329376548906989968}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 8329376548906989968}
   _animator: {fileID: 69949965107314698}
   _viewBody: {fileID: 1047437175584240034}
   _rigidbody2D: {fileID: 7074728272879338317}

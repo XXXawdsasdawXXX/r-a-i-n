@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace FishNet.Utility.Performance
 {
-    public abstract class ObjectPool : MonoBehaviour
+    public abstract class ObjectPool : Essential.Mono
     {
         /// <summary>
         /// NetworkManager this ObjectPool belongs to.

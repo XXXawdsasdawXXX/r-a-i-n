@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Essential;
 using UnityEngine;
 
 namespace FishNet.Managing.Server
@@ -445,6 +446,8 @@ namespace FishNet.Managing.Server
                  * does handle this but only after an initial state is set.
                  * If the clientHost joins without observation of an object
                  * then the initial state will never be set. */
+                
+                Log.ServerInfo($"On client loaded start scene {conn.ClientId}", this);
                 if (conn.IsLocalClient)
                 {
                     foreach (NetworkObject nob in Objects.Spawned.Values)

@@ -5,6 +5,7 @@ using FishNet.Object;
 using FishNet.Transporting;
 using GameKit.Dependencies.Utilities;
 using System.Collections.Generic;
+using Essential;
 using UnityEngine;
 
 namespace FishNet.Observing
@@ -280,6 +281,8 @@ namespace FishNet.Observing
             _initialized = true;
 
             RegisterTimedConditions();
+            
+            Log.Info($"Initialize {networkObject.gameObject.name}", Color.blue, this);
         }
 
         /// <summary>
@@ -398,6 +401,8 @@ namespace FishNet.Observing
                     }
                 }
             }
+
+            Log.Info($"Rebuild {connection.ClientId}", Color.blue, this);
 
             //If all conditions met.
             if (allConditionsMet)

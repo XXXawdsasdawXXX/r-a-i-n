@@ -30,10 +30,16 @@ namespace Game.Entities.Hero
                 _animator.SetFloat(_speedHash, _rigidbody2D.velocity.magnitude);
                 if (_rigidbody2D.velocity.x != 0)
                 {
-                    float forward = _rigidbody2D.velocity.x > 0 ? -1 : 1;
-                    _viewBody.localScale = new Vector3(forward, 1, 1);
+                    Rotate();
                 }
             }
+        }
+
+        [ServerRpc]
+        private void Rotate()
+        {
+            float forward = _rigidbody2D.velocity.x > 0 ? -1 : 1;
+            _viewBody.localScale = new Vector3(forward, 1, 1);
         }
     }
 }

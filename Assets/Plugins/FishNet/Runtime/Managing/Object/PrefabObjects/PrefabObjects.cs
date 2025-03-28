@@ -7,12 +7,12 @@ namespace FishNet.Managing.Object
 {
     //document
     [APIExclude]
-    public abstract class PrefabObjects : ScriptableObject
+    public abstract class  PrefabObjects : ScriptableObject
     {
         /// <summary>
         /// CollectionId for this PrefabObjects.
         /// </summary>
-        public ushort CollectionId { get; private set; }
+        [field: SerializeField] public ushort CollectionId { get; private set; }
         /// <summary>
         /// Sets CollectionIdValue.
         /// </summary>

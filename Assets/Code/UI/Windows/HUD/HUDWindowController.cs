@@ -14,7 +14,6 @@ namespace UI.Windows.HUD
         IUpdateListener
     {
         private GameTime _gameTime;
-
         private Cache<int> _lastUpdateMinute;
         private float _currentValue;
 

@@ -34,13 +34,13 @@ namespace Core.Audio
 
         public UniTask Subscribe()
         {
-            _playerSpawner.OnSpawned += PlayerSpawnerOnOnSpawned;
+         //   _playerSpawner.OnSpawned += PlayerSpawnerOnOnSpawned;
             return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()
         {
-            _playerSpawner.OnSpawned += PlayerSpawnerOnOnSpawned;
+           // _playerSpawner.OnSpawned += PlayerSpawnerOnOnSpawned;
         }
 
         private void PlayerSpawnerOnOnSpawned(NetworkObject obj)
