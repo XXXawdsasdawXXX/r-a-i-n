@@ -1,7 +1,6 @@
 ﻿using Core.Data;
 using Core.GameLoop;
 using Cysharp.Threading.Tasks;
-using FishNet.Component.Transforming;
 using FishNet.Object;
 using UnityEngine;
 
@@ -19,6 +18,11 @@ namespace Game.Entities.Hero
 
         public UniTask GameInitialize()
         {
+            if (!IsOwner)
+            {
+                return UniTask.CompletedTask;
+            }
+            
             _velocityCache = new Cache<Vector3>();
             
             return UniTask.CompletedTask;
@@ -26,6 +30,11 @@ namespace Game.Entities.Hero
 
         public void GameUpdate(float deltaTime)
         {
+            if (!IsOwner)
+            {
+                return;
+            }
+            
             if (_velocityCache.Update(_rigidbody2D.velocity))
             {
                 _animator.SetFloat(_speedHash, _rigidbody2D.velocity.magnitude);
