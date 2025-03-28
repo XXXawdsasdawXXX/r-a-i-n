@@ -11,11 +11,11 @@ namespace Game.World
     [Preserve]
     public class WorldMaterialController : IMono, IInitializeListener, IUpdateListener, IExitListener
     {
+        private static readonly int _overlayBlend = Shader.PropertyToID(MATERIAL_PARAM_NAME);
+        
         private const string MATERIAL_PARAM_NAME = "_OverlayBlend";
         private const float MAX_VALUE = 0.675f;
         
-        private static readonly int _overlayBlend = Shader.PropertyToID(MATERIAL_PARAM_NAME);
-
         private Cache<int> _lastUpdatedMinute;
         private Material _worldMaterial;
         private GameTime _gameTime;
@@ -34,8 +34,8 @@ namespace Game.World
         {
             if (_lastUpdatedMinute.Update(_gameTime.Current.Hours * 60 + _gameTime.Current.Minutes))
             {
-                float timeOfDay = (_gameTime.Current.Hours * 60 + _gameTime.Current.Minutes) / 1440f; // 0-1 интервал
-                float shiftedTime = (timeOfDay - 0.2f) * 2 * Mathf.PI; // Сдвиг темноты на 10% дня (144 мин)
+                float timeOfDay = (_gameTime.Current.Hours * 60 + _gameTime.Current.Minutes) / 1440f;
+                float shiftedTime = (timeOfDay - 0.2f) * 2 * Mathf.PI;
     
                 float brightness = (Mathf.Cos(shiftedTime) + 1) / 2 * MAX_VALUE;
     
