@@ -5,11 +5,15 @@ using Essential;
 using FishNet;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Core.GameLoop
 {
     public sealed class GameEventDispatcher : Essential.Mono, IService
     {
+        private static readonly ProfilerMarker _fixedUpdateProfilerMarker = new("_notifyGameFixedUpdate:");
+        private static readonly ProfilerMarker _updateProfilerMarker = new("_notifyGameUpdate:");
+
         private readonly HashSet<IGameListener> _listeners = new();
         private readonly HashSet<IInitializeListener> _initListeners = new();
         private readonly HashSet<ILoadListener> _loadListeners = new();
@@ -21,10 +25,11 @@ namespace Core.GameLoop
 
         private bool _isGameBooted;
 
+
         private async void Awake()
         {
             _initializeListeners();
-            
+
             await _notifyGameInitialize();
             await _notifyGameLoad();
 
@@ -32,7 +37,7 @@ namespace Core.GameLoop
 
             await _notifySubscribe();
             await _notifyGameStart();
-            
+
             _isGameBooted = true;
         }
 
@@ -126,7 +131,7 @@ namespace Core.GameLoop
                 _subscribers.Remove(subscriber);
             }
         }
-        
+
         private void _initializeListeners()
         {
             List<IGameListener> gameListeners = Container.Instance.GetGameListeners();
@@ -206,27 +211,31 @@ namespace Core.GameLoop
 
         private void _notifyGameUpdate(float deltaTime)
         {
-            foreach (IUpdateListener listener in _updateListeners)
+            using (_updateProfilerMarker.Auto())
             {
-                ProfilerMarker marker = new($"_notifyGameUpdate: {listener.GetType().Name}");
-                marker.Begin();
+                foreach (IUpdateListener listener in _updateListeners)
+                {
+                    Profiler.BeginSample(listener.GetType().Name);
 
-                listener.GameUpdate(deltaTime);
+                    listener.GameUpdate(deltaTime);
 
-                marker.End();
+                    Profiler.EndSample();
+                }
             }
         }
 
         private void _notifyGameFixedUpdate(float fixedDeltaTime)
         {
-            foreach (IFixedUpdateListener listener in _fixedUpdateListeners)
+            using (_fixedUpdateProfilerMarker.Auto())
             {
-                ProfilerMarker marker = new($"_notifyGameFixedUpdate: {listener.GetType().Name}");
-                marker.Begin();
+                foreach (IFixedUpdateListener listener in _fixedUpdateListeners)
+                {
+                    Profiler.BeginSample(listener.GetType().Name);
 
-                listener.GameFixedUpdate(fixedDeltaTime);
+                    listener.GameFixedUpdate(fixedDeltaTime);
 
-                marker.End();
+                    Profiler.EndSample();
+                }
             }
         }
 
