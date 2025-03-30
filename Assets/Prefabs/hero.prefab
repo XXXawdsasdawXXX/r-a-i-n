@@ -439,6 +439,7 @@ MonoBehaviour:
   _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8329376548906989968}
   _networkObjectCache: {fileID: 8329376548906989968}
+  _health: {fileID: 4774697951357296534}
   _spriteRenderer: {fileID: 2001166040625178806}
 --- !u!114 &-227475778803773201
 MonoBehaviour:

@@ -8,6 +8,7 @@ namespace Game.Entities.Params
     public class Health : NetworkBehaviour
     {
         public event Action Changed;
+        public event Action TookDamage;
         public float Current => _health.Value;
         public float Max => 100;
 
@@ -43,6 +44,11 @@ namespace Game.Entities.Params
         private void _onHealthChange(float prev, float next, bool asserver)
         {
             Changed?.Invoke();
+
+            if (prev > next)
+            {
+                TookDamage?.Invoke();
+            }
         }
     }
 }

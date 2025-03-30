@@ -1,37 +1,60 @@
-﻿using FishNet.Object;
+﻿using Core.GameLoop;
+using Core.ServiceLocator;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using FishNet.Object;
+using Game.Entities.Params;
+using Plugins.Demigiant.DOTween.Modules;
 using UnityEngine;
 
 namespace Game.Entities.Hero
 {
-    public class HeroColor : NetworkBehaviour
+    public class HeroColor : NetworkBehaviour, ISubscriber, IExitListener
     {
+        [SerializeField] private Health _health;
         [SerializeField] private SpriteRenderer _spriteRenderer;
+
+        private ColorTweenData _damageTween;
+
+        private Tween _tween;
 
         public override void OnStartClient()
         {
             base.OnStartClient();
 
             enabled = IsOwner;
+
+            _damageTween = Container.Instance.GetConfig<HeroSettings>().DamageTween;
         }
 
-        private void Update()
+        public UniTask Subscribe()
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                ChangeColorServer(Color.red);
-            }
+            _health.TookDamage += _server_PlayDamageTween;
+
+            return UniTask.CompletedTask;
         }
 
-        [ObserversRpc]
-        private void ChangeColorObserver(Color color)
+        public void Unsubscribe()
         {
-            _spriteRenderer.color = color;
+            _health.TookDamage -= _server_PlayDamageTween;
+        }
+        
+        public void GameExit()
+        {
+            _tween?.Kill();
         }
 
         [ServerRpc]
-        private void ChangeColorServer(Color color)
+        private void _server_PlayDamageTween()
         {
-            ChangeColorObserver(color);
+            _observer_PlayDamageTween();
+        }
+
+        [ObserversRpc]
+        private void _observer_PlayDamageTween()
+        {
+            _tween?.Kill();
+            _tween = _spriteRenderer.DOColor(_damageTween.Color, _damageTween.Duration).SetLoops(2, LoopType.Yoyo);
         }
     }
 }
