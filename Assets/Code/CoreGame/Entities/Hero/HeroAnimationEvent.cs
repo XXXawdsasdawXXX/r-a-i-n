@@ -8,9 +8,11 @@ namespace Code.CoreGame.Entities.Hero
 {
     public class HeroAnimationEvent : Essential.Mono, IInitializeListener
     {
+        public bool IsInitialized { get; set; }
+        
         private AudioService _audio;
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             _audio = Container.Instance.GetService<AudioService>();
             

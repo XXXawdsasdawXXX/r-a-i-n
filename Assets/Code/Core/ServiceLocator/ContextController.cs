@@ -6,9 +6,11 @@ namespace Core.ServiceLocator
 {
     public class ContextController : IMono, IInitializeListener, ISubscriber
     {
+        public bool IsInitialized { get; set; }
+        
         private SceneService _sceneService;
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             _sceneService = Container.Instance.GetService<SceneService>();
             
@@ -38,5 +40,7 @@ namespace Core.ServiceLocator
         {
             
         }
+
+   
     }
 }

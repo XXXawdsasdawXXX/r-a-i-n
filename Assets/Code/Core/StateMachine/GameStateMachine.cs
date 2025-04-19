@@ -34,9 +34,11 @@ namespace Core.StateMachine
             if (!_currentState.IsInitialized)
             {
                 await _currentState.Initialize();
+
+                _currentState.IsInitialized = true;
             }
             
-            _states[type].Enter();
+            await _states[type].Enter();
         }
     }
 }

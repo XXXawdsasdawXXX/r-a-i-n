@@ -11,6 +11,7 @@ namespace Code.CoreGame.Entities.Hero
 {
     public class HeroMovement : NetworkBehaviour, IInitializeListener, IFixedUpdateListener
     {
+        public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "HeroMovement";
         
         [SerializeField] private Rigidbody2D _rigidbody2D;
@@ -45,9 +46,11 @@ namespace Code.CoreGame.Entities.Hero
             }
         }
 
-        public UniTask GameInitialize()
+
+        public UniTask Initialize()
         {
             Log.Info("initialize",Color.magenta, this);
+            
             _inputManager = Container.Instance.GetService<InputManager>();
             
             return UniTask.CompletedTask;

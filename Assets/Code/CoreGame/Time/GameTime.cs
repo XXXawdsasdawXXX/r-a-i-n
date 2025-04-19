@@ -21,18 +21,18 @@ namespace Code.CoreGame.Time
             }
         }
 
+        public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "GameTime";
         public TimeSpan Current { get; private set; }
 
         private float _timeScale;
         private double _lastUpdateTime;
-
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             _timeScale = Container.Instance.GetConfig<GameTimeSettings>().TimeScale;
             
-            return UniTask.CompletedTask;
+            return UniTask.CompletedTask;;
         }
 
         public UniTask Subscribe()

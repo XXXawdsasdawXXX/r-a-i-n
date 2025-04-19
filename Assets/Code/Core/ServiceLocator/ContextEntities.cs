@@ -13,5 +13,11 @@ namespace Core.ServiceLocator
 
         public ContextEntities Parent;
         public ContextEntities Child;
+
+        public void SetChildContext(ContextEntities context)
+        {
+            Child = context;
+            Child.Parent = this;
+        }
     }
 }

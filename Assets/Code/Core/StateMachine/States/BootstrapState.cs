@@ -1,15 +1,17 @@
 ﻿using Core.AssetManagement;
 using Core.GameLoop;
+using Core.Libraries.Assets;
 using Core.Libraries.Installers;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 using UnityEngine;
 
 namespace Core.StateMachine
 {
     public class BootstrapState : IState
     {
-        public bool IsInitialized { get; private set; }
+        public bool IsInitialized { get; set; }
         
         private readonly GameStateMachine _gameStateMachine;
         
@@ -21,26 +23,28 @@ namespace Core.StateMachine
         public async UniTask Initialize()
         {
             InstallerLibrary installerLibrary = await AssetProvider
-                .LoadScriptableObject<InstallerLibrary>(AssetPath.INSTALLER_LIBRARY_PATH);
+                .LoadScriptableObject<InstallerLibrary>(AssetKey.INSTALLER_LIBRARY_PATH);
+            AssetLibrary assetLibrary = await AssetProvider
+                .LoadScriptableObject<AssetLibrary>(AssetKey.ASSET_LIBRARY_PATH);
+            ScriptableObject audioEventLibrary = await AssetProvider
+                .LoadScriptableObject(AssetKey.AUDIO_LIBRARY_PATH);
 
+            if (Log.PROFILER_IS_ACTIVE)
+            {
+                AssetProvider.Instantiate(assetLibrary.Window.Get(AssetKey.CANVAS_PROFILER));
+            }
+            
             ContextEntities projectContext = ContextBuilder.BuildContext(installerLibrary.ProjectsInstaller.GetTypes());
+            projectContext.Services.Add(typeof(GameStateMachine), _gameStateMachine);
             
             Container container = new(projectContext);
-            
-            container.AddConfig(installerLibrary);
-            ScriptableObject audioEventLibrary = await AssetProvider.LoadScriptableObject(AssetPath.AUDIO_LIBRARY_PATH); 
-        
-            container.AddConfig(audioEventLibrary);
-            
-            ScriptableObject assetLibrary = await AssetProvider.LoadScriptableObject(AssetPath.ASSET_LIBRARY_PATH); 
+
             container.AddConfig(assetLibrary);
+            container.AddConfig(installerLibrary);
+            container.AddConfig(audioEventLibrary);
             
             GameEventDispatcher gameEventDispatcher = container.GetService<GameEventDispatcher>();
             gameEventDispatcher.Register(container.GetGameListeners());
-            
-            container.Context.Services.Add(typeof(GameStateMachine), _gameStateMachine);
-            
-            IsInitialized = true;
         }
 
         public UniTask Enter()

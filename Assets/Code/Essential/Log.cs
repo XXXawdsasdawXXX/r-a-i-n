@@ -7,10 +7,36 @@ namespace Essential
 {
     public static class Log
     {
+        public static bool PROFILER_IS_ACTIVE = true;
+        
         private static readonly Color SERVER_COLOR = new(0.3f, 0.4f, 0.6f);
         private static readonly Color CLIENT_COLOR = new(0.4f, 0.3f, 0.4f);
         
         [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
+        
+        public static void Info(object context, string message)
+        {
+            if (context != null)
+            {
+                Debug.Log($"{context.GetType().Name}: {message}");
+                return;
+            }
+            
+            Debug.Log(message);
+        }
+        
+        public static void Info(object context, string message, Color color)
+        {
+            if (context != null)
+            {
+                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
+                return;
+            }
+            
+            Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>" + message + "</color>");
+        }
+
+        
         public static void Info(string message, object context = null)
         {
             if (context != null)

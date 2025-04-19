@@ -12,10 +12,12 @@ namespace Code.CoreGame.Grid
     [Preserve]
     public class GridService : IService, IInitializeListener
     {
+        public bool IsInitialized { get; set; }
+        
         private GridView _view;
         private GridSettings _settings;
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             _view = Container.Instance.GetView<GridView>();
             _settings = Container.Instance.GetConfig<GridSettings>();

@@ -15,6 +15,7 @@ namespace Core.Network
 {
     public class HeroPool : NetworkBehaviour, IService, IInitializeListener, ISubscriber
     {
+        public bool IsInitialized { get; set; }
         public event Action<GameObject> HeroSpawned;
         public event Action<GameObject> PlayerHeroSpawned;
 
@@ -25,13 +26,14 @@ namespace Core.Network
 
         private NetworkManager _networkManager;
 
-        public UniTask GameInitialize()
+
+        public UniTask Initialize()
         {
             _networkManager = InstanceFinder.NetworkManager;
 
             return UniTask.CompletedTask;
         }
-
+        
         public UniTask Subscribe()
         {
             _networkManager.SceneManager.OnClientLoadedStartScenes += _sceneManagerOnClientLoadedStartScenes;
@@ -85,5 +87,7 @@ namespace Core.Network
             Log.Info($"on remove connection {_heroes?.ContainsKey(connection)} {state.ConnectionState}" +
                      $"\n nc id {connection.ClientId} state {state.ConnectionId}", _logColor, this);
         }
+
+     
     }
 }

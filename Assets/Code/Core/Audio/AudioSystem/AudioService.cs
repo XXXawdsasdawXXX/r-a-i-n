@@ -2,6 +2,7 @@
 using Core.Libraries;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -11,15 +12,18 @@ namespace Core.Audio
     [Preserve]
     public class AudioService : IService, IInitializeListener
     {
+        public bool IsInitialized { get; set; }
+   
         private AudioLibrary _audioLibrary;
-
-        public UniTask GameInitialize()
+ 
+        public UniTask Initialize()
         {
             _audioLibrary = Container.Instance.GetConfig<AudioLibrary>();
-            
+
+        Log.Info(this, $"_audioLibrary != null {_audioLibrary != null}", Color.red);            
             return UniTask.CompletedTask;
         }
-
+        
         /*
         public void OneShot(EventReference eventReference)
         {
@@ -40,5 +44,7 @@ namespace Core.Audio
             
             RuntimeManager.PlayOneShot(eventReference, position);
         }
+
+   
     }
 }

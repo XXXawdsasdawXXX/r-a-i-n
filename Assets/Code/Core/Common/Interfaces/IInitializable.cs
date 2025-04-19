@@ -4,7 +4,8 @@ namespace Core.Interfaces
 {
     public interface IInitializable
     {
-        bool IsInitialized { get; }
+        bool IsInitialized { get; set; }
         UniTask Initialize();
+        
     }
 }

@@ -15,18 +15,20 @@ namespace Core.GameLoop
     [Preserve]
     internal sealed class MonoSpawnTracker : IService, IInitializeListener, ISubscriber
     {
+        public bool IsInitialized { get; set; }
+        
         private GameEventDispatcher _gameEventDispatcher;
         private PlayerSpawner _playerSpawner;
 
         private readonly HashSet<Essential.Mono> _observeMono = new();
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
-
+            
             return UniTask.CompletedTask;
         }
-
+        
         public UniTask Subscribe()
         {
             Essential.Mono.Started += _onMonoStarted;
@@ -82,5 +84,7 @@ namespace Core.GameLoop
                 _gameEventDispatcher.RemoveSpawnableListener(gameListener);
             }
         }
+
+    
     }
 }

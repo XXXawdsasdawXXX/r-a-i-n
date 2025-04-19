@@ -22,5 +22,10 @@ namespace Core.AssetManagement
 
             return request.asset as ScriptableObject;
         }
+
+        public static GameObject Instantiate(GameObject prefab)
+        {
+            return Object.Instantiate(prefab);
+        }
     }
 }

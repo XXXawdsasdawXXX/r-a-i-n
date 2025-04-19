@@ -10,19 +10,20 @@ namespace Code.CoreGame.Time
 {
     public class WorldMaterialController : IMono, IInitializeListener, IUpdateListener, IExitListener
     {
-        private static readonly int _overlayBlend = Shader.PropertyToID(MATERIAL_PARAM_NAME);
+        private static readonly int OVERLAY_BLEND = Shader.PropertyToID(MATERIAL_PARAM_NAME);
 
         private const string MATERIAL_PARAM_NAME = "_OverlayBlend";
         private const float MAX_VALUE = 0.675f;
 
+        public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "WorldMaterialController";
         
         private Cache<int> _lastUpdatedMinute;
         private Material _worldMaterial;
         private GameTime _gameTime;
-
-
-        public UniTask GameInitialize()
+        
+        
+        public UniTask Initialize()
         {
             _worldMaterial = Container.Instance.GetConfig<AssetLibrary>().Material.Get(MaterialLibrary.WORLD);
             _gameTime = Container.Instance.GetService<GameTime>();
@@ -41,13 +42,13 @@ namespace Code.CoreGame.Time
     
                 float brightness = (Mathf.Cos(shiftedTime) + 1) / 2 * MAX_VALUE;
     
-                _worldMaterial.SetFloat(_overlayBlend, brightness);
+                _worldMaterial.SetFloat(OVERLAY_BLEND, brightness);
             }
         }
 
         public void GameExit()
         {
-            _worldMaterial.SetFloat(_overlayBlend, 0);
+            _worldMaterial.SetFloat(OVERLAY_BLEND, 0);
         }
     }
 }

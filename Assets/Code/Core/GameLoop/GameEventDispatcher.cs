@@ -25,12 +25,7 @@ namespace Core.GameLoop
         private readonly HashSet<ISubscriber> _subscribers = new();
 
         private bool _isStarted;
-
-        private void Awake()
-        {
-            DontDestroyOnLoad(this);
-        }
-
+        
         private void Update()
         {
             if (_isStarted)
@@ -92,9 +87,11 @@ namespace Core.GameLoop
             ProfilerMarker marker = new($"AddSpawnableListener: {listener.GetType().Name}");
             marker.Begin();
 
-            if (listener is IInitializeListener initListener)
+            if (listener is IInitializeListener initListener && !initListener.IsInitialized)
             {
-                await initListener.GameInitialize();
+                await initListener.Initialize();
+                
+                initListener.IsInitialized = true;
             }
 
             if (listener is ISubscriber subscriber)
@@ -176,7 +173,15 @@ namespace Core.GameLoop
 
             foreach (IInitializeListener listener in _initListeners)
             {
-                await listener.GameInitialize();
+                if (listener.IsInitialized)
+                {
+                    continue;
+                }
+                
+                Log.Info(this, $"{listener.GetType().Name} initialize", Color.blue);
+                await listener.Initialize();
+
+                listener.IsInitialized = true;
             }
 
             marker.End();

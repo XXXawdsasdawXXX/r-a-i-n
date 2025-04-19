@@ -8,7 +8,8 @@ namespace Code.CoreGame.Entities.Hero
 {
     public class HeroAnimation : NetworkBehaviour, IInitializeListener, IUpdateListener
     {
-        private static readonly int _speedHash = Animator.StringToHash("Speed");
+        private static readonly int SPEED_HASH = Animator.StringToHash("Speed");
+        public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "HeroAnimation";
         
         [SerializeField] private Animator _animator;
@@ -16,8 +17,8 @@ namespace Code.CoreGame.Entities.Hero
         [SerializeField] private Rigidbody2D _rigidbody2D;
 
         private Cache<Vector3> _velocityCache;
-        
-        public UniTask GameInitialize()
+
+        public UniTask Initialize()
         {
             if (!IsOwner)
             {
@@ -38,7 +39,7 @@ namespace Code.CoreGame.Entities.Hero
             
             if (_velocityCache.Update(_rigidbody2D.velocity))
             {
-                _animator.SetFloat(_speedHash, _rigidbody2D.velocity.magnitude);
+                _animator.SetFloat(SPEED_HASH, _rigidbody2D.velocity.magnitude);
                 if (_rigidbody2D.velocity.x != 0)
                 {
                     RotateServerRpc(_rigidbody2D.velocity.x);

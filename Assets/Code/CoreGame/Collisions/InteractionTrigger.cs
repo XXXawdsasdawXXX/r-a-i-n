@@ -10,10 +10,12 @@ namespace Code.CoreGame.Collisions
     public sealed class InteractionTrigger : Trigger, IInitializeListener
     {
         public event Action InteractionPerformed;  
+        public bool IsInitialized { get; set; }
 
         private InputManager _inputManager;
-
-        public UniTask GameInitialize()
+        
+        
+        public UniTask Initialize()
         {
             _inputManager = Container.Instance.GetService<InputManager>();
             

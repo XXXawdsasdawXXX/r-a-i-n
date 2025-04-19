@@ -14,12 +14,14 @@ namespace UI.Components
     public class UIButton : Essential.Mono ,IPointerDownHandler, IPointerUpHandler, IInitializeListener
     {
         public event Action Clicked;
+        public bool IsInitialized { get; set; }
         
         [SerializeField] private Button _button;
         
         private AudioService _audio;
-        
-        public UniTask GameInitialize()
+
+
+        public UniTask Initialize()
         {
             _audio = Container.Instance.GetService<AudioService>();
           

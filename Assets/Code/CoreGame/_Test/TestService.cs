@@ -14,11 +14,13 @@ namespace Code.CoreGame._Test
     [Preserve]
     public class TestService : IMono, IInitializeListener, ISubscriber
     {
+        public bool IsInitialized { get; set; }
+        
         private GridService _gridService;
         private InputManager _inputManager;
         private CameraView _cameraView;
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             _gridService = Container.Instance.GetService<GridService>();
             _inputManager = Container.Instance.GetService<InputManager>();

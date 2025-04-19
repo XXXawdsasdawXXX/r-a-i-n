@@ -10,10 +10,12 @@ namespace Core.Audio
     [Preserve]
     public class AudioGlobalVolume : IService, IInitializeListener
     {
+        public bool IsInitialized { get; set; }
+        
         private Bus _musicBus;
         private Bus _effectBus;
-
-        public UniTask GameInitialize()
+        
+        public UniTask Initialize()
         {
             return UniTask.CompletedTask;
                         
@@ -24,7 +26,6 @@ namespace Core.Audio
             
             return UniTask.CompletedTask;*/
         }
-
         public void ChangeEffectVolume(float volume)
         {
             _effectBus.setVolume(volume);
@@ -34,5 +35,7 @@ namespace Core.Audio
         {
             _musicBus.setVolume(volume);
         }
+
+   
     }
 }

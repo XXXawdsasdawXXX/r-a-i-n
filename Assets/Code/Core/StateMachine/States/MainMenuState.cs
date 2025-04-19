@@ -1,23 +1,29 @@
+using Core.AssetManagement;
 using Core.GameLoop;
+using Core.Libraries.Assets;
 using Core.Scenes;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Core.StateMachine
 {
     public class MainMenuState : IState
     {
-        public bool IsInitialized { get; private set; }
+        public bool IsInitialized { get; set; }
 
         private GameEventDispatcher _gameEventDispatcher;
         private SceneService _sceneService;
+        
+        private GameObject _mainMenuCanvasPrefab;
 
         public UniTask Initialize()
         {
             _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
+            
             _sceneService = Container.Instance.GetService<SceneService>();
 
-            IsInitialized = true;
+            _mainMenuCanvasPrefab = Container.Instance.GetConfig<AssetLibrary>().Window.Get(AssetKey.CANVAS_MAIN_MENU);
             
             return UniTask.CompletedTask;
         }
@@ -27,8 +33,10 @@ namespace Core.StateMachine
             _gameEventDispatcher.Dispose();
             
             await _sceneService.LoadSceneAsync(EScene.Menu);
+
+            AssetProvider.Instantiate(_mainMenuCanvasPrefab);
             
-            Container.Instance.Context.Child = ContextBuilder.BuildContext();
+            Container.Instance.Context.SetChildContext(ContextBuilder.BuildContext());
             
             _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
         }

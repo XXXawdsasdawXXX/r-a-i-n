@@ -13,14 +13,15 @@ namespace UI.Windows.HUD
         IStartListener,
         IUpdateListener
     {
+        public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "HUDWindowController";
         
         private GameTime _gameTime;
         private Cache<int> _lastUpdateMinute;
         private float _currentValue;
-
-
-        public UniTask GameInitialize()
+        
+        
+        public UniTask Initialize()
         {
             _gameTime = Container.Instance.GetService<GameTime>();
 

@@ -2,158 +2,47 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="540b8f42-2d63-4d71-ad37-73b5d9f5eb8c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetPath.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetPath.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetProvider.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Common/Interfaces.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Common/Interfaces/IInitializable.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Common/Interfaces/IInitializable.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/Bootstrap.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/Bootstrap.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Installers.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Installers/ProjectInstaller.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Installers/ProjectInstaller.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Installers.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Installers/InstallerLibrary.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Installers/InstallerLibrary.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/EScene.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/EScene.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/Editor.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/Editor/SceneEnumGenerator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/Editor/SceneEnumGenerator.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/ReferenceTriggerSceneLoader.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/ReferenceTriggerSceneLoader.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/SceneLoadingCurtain.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/SceneLoadingCurtain.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/SceneService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Scenes/SceneService.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextBuilder.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextBuilder.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextController.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextEntities.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextEntities.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/Installer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/Installer.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/GameStateMachine.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/GameStateMachine.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/IState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/IState.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/BootstrapState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/BootstrapState.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/CoreGameState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/CoreGameState.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/MainMenuState.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/MainMenuState.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Installers.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Installers/CoreGameInstaller.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Installers/CoreGameInstaller.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Essential/DontDestroyGameObject.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/Essential/DontDestroyGameObject.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/MetaGame.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/MetaGame/MetaGame.asmdef" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Code/MetaGame/MetaGame.asmdef.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Assets/WindowLibrary.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Assets/WindowLibrary.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/Audio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/Audio.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioService.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioAttenuationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioAttenuationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Audio/Editor/AudioEventEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Audio/Editor/AudioEventEditor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetPath.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetKey.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetPath.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetKey.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/AssetManagement/AssetProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioGlobalVolume.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioGlobalVolume.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Audio/AudioSystem/AudioService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Common/Interfaces/IInitializable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Common/Interfaces/IInitializable.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/GameEventDispatcher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/GameEventDispatcher.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/GameListeners.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/GameListeners.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/MonoSpawnTracker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/GameLoop/MonoSpawnTracker.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Assets/AssetLibrary.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Assets/AssetLibrary.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Assets/MaterialLibrary.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Libraries/Assets/MaterialLibrary.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Network/ConnectionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Network/ConnectionHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Code/Core/Network/HeroPool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/Network/HeroPool.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/Container.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/Container.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/Container.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/Container.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Camera.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Camera.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Camera/CameraView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Camera/CameraView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Camera/CameraView.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Camera/CameraView.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Collisions.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Collisions/InteractionTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions/InteractionTrigger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Collisions/InteractionTrigger.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions/InteractionTrigger.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Collisions/Trigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions/Trigger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Collisions/Trigger.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions/Trigger.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroAnimation.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimation.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroAnimationEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimationEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroAnimationEvent.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimationEvent.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroColor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroColor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroColor.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroColor.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroItemController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroItemController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroItemController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroItemController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroMovement.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroMovement.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroMovement.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroSettings.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroSettings.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Hero/HeroView.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroView.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Obstacle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Obstacle.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Obstacle.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Obstacle.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Params.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Params.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Params/Health.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Params/Health.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Params/Health.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Params/Health.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Params/PersonName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Params/PersonName.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Entities/Params/PersonName.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Params/PersonName.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Game.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/CoreGame.asmdef" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Game.asmdef.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/CoreGame.asmdef.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/ETileType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/ETileType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/ETileType.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/ETileType.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/GridService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/GridService.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridService.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/GridSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/GridSettings.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridSettings.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/GridView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Grid/GridView.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridView.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Activators.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Activators.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Activators/ActivatorBroadcast.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Activators/ActivatorBroadcast.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Activators/ActivatorBroadcast.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Activators/ActivatorBroadcast.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Activators/Laptop.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Activators/Laptop.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Activators/Laptop.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Activators/Laptop.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/EInteractionObjectType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/EInteractionObjectType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/EInteractionObjectType.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/EInteractionObjectType.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/InteractionObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/InteractionObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/InteractionObject.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/InteractionObject.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Item.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Item.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/InteractionObjects/Item.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/InteractionObjects/Item.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time/GameTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/GameTime.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time/GameTime.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/GameTime.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time/GameTimeSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/GameTimeSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time/GameTimeSettings.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/GameTimeSettings.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time/WorldMaterialController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/WorldMaterialController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/Time/WorldMaterialController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/WorldMaterialController.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/_Test.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/_Test.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/_Test/TestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/_Test/TestService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/Game/_Test/TestService.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/_Test/TestService.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextEntities.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/ServiceLocator/ContextEntities.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/GameStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/GameStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/BootstrapState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/BootstrapState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/CoreGameState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/CoreGameState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/MainMenuState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Core/StateMachine/States/MainMenuState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions/InteractionTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Collisions/InteractionTrigger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimationEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroAnimationEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Hero/HeroMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Grid/GridService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/GameTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/GameTime.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/WorldMaterialController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Time/WorldMaterialController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/_Test/TestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/_Test/TestService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Essential/Log.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/Essential/Log.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Components/UIButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Components/UIButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Game/UIHealthBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Game/UIHealthBar.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Game/UIInteractionIcon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Game/UIInteractionIcon.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Game/UIPersonName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Game/UIPersonName.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Windows/HUD/HUDWindowController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Windows/HUD/HUDWindowController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Libraries.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Libraries/Library_Asset.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Libraries/Library_Asset.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Libraries/Library_Audio.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Libraries/Library_Audio.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Materials/World.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Graphics/Materials/World.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FishNet/Runtime/Managing/Scened/SceneManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FishNet/Runtime/Managing/Scened/SceneManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game_0.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game_0.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game_1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game_1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Data/Resources.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/UI_game.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/UI_game.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ui/game.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ui/game/bar.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ui/game/bar.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ui/game/text_small_game.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ui/game/text_small_game.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Library_Asset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Library_Asset.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Bootstrap.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Bootstrap.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Menu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core.csproj.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/Core.csproj.DotSettings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -268,7 +157,7 @@
       <workItem from="1744816352907" duration="1548000" />
       <workItem from="1744911482434" duration="4780000" />
       <workItem from="1744998940157" duration="47000" />
-      <workItem from="1745056025356" duration="17149000" />
+      <workItem from="1745056025356" duration="21199000" />
     </task>
     <servers />
   </component>

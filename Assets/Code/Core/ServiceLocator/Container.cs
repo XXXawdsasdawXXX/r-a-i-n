@@ -104,9 +104,9 @@ namespace Core.ServiceLocator
 
             while (lowContext != null)
             {
-                list.AddRange(lowContext.Services.OfType<T>());
-                list.AddRange(lowContext.Mono.OfType<T>());
-                list.AddRange(lowContext.Views.OfType<T>());
+                list.AddRange(lowContext.Services.Values.OfType<T>());
+                list.AddRange(lowContext.Mono.Values.OfType<T>());
+                list.AddRange(lowContext.Views.Values.OfType<T>());
                 list.AddRange(lowContext.Objects.OfType<T>());
                 
                 lowContext = lowContext.Parent;
