@@ -32,8 +32,8 @@ namespace Code.CoreGame.InteractionObjects.Activators
         public void Unsubscribe()
         {
             Trigger.InteractionPerformed -= _onInteractionPerformed;
-            InstanceFinder.ClientManager.UnregisterBroadcast<ActivatorBroadcast>(_onServerSendChanged);
-            InstanceFinder.ServerManager.UnregisterBroadcast<ActivatorBroadcast>(_onClientRequestChanged);
+            InstanceFinder.ClientManager?.UnregisterBroadcast<ActivatorBroadcast>(_onServerSendChanged);
+            InstanceFinder.ServerManager?.UnregisterBroadcast<ActivatorBroadcast>(_onClientRequestChanged);
         }
 
         private void _onInteractionPerformed()

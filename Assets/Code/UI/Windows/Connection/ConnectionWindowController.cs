@@ -25,6 +25,10 @@ namespace UI.Windows.Connection
           
             view.InputFieldHostIP.SetTextWithoutNotify(_connectionHandler.LastJoinedIP);
             
+            
+            view.InputFieldHostIP.SetTextWithoutNotify(
+                PlayerPrefs.GetString(ConnectionHandler.SAVE_KEY, view.InputFieldHostIP.Value));
+            
             view.Open();
             
             return UniTask.CompletedTask;
@@ -46,6 +50,8 @@ namespace UI.Windows.Connection
 
         private void ButtonClientOnClicked()
         {
+            PlayerPrefs.SetString(ConnectionHandler.SAVE_KEY, view.InputFieldHostIP.Value);
+            
             _connectionHandler.ConnectAsClient(view.InputFieldHostIP.Value);
             
             _gameStateMachine.SwitchState(typeof(CoreGameState));

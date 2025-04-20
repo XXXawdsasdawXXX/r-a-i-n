@@ -8,12 +8,12 @@ namespace Essential
         public static event Action<Mono> Started;
         public static event Action<Mono> Destroyed;
         
-        private void Start()
+        protected virtual void Start()
         {
             Started?.Invoke(this);
         }
         
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             Destroyed?.Invoke(this);
         }

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.ServiceLocator;
+using Cysharp.Threading.Tasks;
 using FishNet;
 using FishNet.Connection;
-using FishNet.Managing.Logging;
 using FishNet.Managing.Scened;
 using FishNet.Object;
 using UnityEngine;
 
 namespace Core.Scenes
 {
-    public class ReferenceTriggerSceneLoader : MonoBehaviour
+    public class ReferenceTriggerSceneLoader : Essential.Mono
     {
+        public event Action<NetworkObject, EScene> MovedToAnotherScene; 
+
           /// <summary>
         /// True to move the triggering object.
         /// </summary>
@@ -34,7 +37,7 @@ namespace Core.Scenes
         /// </summary>
         [Tooltip("Scenes to load.")]
         [SerializeField]
-        private string[] _scenes = new string[0];
+        private EScene _scene;
         /// <summary>
         /// True to only unload for the connectioning causing the trigger.
         /// </summary>
@@ -62,6 +65,46 @@ namespace Core.Scenes
         /// </summary>
         private Dictionary<NetworkConnection, float> _triggeredTimes = new();
 
+        [SerializeField] private int _stackedSceneHandle;
+        [SerializeField] private bool _sceneStack;
+
+        protected override void Start()
+        {
+            InstanceFinder.SceneManager.OnLoadEnd += SceneManagerOnOnLoadEnd;
+            base.Start();
+        }
+
+        private void OnDisable()
+        {
+            if (InstanceFinder.SceneManager != null)
+            {
+                InstanceFinder.SceneManager.OnLoadEnd -= SceneManagerOnOnLoadEnd;
+            }
+        }
+
+        private void SceneManagerOnOnLoadEnd(SceneLoadEndEventArgs obj)
+        {
+            if (!obj.QueueData.AsServer)
+            {
+                return;
+            }
+
+            if (_sceneStack)
+            {
+                return;
+            }
+
+            if (_stackedSceneHandle != 0)
+            {
+                return;
+            }
+
+            if (obj.LoadedScenes.Length > 0)
+            {
+                _stackedSceneHandle = obj.LoadedScenes[0].handle;
+            }
+        }
+
         private void OnTriggerEnter2D(Collider2D col)
         {
             if (!_onTriggerEnter)
@@ -85,8 +128,11 @@ namespace Core.Scenes
             }
           
             _triggeredTimes[networkObject.Owner] = Time.time;
+
+            MovedToAnotherScene?.Invoke(networkObject, _scene);
             
-            LoadScene(col.GetComponent<NetworkObject>());
+            //Container.Instance.GetService<SceneService>().LoadSceneAsync(_scene).Forget();
+            LoadScene(networkObject);
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -116,7 +162,7 @@ namespace Core.Scenes
             LoadScene(other.GetComponent<NetworkObject>());
         }
 
-        
+    
         private void LoadScene(NetworkObject triggeringIdentity)
         {
             if (!InstanceFinder.NetworkManager.IsServerStarted)
@@ -145,7 +191,7 @@ namespace Core.Scenes
             };
 
             //Make scene data.
-            SceneLoadData sceneLoadData = new(_scenes);
+            SceneLoadData sceneLoadData = new(_scene.ToString());
             sceneLoadData.PreferredActiveScene = new(sceneLoadData.SceneLookupDatas[0]);
             sceneLoadData.ReplaceScenes = _replaceOption;
             sceneLoadData.Options = loadOptions;
@@ -162,6 +208,5 @@ namespace Core.Scenes
                 InstanceFinder.SceneManager.LoadGlobalScenes(sceneLoadData);
             }
         }
-
     }
 }

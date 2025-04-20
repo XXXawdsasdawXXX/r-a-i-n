@@ -8,6 +8,7 @@ namespace Core.Network
 {
     public sealed class ConnectionHandler : MonoBehaviour
     {
+        public const string SAVE_KEY = "last_connection_ip";
         public string LastJoinedIP => _serverIP;
 
         [SerializeField] private string _serverIP = "192.168.1.100";

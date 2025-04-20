@@ -9,9 +9,9 @@ namespace Code.CoreGame.Camera
     {
         [field: SerializeField] public UnityEngine.Camera Camera { get; private set; }
 
-        public Vector3 ScreenToWorldPoint(Vector3 worldPosition)
+        public Vector3 ScreenToWorldPoint(Vector3 screenPosition)
         {
-            return Camera.ScreenToWorldPoint(worldPosition);
+            return Camera != null ? Camera.ScreenToWorldPoint(screenPosition) : Vector3.zero;
         }
     }
 }
