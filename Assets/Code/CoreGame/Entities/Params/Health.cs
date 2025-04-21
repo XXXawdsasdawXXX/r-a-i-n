@@ -22,7 +22,7 @@ namespace Code.CoreGame.Entities.Params
             _health.OnChange += _onHealthChange;
         }
 
-        private void OnDestroy()
+        protected  override void OnDestroy()
         {
             _health.OnChange -= _onHealthChange;
         }

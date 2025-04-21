@@ -8,6 +8,7 @@ using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using Essential;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core.StateMachine
 {
@@ -37,30 +38,33 @@ namespace Core.StateMachine
 
         public async UniTask Enter()
         {
-            await _sceneService.LoadSceneAsync(EScene.Game_0); //todo use player progress
-            
-            _coreEntities.Add(AssetProvider.Instantiate(_assetLibrary.Windows.Get(AssetKey.CANVAS_CORE_GAME)));
-            _coreEntities.Add(AssetProvider.Instantiate(_assetLibrary.SceneComponents.Get(AssetKey.CAMERA))); 
             _coreEntities.Add(AssetProvider.Instantiate(_assetLibrary.SceneComponents.Get(AssetKey.POOL_HERO)));
             _coreEntities.Add(AssetProvider.Instantiate(_assetLibrary.SceneComponents.Get(AssetKey.POOL_ITEM)));    
-            
-            ContextEntities coreGameContext = ContextBuilder.BuildContext(_installerLibrary.CoreGameInstaller.GetTypes());
-            Container.Instance.Context.SetChildContext(coreGameContext);
-            _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
+            _coreEntities.Add(AssetProvider.Instantiate(_assetLibrary.Windows.Get(AssetKey.CANVAS_CORE_GAME)));
 
+            Container.Instance.Context.BuildChildContext(_installerLibrary.CoreGameInstaller.GetTypes());
+            
+            await _sceneService.LoadSceneAsync(EScene.Game_0); //todo use player progress
+            
+            Log.Info(this, "build child context");
+            Container.Instance.Context.Child.BuildChildContext();
+           
+            await _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
+            
             SubscribeToEvents(true);
         }
 
-        public UniTask Exit()
+        public  UniTask Exit()
         {
             SubscribeToEvents(false);
             
-            _gameEventDispatcher.Dispose();
+             _gameEventDispatcher.Dispose();
 
             foreach (GameObject entity in _coreEntities)
             {
                 Object.Destroy(entity);
             }
+            
             _coreEntities.Clear();
             
             return UniTask.CompletedTask;
@@ -80,18 +84,17 @@ namespace Core.StateMachine
             }
         }
 
-        private void OnSwitchScene(EScene obj)
+        private async void OnSwitchScene(EScene obj)
         {
             Log.Info(this, $"On switch scene {obj}", Color.magenta);
             
-            _gameEventDispatcher.Dispose();
-            
-            ContextEntities sceneContext = ContextBuilder
-                .BuildContext(_installerLibrary.GetSceneInstaller(obj)?.GetTypes()); 
-            
-            Container.Instance.Context.Child.SetChildContext(sceneContext);
+             _gameEventDispatcher.Dispose();
+
+          
+             
+            Container.Instance.Context.Child.BuildChildContext(_installerLibrary.GetSceneInstaller(obj)?.GetTypes());
          
-            _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
+            await _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
         }
     }
 }

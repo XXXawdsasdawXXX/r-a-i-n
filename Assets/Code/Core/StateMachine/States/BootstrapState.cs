@@ -49,15 +49,16 @@ namespace Core.StateMachine
                 container.AddConfig(config);
             }
             
-            GameEventDispatcher gameEventDispatcher = container.GetService<GameEventDispatcher>();
-            gameEventDispatcher.Register(container.GetGameListeners());
+            /*GameEventDispatcher gameEventDispatcher = container.GetService<GameEventDispatcher>();
+           
+            await gameEventDispatcher.Register(container.GetGameListeners());*/
         }
 
         public UniTask Enter()
         {
-            _gameStateMachine.SwitchState(typeof(MainMenuState));
-            
-            return UniTask.CompletedTask;
+             _gameStateMachine.SwitchState(typeof(MainMenuState));
+     
+             return UniTask.CompletedTask;
         }
 
         public UniTask Exit()

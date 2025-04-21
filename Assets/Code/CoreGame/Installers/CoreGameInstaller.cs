@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.CoreGame._Test;
+using Code.CoreGame.Camera;
 using Code.CoreGame.Grid;
 using Code.CoreGame.Time;
 using Core.Network;
@@ -18,7 +19,8 @@ namespace Code.CoreGame.Installers
                 typeof(TestService),
                 typeof(GameTime),
                 typeof(GridService),
-                typeof(WorldMaterialController)
+                typeof(WorldMaterialController),
+                typeof(CameraController),
             };
         }
     }

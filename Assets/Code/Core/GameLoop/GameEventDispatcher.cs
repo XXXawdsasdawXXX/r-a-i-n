@@ -50,32 +50,29 @@ namespace Core.GameLoop
             }
         }
         
-        public async void Register(List<IGameListener> listeners)
+        public async UniTask Register(List<IGameListener> listeners)
         {
             _initializeListeners(listeners);
 
             await _notifyGameInitialize();
             await _notifyGameLoad();
-
-            await UniTask.WaitUntil(() => InstanceFinder.IsServerStarted || InstanceFinder.IsClientStarted);
-
             await _notifySubscribe();
             await _notifyGameStart();
-
+            
             _isStarted = true;
         }
 
         public void Dispose()
         {
-            if (_isStarted)
+            foreach (ISubscriber subscriber in _subscribers)
             {
-                _notifyGameExit();
+                subscriber.Unsubscribe();
             }
-
+       
             _isStarted = false;
         }
         
-        public async void AddSpawnableListener(IGameListener listener)
+        public async void AddListener(IGameListener listener)
         {
             if (!_listeners.Add(listener))
             {
@@ -178,13 +175,14 @@ namespace Core.GameLoop
                     continue;
                 }
                 
-                Log.Info(this, $"{listener.GetType().Name} initialize", Color.blue);
                 await listener.Initialize();
 
                 listener.IsInitialized = true;
             }
 
             marker.End();
+            
+            Log.Info(this, $"_notifyGameInitialize", Color.red);
         }
 
         private async UniTask _notifyGameLoad()
@@ -198,6 +196,8 @@ namespace Core.GameLoop
             }
 
             marker.End();
+            
+            Log.Info(this, $"_notifyGameLoad", Color.red);
         }
 
         private async UniTask _notifySubscribe()
@@ -211,6 +211,8 @@ namespace Core.GameLoop
             }
 
             marker.End();
+            
+            Log.Info(this, $"_notifySubscribe", Color.red);
         }
 
         private async UniTask _notifyGameStart()
@@ -222,8 +224,10 @@ namespace Core.GameLoop
             {
                 await listener.GameStart();
             }
-
+            
             marker.End();
+            
+            Log.Info(this, $"_notifyGameStart", Color.red);
         }
 
         private void _notifyGameUpdate(float deltaTime)
@@ -239,6 +243,7 @@ namespace Core.GameLoop
                     Profiler.EndSample();
                 }
             }
+
         }
 
         private void _notifyGameFixedUpdate(float fixedDeltaTime)
@@ -271,6 +276,8 @@ namespace Core.GameLoop
                 listener.GameExit();
             }
 
+            
+            Log.Info(this, $"_notifyGameExit", Color.red);
             marker.End();
         }
     }

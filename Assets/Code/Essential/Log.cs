@@ -8,12 +8,15 @@ namespace Essential
     public static class Log
     {
         public static bool PROFILER_IS_ACTIVE = true;
-        
-        private static readonly Color SERVER_COLOR = new(0.3f, 0.4f, 0.6f);
-        private static readonly Color CLIENT_COLOR = new(0.4f, 0.3f, 0.4f);
-        
+
+        public static readonly Color Orange = new Color(0.7f, 0.4f, 0.2f);
+        public static readonly Color Green = new Color(0.7f, 0.8f, 0.4f);
+        public static readonly Color Blue = new Color(0.45f, 0.7f, 0.9f);
+
+        public static readonly Color SERVER_COLOR = new(0.3f, 0.4f, 0.6f);
+        public static readonly Color CLIENT_COLOR = new(0.4f, 0.3f, 0.4f);
+
         [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
-        
         public static void Info(object context, string message)
         {
             if (context != null)
@@ -21,22 +24,23 @@ namespace Essential
                 Debug.Log($"{context.GetType().Name}: {message}");
                 return;
             }
-            
+
             Debug.Log(message);
         }
-        
+
         public static void Info(object context, string message, Color color)
         {
             if (context != null)
             {
-                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
+                Debug.Log(
+                    $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
                 return;
             }
-            
+
             Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>" + message + "</color>");
         }
 
-        
+
         public static void Info(string message, object context = null)
         {
             if (context != null)
@@ -44,7 +48,7 @@ namespace Essential
                 Debug.Log($"{context.GetType().Name}: {message}");
                 return;
             }
-            
+
             Debug.Log(message);
         }
 
@@ -53,34 +57,37 @@ namespace Essential
         {
             if (context != null)
             {
-                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
+                Debug.Log(
+                    $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
                 return;
             }
-            
+
             Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>" + message + "</color>");
         }
-        
+
         [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
         public static void Info(object message, Color color, object context = null)
         {
             if (context != null)
             {
-                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
+                Debug.Log(
+                    $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{context.GetType().Name}: {message}</color>");
                 return;
             }
-            
+
             Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>" + message + "</color>");
         }
-        
+
         [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
         public static void ServerInfo(string message, object context = null)
         {
             if (context != null)
             {
-                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(SERVER_COLOR)}>|SERVER| {context.GetType().Name}: {message}</color>");
+                Debug.Log(
+                    $"<color=#{ColorUtility.ToHtmlStringRGBA(SERVER_COLOR)}>|SERVER| {context.GetType().Name}: {message}</color>");
                 return;
             }
-            
+
             Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(SERVER_COLOR)}>|SERVER|" + message + "</color>");
         }
 
@@ -89,13 +96,14 @@ namespace Essential
         {
             if (context != null)
             {
-                Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(CLIENT_COLOR)}>|CLIENT| {context.GetType().Name}: {message}</color>");
+                Debug.Log(
+                    $"<color=#{ColorUtility.ToHtmlStringRGBA(CLIENT_COLOR)}>|CLIENT| {context.GetType().Name}: {message}</color>");
                 return;
             }
-            
+
             Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGBA(CLIENT_COLOR)}>|CLIENT|" + message + "</color>");
         }
-        
+
         [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
         public static void Error(string message, object context = null)
         {
@@ -104,7 +112,7 @@ namespace Essential
                 Debug.LogError($"{context}: {message}");
                 return;
             }
-            
+
             Debug.LogError(message);
         }
 
@@ -116,7 +124,7 @@ namespace Essential
                 Debug.LogWarning($"{context}: {message}");
                 return;
             }
-            
+
             Debug.LogWarning(message);
         }
 

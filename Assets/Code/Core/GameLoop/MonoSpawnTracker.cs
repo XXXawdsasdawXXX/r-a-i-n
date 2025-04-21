@@ -109,12 +109,10 @@ namespace Core.GameLoop
 
         private void _onMonoStarted(Essential.Mono obj)
         {
-            Log.Info($"Mono started {obj.GetType().Name}", this);
-
             if (obj is IGameListener gameListener && _observeMono.Add(obj))
             {
-                Log.Info($"Mono started {obj.GetType().Name} add to collection", this);
-                _gameEventDispatcher.AddSpawnableListener(gameListener);
+                Log.Info(this, $"Mono started {obj.GetType().Name} add to collection");
+                _gameEventDispatcher.AddListener(gameListener);
             }
         }
 

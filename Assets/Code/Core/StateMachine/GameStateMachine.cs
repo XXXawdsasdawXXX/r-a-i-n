@@ -19,8 +19,23 @@ namespace Core.StateMachine
                 { typeof(MainMenuState), new MainMenuState() },
                 { typeof(CoreGameState) , new CoreGameState()}
             };
+            
+            SetState(typeof(BootstrapState));
+            
+        }
+        
+        private async void SetState(Type type)
+        {
+            _currentState = _states[type];
 
-            SwitchState(typeof(BootstrapState));
+            if (!_currentState.IsInitialized)
+            {
+                await _currentState.Initialize();
+
+                _currentState.IsInitialized = true;
+            }
+            
+            await _states[type].Enter();
         }
 
         public async void SwitchState(Type type)
@@ -44,7 +59,7 @@ namespace Core.StateMachine
 
         public void GameExit()
         {
-            // _currentState.Exit();
+            _currentState?.Exit();
         }
     }
 }

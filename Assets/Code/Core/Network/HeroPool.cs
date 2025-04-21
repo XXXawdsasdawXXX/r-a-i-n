@@ -19,17 +19,19 @@ namespace Core.Network
         public event Action<GameObject> HeroSpawned;
         public event Action<GameObject> PlayerHeroSpawned;
 
-        private readonly Dictionary<NetworkConnection, NetworkObject> _heroes = new();
+        public readonly Dictionary<NetworkConnection, NetworkObject> Heroes = new();
         private readonly Color _logColor = new(0.3f, 0.8f, 0.2f);
 
         [SerializeField] private NetworkObject _heroPrefab;
 
         private NetworkManager _networkManager;
+        private UserProvider _userProvider;
 
 
         public UniTask Initialize()
         {
             _networkManager = InstanceFinder.NetworkManager;
+            _userProvider = Container.Instance.GetService<UserProvider>();
 
             return UniTask.CompletedTask;
         }
@@ -50,11 +52,12 @@ namespace Core.Network
 
         private void _sceneManagerOnClientLoadedStartScenes(NetworkConnection connection, bool isServer)
         {
-            if (_heroes.ContainsKey(connection))
+            if (Heroes.ContainsKey(connection))
             {
+                Log.Info(this, $"hero already exist", Log.Blue);
                 return;
             }
-
+            
             NetworkObject pooledInstantiated = _networkManager.GetPooledInstantiated(
                 _heroPrefab,
                 Vector3.zero,
@@ -68,8 +71,19 @@ namespace Core.Network
                      $"PrefabId: {_heroPrefab.PrefabId}, " +
                      $"CollectionId: {_heroPrefab.SpawnableCollectionId}", _logColor, this);
 
-            _heroes[connection] = pooledInstantiated;
-
+            Heroes[connection] = pooledInstantiated;
+            
+            Log.Info(this, $"is owner {pooledInstantiated.gameObject.name} is owner {pooledInstantiated.IsOwner}", Log.Blue);
+            
+            /*
+            if (connection == InstanceFinder.ClientManager.Connection)
+            {
+                Log.Info(this, $"set hero", Log.Blue);
+                _userProvider.SetConnection(connection);
+                _userProvider.SetHero(pooledInstantiated);
+            }
+            */
+            
             HeroSpawned?.Invoke(pooledInstantiated.gameObject);
 
             TargetHeroSpawned(connection, pooledInstantiated.gameObject);
@@ -84,7 +98,7 @@ namespace Core.Network
 
         private void _serverManagerOnRemoveConnection(NetworkConnection connection, RemoteConnectionStateArgs state)
         {
-            Log.Info($"on remove connection {_heroes?.ContainsKey(connection)} {state.ConnectionState}" +
+            Log.Info($"on remove connection {Heroes?.ContainsKey(connection)} {state.ConnectionState}" +
                      $"\n nc id {connection.ClientId} state {state.ConnectionId}", _logColor, this);
         }
 

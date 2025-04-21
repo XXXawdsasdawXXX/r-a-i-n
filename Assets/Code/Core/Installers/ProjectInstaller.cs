@@ -2,6 +2,7 @@ using System;
 using Core.Audio;
 using Core.GameLoop;
 using Core.Input;
+using Core.Network;
 using Core.Scenes;
 using Core.ServiceLocator;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Core.Installers
         {
             return new[]
             {
+                typeof(UserProvider),
                 typeof(MonoSpawnTracker),
                 typeof(AudioService),
                 typeof(AudioGlobalVolume),

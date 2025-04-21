@@ -1,95 +1,185 @@
 ﻿using System;
 using System.Collections.Generic;
-using Essential;
+using System.Linq;
 using Object = UnityEngine.Object;
 
 namespace Core.ServiceLocator
 {
     internal static class ContextBuilder
     {
-        internal static ContextEntities BuildContext()
-        {
-            ContextEntities context = new()
-            {
-                Services = new Dictionary<Type, IService>(),
-                Views = new Dictionary<Type, MonoView>(),
-                Mono = new Dictionary<Type, IMono>(),
-                Objects = Object.FindObjectsOfType<Essential.Mono>()
-            };
-
-            foreach (Essential.Mono mono in context.Objects)
-            {
-                _registry(mono, context);
-            }
-
-            return context;
-        }
-
         internal static ContextEntities BuildContext(Type[] allTypes)
         {
-            ContextEntities context = new()
+            ContextEntities newContext = new()
             {
                 Services = new Dictionary<Type, IService>(),
                 Views = new Dictionary<Type, MonoView>(),
                 Mono = new Dictionary<Type, IMono>(),
-                Objects = Object.FindObjectsOfType<Essential.Mono>()
+                Objects = Object.FindObjectsOfType<Essential.Mono>().ToList()
             };
-
-            foreach (Essential.Mono mono in context.Objects)
+            
+            foreach (Essential.Mono mono in newContext.Objects)
             {
-                _registry(mono, context);
+                _registry(mono,  newContext);
             }
 
-            if (allTypes != null)
+            foreach (Type type in allTypes) 
             {
-                foreach (Type type in allTypes)
-                {
-                    _createAndRegistry(type, context);
-                }
+                _createAndRegistry(type,  newContext);
             }
 
-            return context;
+            return newContext;
+        }
+        internal static void BuildChildContext(this ContextEntities existingContext)
+        {
+            existingContext.SetChildContext(BuildContext(existingContext));
         }
 
-        private static void _registry(Essential.Mono mono, ContextEntities context)
+        internal static void BuildChildContext(this ContextEntities existingContext, Type[] allTypes)
+        {
+            existingContext.SetChildContext(BuildContext(existingContext, allTypes));
+        }
+
+        internal static ContextEntities BuildContext(ContextEntities existingContext, Type[] allTypes)
+        {
+            if (allTypes == null)
+            {
+                return BuildContext(existingContext);
+            }
+            
+            ContextEntities newContext = new()
+            {
+                Services = new Dictionary<Type, IService>(),
+                Views = new Dictionary<Type, MonoView>(),
+                Mono = new Dictionary<Type, IMono>(),
+                Objects = Object.FindObjectsOfType<Essential.Mono>().ToList()
+            };
+            
+            ContextEntities currentContext = existingContext;
+        
+            while (currentContext != null)
+            {
+                newContext.Objects.RemoveAll(obj => currentContext.ContainsObject(obj));
+                currentContext = currentContext.Parent;
+            }
+            
+            foreach (Essential.Mono mono in newContext.Objects)
+            {
+                _registry(mono, existingContext, newContext);
+            }
+
+            foreach (Type type in allTypes) 
+            {
+                _createAndRegistry(type, existingContext, newContext);
+            }
+
+            return newContext;
+        }
+        
+        internal static ContextEntities BuildContext(ContextEntities existingContext)
+        {
+            ContextEntities newContext = new()
+            {
+                Services = new Dictionary<Type, IService>(),
+                Views = new Dictionary<Type, MonoView>(),
+                Mono = new Dictionary<Type, IMono>(),
+                Objects = Object.FindObjectsOfType<Essential.Mono>().ToList()
+            };
+            
+            ContextEntities currentContext = existingContext;
+        
+            while (currentContext != null)
+            {
+                newContext.Objects.RemoveAll(obj => currentContext.ContainsObject(obj));
+                currentContext = currentContext.Parent;
+            }
+            
+            foreach (Essential.Mono mono in newContext.Objects)
+            {
+                _registry(mono, existingContext, newContext);
+            }
+
+            return newContext;
+        }
+
+        private static void _registry(Essential.Mono mono, ContextEntities existingContext, ContextEntities newContext)
         {
             Type type = mono.GetType();
 
-            if (mono is IMono monoInterface && !context.Mono.ContainsKey(type))
+            if (mono is IMono monoInterface 
+                &&  !existingContext.ContainsMono(type) && !newContext.Mono.ContainsKey(type) )
             {
-                context.Mono[type] = monoInterface;
+                newContext.Mono[type] = monoInterface;
             }
 
-            else if (mono is IService service && !context.Services.ContainsKey(type))
+            else if (mono is IService service 
+                     && !existingContext.ContainsService(type) && !newContext.Services.ContainsKey(type))
             {
-                context.Services[type] = service;
+                newContext.Services[type] = service;
             }
 
-            else if (mono is MonoView view && !context.Views.ContainsKey(type))
+            else if (mono is MonoView view 
+                     && !existingContext.ContainsView(type) && !newContext.Views.ContainsKey(type))
             {
-                context.Views[type] = view;
+                newContext.Views[type] = view;
             }
-
-            Log.Info($"[ContextBuilder] _registry {type.Name}");
         }
 
-        private static void _createAndRegistry(Type type, ContextEntities context)
+        private static void _createAndRegistry(Type type, ContextEntities existingContext, ContextEntities newContext)
+        {
+            if (typeof(IService).IsAssignableFrom(type) && !existingContext.ContainsService(type)
+                                                        && !typeof(Essential.Mono).IsAssignableFrom(type)
+                                                        && !type.IsAbstract)
+            {
+                IService instance = (IService)Activator.CreateInstance(type);
+                newContext.Services[type] = instance;
+            }
+
+            else if (typeof(IMono).IsAssignableFrom(type) && !existingContext.ContainsMono(type)
+                                                          && !typeof(Essential.Mono).IsAssignableFrom(type)
+                                                          && !type.IsAbstract)
+            {
+                IMono instance = (IMono)Activator.CreateInstance(type);
+                newContext.Mono[type] = instance;
+            }
+        }
+        
+        
+        private static void _registry(Essential.Mono mono, ContextEntities newContext)
+        {
+            Type type = mono.GetType();
+
+            if (mono is IMono monoInterface  && !newContext.Mono.ContainsKey(type))
+            {
+                newContext.Mono[type] = monoInterface;
+            }
+
+            else if (mono is IService service && !newContext.Services.ContainsKey(type))
+            {
+                newContext.Services[type] = service;
+            }
+
+            else if (mono is MonoView view  && !newContext.Views.ContainsKey(type))
+            {
+                newContext.Views[type] = view;
+            }
+        }
+
+        private static void _createAndRegistry(Type type, ContextEntities newContext)
         {
             if (typeof(IService).IsAssignableFrom(type) && !typeof(Essential.Mono).IsAssignableFrom(type)
                                                         && !type.IsAbstract)
             {
                 IService instance = (IService)Activator.CreateInstance(type);
-                context.Services[type] = instance;
+                newContext.Services[type] = instance;
             }
 
             else if (typeof(IMono).IsAssignableFrom(type) && !typeof(Essential.Mono).IsAssignableFrom(type)
                                                           && !type.IsAbstract)
             {
                 IMono instance = (IMono)Activator.CreateInstance(type);
-                context.Mono[type] = instance;
+                newContext.Mono[type] = instance;
             }
-
-            Log.Info($"[ContextBuilder] _createAndRegistry {type.Name}");
         }
+        
     }
 }

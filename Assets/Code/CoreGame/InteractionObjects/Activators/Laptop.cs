@@ -1,5 +1,6 @@
 ﻿using Core.GameLoop;
 using Cysharp.Threading.Tasks;
+using Essential;
 using FishNet;
 using FishNet.Connection;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace Code.CoreGame.InteractionObjects.Activators
 
         public UniTask Subscribe()
         {
+            Log.Info(this, "subscribe", new Color(0.4f, 0.5f, 0.5f));
             Trigger.InteractionPerformed += _onInteractionPerformed;
             InstanceFinder.ClientManager.RegisterBroadcast<ActivatorBroadcast>(_onServerSendChanged);
             InstanceFinder.ServerManager.RegisterBroadcast<ActivatorBroadcast>(_onClientRequestChanged);
@@ -31,6 +33,7 @@ namespace Code.CoreGame.InteractionObjects.Activators
 
         public void Unsubscribe()
         {
+            Log.Info(this, "unsubscribe", new Color(0.4f, 0.5f, 0.5f));
             Trigger.InteractionPerformed -= _onInteractionPerformed;
             InstanceFinder.ClientManager?.UnregisterBroadcast<ActivatorBroadcast>(_onServerSendChanged);
             InstanceFinder.ServerManager?.UnregisterBroadcast<ActivatorBroadcast>(_onClientRequestChanged);

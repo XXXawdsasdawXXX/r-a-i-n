@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Code.CoreGame.Entities.Hero
 {
-    public class HeroMovement : NetworkBehaviour, IInitializeListener, IFixedUpdateListener
+    public class HeroMovement : NetworkBehaviour, IInitializeListener, IFixedUpdateListener, IStartListener
     {
         public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "HeroMovement";
@@ -30,6 +30,22 @@ namespace Code.CoreGame.Entities.Hero
                 return;
             }
             
+        
+        }
+
+        public UniTask Initialize()
+        {
+            Log.Info("initialize",Color.magenta, this);
+            
+            _inputManager = Container.Instance.GetService<InputManager>();
+            
+            return UniTask.CompletedTask;
+        }
+
+
+        public UniTask GameStart()
+        {
+            /*
             _camera = Container.Instance.GetView<CameraView>();
 
             if (_camera != null)
@@ -44,13 +60,7 @@ namespace Code.CoreGame.Entities.Hero
                 
                 Log.Info("spawn",Color.magenta, this);
             }
-        }
-        
-        public UniTask Initialize()
-        {
-            Log.Info("initialize",Color.magenta, this);
-            
-            _inputManager = Container.Instance.GetService<InputManager>();
+            */
             
             return UniTask.CompletedTask;
         }
@@ -59,5 +69,7 @@ namespace Code.CoreGame.Entities.Hero
         {
             _rigidbody2D.velocity = _inputManager.Direction.normalized * _moveSpeed * fixedDeltaTime;
         }
+
+    
     }
 }

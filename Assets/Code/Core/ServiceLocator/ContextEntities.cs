@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net.Filter;
 
 namespace Core.ServiceLocator
 {
     internal class ContextEntities
     {
-        public Essential.Mono[] Objects;
+        public List<Essential.Mono> Objects;
         public Dictionary<Type, MonoView> Views;
         
         public Dictionary<Type, IService> Services;
@@ -18,6 +19,48 @@ namespace Core.ServiceLocator
         {
             Child = context;
             Child.Parent = this;
+        }
+
+        public bool ContainsMono(Type type)
+        {
+            if (Mono.ContainsKey(type))
+            {
+                return true;
+            }
+            
+            return Parent != null && Parent.ContainsMono(type);
+        }
+        
+        public bool ContainsService(Type type)
+        {
+            if (Services.ContainsKey(type))
+            {
+                return true;
+            }
+            
+            return Parent != null && Parent.ContainsService(type);
+        }
+        
+        public bool ContainsView(Type type)
+        {
+            if (Views.ContainsKey(type))
+            {
+                return true;
+            }
+            
+            return Parent != null && Parent.ContainsView(type);
+        }
+        
+        public bool ContainsObject(Essential.Mono mono)
+        {
+            Objects.RemoveAll(o => o == null);
+            
+            if (Objects.Contains(mono))
+            {
+                return true;
+            }
+            
+            return Parent != null && Parent.Objects.Contains(mono);
         }
     }
 }

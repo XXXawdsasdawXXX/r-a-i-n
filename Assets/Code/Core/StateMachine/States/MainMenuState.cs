@@ -15,11 +15,11 @@ namespace Core.StateMachine
         private SceneService _sceneService;
         
         private AssetLibrary _assetLibrary;
-        
-        
+
         public UniTask Initialize()
         {
             _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
+            
             _sceneService = Container.Instance.GetService<SceneService>();
             
             _assetLibrary = Container.Instance.GetConfig<AssetLibrary>();
@@ -34,16 +34,16 @@ namespace Core.StateMachine
             AssetProvider.Instantiate(_assetLibrary.Windows.Get(AssetKey.CANVAS_MAIN_MENU));
             AssetProvider.Instantiate(_assetLibrary.SceneComponents.Get(AssetKey.CAMERA));
             
-            Container.Instance.Context.SetChildContext(ContextBuilder.BuildContext());
+            Container.Instance.Context.BuildChildContext();
             
-            _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
+            await _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
         }
 
-        public UniTask Exit()
+        public  UniTask Exit()
         {
-            _gameEventDispatcher.Dispose();
-            
-            return UniTask.CompletedTask;
+             _gameEventDispatcher.Dispose();
+             
+             return UniTask.CompletedTask;
         }
     }
 }
