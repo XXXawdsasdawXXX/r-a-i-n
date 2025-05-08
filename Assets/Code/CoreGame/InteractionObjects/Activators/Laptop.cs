@@ -21,14 +21,11 @@ namespace Code.CoreGame.InteractionObjects.Activators
             base.StartInteraction();
         }
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
-            Log.Info(this, "subscribe", new Color(0.4f, 0.5f, 0.5f));
             Trigger.InteractionPerformed += _onInteractionPerformed;
             InstanceFinder.ClientManager.RegisterBroadcast<ActivatorBroadcast>(_onServerSendChanged);
             InstanceFinder.ServerManager.RegisterBroadcast<ActivatorBroadcast>(_onClientRequestChanged);
-
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

@@ -39,7 +39,7 @@ namespace Core.GameLoop
             return UniTask.CompletedTask;
         }
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             Essential.Mono.Started += _onMonoStarted;
             Essential.Mono.Destroyed += _onMonoDestroyed;
@@ -57,7 +57,6 @@ namespace Core.GameLoop
             InstanceFinder.ServerManager.OnSpawn += _onMonoStarted;
             InstanceFinder.ServerManager.OnDespawn += _onMonoDestroyed;
 
-            return UniTask.CompletedTask;
         }
 
 

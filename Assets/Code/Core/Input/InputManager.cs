@@ -13,7 +13,7 @@ namespace Core.Input
         public event Action<EInputAction> ActionEnded;
 
         public string RuntimeListenerName => "InputManager";
-        public Vector2 Direction { get; private set; }
+        public Vector2 Direction { get; private set; } = Vector2.zero;
         public Vector3 MousePosition { get; private set; }
 
 

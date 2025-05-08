@@ -27,11 +27,13 @@ namespace Core.Audio
         {
             if (_event.IsNull)
             {
-                Log.Error($"{gameObject.name} event reference is null", this);
+                Log.Error(this, $"{gameObject.name} event reference is null");
+                
                 return;
             }
             
             Log.Info($"Play {_event.Path}", this);
+            
             _instance = RuntimeManager.CreateInstance(_event);
             _instance.set3DAttributes(transform.position.To3DAttributes());
             _instance.start();

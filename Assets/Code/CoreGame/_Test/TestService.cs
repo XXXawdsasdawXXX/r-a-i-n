@@ -29,11 +29,9 @@ namespace Code.CoreGame._Test
             return UniTask.CompletedTask;
         }
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             _inputManager.ActionEnded += _inputManagerOnActionEnded;
-            
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

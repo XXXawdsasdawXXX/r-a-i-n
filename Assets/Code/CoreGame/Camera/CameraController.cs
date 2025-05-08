@@ -1,5 +1,4 @@
 ﻿using Core.GameLoop;
-using Core.Interfaces;
 using Core.Network;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
@@ -41,8 +40,6 @@ namespace Code.CoreGame.Camera
                 position.z = -10;
                 
                 _cameraView.transform.position = position;
-                
-                Log.Info(this, $"user id {_userProvider.Connection.ClientId}.", Log.Orange);
             }
             else
             {

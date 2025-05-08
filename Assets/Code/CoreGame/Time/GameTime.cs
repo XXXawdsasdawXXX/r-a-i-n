@@ -35,11 +35,9 @@ namespace Code.CoreGame.Time
             return UniTask.CompletedTask;;
         }
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             InstanceFinder.ClientManager.RegisterBroadcast<GameTimeBroadcast>(_onServerSendChanged);
-            
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

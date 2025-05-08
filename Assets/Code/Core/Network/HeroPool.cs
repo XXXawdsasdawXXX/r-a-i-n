@@ -36,12 +36,10 @@ namespace Core.Network
             return UniTask.CompletedTask;
         }
         
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             _networkManager.SceneManager.OnClientLoadedStartScenes += _sceneManagerOnClientLoadedStartScenes;
             _networkManager.ServerManager.OnRemoteConnectionState += _serverManagerOnRemoveConnection;
-
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

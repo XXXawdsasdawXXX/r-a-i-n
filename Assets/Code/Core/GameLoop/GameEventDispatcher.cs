@@ -86,14 +86,14 @@ namespace Core.GameLoop
 
             if (listener is IInitializeListener initListener && !initListener.IsInitialized)
             {
-                await initListener.Initialize();
+                initListener.Initialize();
                 
                 initListener.IsInitialized = true;
             }
 
             if (listener is ISubscriber subscriber)
             {
-                await subscriber.Subscribe();
+                subscriber.Subscribe();
 
                 _subscribers.Add(subscriber);
             }
@@ -200,19 +200,21 @@ namespace Core.GameLoop
             Log.Info(this, $"_notifyGameLoad", Color.red);
         }
 
-        private async UniTask _notifySubscribe()
+        private UniTask _notifySubscribe()
         {
             ProfilerMarker marker = new("_notifySubscribe");
             marker.Begin();
 
             foreach (ISubscriber subscriber in _subscribers)
             {
-                await subscriber.Subscribe();
+                subscriber.Subscribe();
             }
 
             marker.End();
             
             Log.Info(this, $"_notifySubscribe", Color.red);
+            
+            return UniTask.CompletedTask;
         }
 
         private async UniTask _notifyGameStart()

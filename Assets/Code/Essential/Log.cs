@@ -12,6 +12,7 @@ namespace Essential
         public static readonly Color Orange = new Color(0.7f, 0.4f, 0.2f);
         public static readonly Color Green = new Color(0.7f, 0.8f, 0.4f);
         public static readonly Color Blue = new Color(0.45f, 0.7f, 0.9f);
+        public static readonly Color Gray = new Color(0.4f, 0.5f, 0.5f);
 
         public static readonly Color SERVER_COLOR = new(0.3f, 0.4f, 0.6f);
         public static readonly Color CLIENT_COLOR = new(0.4f, 0.3f, 0.4f);
@@ -105,7 +106,7 @@ namespace Essential
         }
 
         [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
-        public static void Error(string message, object context = null)
+        public static void Error( object context, string message)
         {
             if (context != null)
             {

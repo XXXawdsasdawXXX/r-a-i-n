@@ -17,12 +17,10 @@ namespace Core.ServiceLocator
             return UniTask.CompletedTask;
         }
         
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             _sceneService.SceneUnloaded += OnSceneUnloaded;
             _sceneService.SceneLoaded += OnSceneLoaded;
-
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

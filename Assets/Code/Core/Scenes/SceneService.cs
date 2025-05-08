@@ -18,11 +18,9 @@ namespace Core.Scenes
         
         private EScene _currentScene;
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             InstanceFinder.SceneManager.OnLoadEnd += OnSceneManagerLoadEnd;
-            
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

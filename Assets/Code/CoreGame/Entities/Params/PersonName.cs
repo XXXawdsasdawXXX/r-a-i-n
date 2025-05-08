@@ -20,11 +20,9 @@ namespace Code.CoreGame.Entities.Params
             SetName(GetHashCode().ToString());
         }
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
             _name.OnChange += OnNameChanged;
-
-            return UniTask.CompletedTask;
         }
 
         public void Unsubscribe()

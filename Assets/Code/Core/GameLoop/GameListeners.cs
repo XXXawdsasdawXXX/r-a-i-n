@@ -9,7 +9,7 @@ namespace Core.GameLoop
 
     public interface ISubscriber : IGameListener
     {
-        UniTask Subscribe();
+        void Subscribe();
         void Unsubscribe();
     }
     

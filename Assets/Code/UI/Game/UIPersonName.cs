@@ -18,17 +18,12 @@ namespace UI.Game
             
             Log.Info($"game start set name {_personName.Name}");
             
-            _personName.Changed += SetName;
-            
             return UniTask.CompletedTask;
         }
 
-        public UniTask Subscribe()
+        public void Subscribe()
         {
-            Log.Info($"2", this);
-            
-            
-            return UniTask.CompletedTask;
+            _personName.Changed += SetName;
         }
 
         public void Unsubscribe()

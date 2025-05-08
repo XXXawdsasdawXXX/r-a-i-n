@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.CoreGame.Collisions;
+using Code.CoreGame.Common.Collisions;
 using UnityEngine;
 
 namespace Code.CoreGame.InteractionObjects
