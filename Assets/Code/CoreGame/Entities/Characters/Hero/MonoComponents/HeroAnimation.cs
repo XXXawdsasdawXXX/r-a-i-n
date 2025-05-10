@@ -1,15 +1,15 @@
-﻿using Core.Data;
+﻿using Code.CoreGame.Entities.Characters.Controllers;
+using Core.Data;
 using Core.GameLoop;
+using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Hero
+namespace Code.CoreGame.Entities.Characters.Hero
 {
     public class HeroAnimation : NetworkBehaviour, IInitializeListener, IUpdateListener
     {
-        private static readonly int SPEED_HASH = Animator.StringToHash("Speed");
-        private static readonly int HARVEST_HASH = Animator.StringToHash("Harvest");
         public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "HeroAnimation";
         
@@ -18,6 +18,7 @@ namespace Code.CoreGame.Entities.Hero
         [SerializeField] private Rigidbody2D _rigidbody2D;
 
         private Cache<Vector3> _velocityCache;
+        private Miner _mainer;
 
         public UniTask Initialize()
         {
@@ -37,7 +38,7 @@ namespace Code.CoreGame.Entities.Hero
             {
                 return;
             }
-            
+
             if (_velocityCache.Update(_rigidbody2D.velocity))
             {
                 _animator.SetFloat(AnimatorKey.SPEED, _rigidbody2D.velocity.magnitude);

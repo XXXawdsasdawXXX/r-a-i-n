@@ -1,9 +1,9 @@
 ﻿using System;
 using Code.CoreGame._Test;
 using Code.CoreGame.Camera;
+using Code.CoreGame.Entities.Characters.Controllers;
 using Code.CoreGame.Grid;
 using Code.CoreGame.Time;
-using Core.Network;
 using Core.ServiceLocator;
 using UnityEngine;
 
@@ -17,10 +17,14 @@ namespace Code.CoreGame.Installers
             return new[]
             {
                 typeof(TestService),
+                //world
                 typeof(GameTime),
                 typeof(GridService),
                 typeof(WorldMaterialController),
                 typeof(CameraController),
+                //hero
+                typeof(Movement),
+                typeof(Miner),
             };
         }
     }

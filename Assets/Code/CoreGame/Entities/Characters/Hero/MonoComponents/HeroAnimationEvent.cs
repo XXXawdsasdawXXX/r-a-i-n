@@ -3,8 +3,10 @@ using Core.GameLoop;
 using Core.Libraries;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
+using UnityEngine;
 
-namespace Code.CoreGame.Entities.Hero
+namespace Code.CoreGame.Entities.Characters.Hero
 {
     public class HeroAnimationEvent : Essential.Mono, IInitializeListener
     {
@@ -16,11 +18,14 @@ namespace Code.CoreGame.Entities.Hero
         {
             _audio = Container.Instance.GetService<AudioService>();
             
+            Log.Info(this, $"Initialize -> audio != null {_audio != null}", Color.cyan);
+            
             return UniTask.CompletedTask;
         }
 
         private void PlayStep()
         {
+            //_audio ??= Container.Instance.GetService<AudioService>();
             _audio.OneShot(AudioEventLibrary.STEP, transform.position);
         }
     }

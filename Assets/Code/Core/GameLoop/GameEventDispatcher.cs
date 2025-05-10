@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using Essential;
-using FishNet;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -71,8 +69,16 @@ namespace Core.GameLoop
        
             _isStarted = false;
         }
+
+        public async void AddSpawnableListeners(IGameListener[] listeners)
+        {
+            foreach (IGameListener listener in listeners)
+            {
+                await AddSpawnableListener(listener);
+            }
+        }
         
-        public async void AddListener(IGameListener listener)
+        public async UniTask AddSpawnableListener(IGameListener listener)
         {
             if (!_listeners.Add(listener))
             {
@@ -98,9 +104,17 @@ namespace Core.GameLoop
                 _subscribers.Add(subscriber);
             }
 
-            if (listener is ILoadListener loadListener) await loadListener.GameLoad();
+            if (listener is ILoadListener loadListener)
+            {
+                await loadListener.GameLoad();
 
-            if (listener is IStartListener startListener) await startListener.GameStart();
+                _loadListeners.Add(loadListener);
+            }
+
+            if (listener is IStartListener startListener)
+            {
+                await startListener.GameStart();
+            }
 
             if (listener is IUpdateListener updateListener) _updateListeners.Add(updateListener);
 
@@ -110,12 +124,25 @@ namespace Core.GameLoop
 
             marker.End();
         }
+        
+        public void RemoveSpawnableListeners(IGameListener[] listeners)
+        {
+            foreach (IGameListener listener in listeners)
+            {
+                RemoveSpawnableListener(listener);
+            }
+        }
 
         public void RemoveSpawnableListener(IGameListener listener)
         {
             if (!_listeners.Remove(listener))
             {
                 return;
+            }
+
+            if (listener is ILoadListener loadListener)
+            {
+                _loadListeners.Remove(loadListener);
             }
 
             if (listener is IUpdateListener updateListener)

@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 7987240356325076128}
   - component: {fileID: 2934239996263089593}
   - component: {fileID: 4457616683836532246}
-  - component: {fileID: 6778264612898636302}
   - component: {fileID: 3634067845205420892}
   - component: {fileID: -227475778803773201}
   - component: {fileID: 4774697951357296534}
@@ -183,7 +182,7 @@ MonoBehaviour:
   <Rigidbody>k__BackingField: {fileID: 7074728272879338317}
   <Name>k__BackingField: {fileID: 4172023190012156737}
   <Health>k__BackingField: {fileID: 4774697951357296534}
-  <Movement>k__BackingField: {fileID: 6778264612898636302}
+  <Movement>k__BackingField: {fileID: 0}
   <Color>k__BackingField: {fileID: 3634067845205420892}
   <Animation>k__BackingField: {fileID: 7102317373915660470}
   <ItemController>k__BackingField: {fileID: -227475778803773201}
@@ -268,7 +267,7 @@ MonoBehaviour:
   NetworkBehaviours:
   - {fileID: 7987240356325076128}
   - {fileID: 0}
-  - {fileID: 6778264612898636302}
+  - {fileID: 0}
   - {fileID: 3634067845205420892}
   - {fileID: -227475778803773201}
   - {fileID: 4774697951357296534}
@@ -387,23 +386,6 @@ MonoBehaviour:
   _interpolation: 2
   _clientAuthoritative: 1
   _sendToOwner: 0
---- !u!114 &6778264612898636302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5483374850134618058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fa5d500ab6d1a4fa0378d90e177d90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 8329376548906989968}
-  _networkObjectCache: {fileID: 8329376548906989968}
-  _rigidbody2D: {fileID: 7074728272879338317}
-  _moveSpeed: 100
 --- !u!114 &3634067845205420892
 MonoBehaviour:
   m_ObjectHideFlags: 0

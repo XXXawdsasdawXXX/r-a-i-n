@@ -1,99 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.GameLoop;
 using Core.ServiceLocator;
+using Cysharp.Threading.Tasks;
 using Essential;
 using FishNet;
+using FishNet.Connection;
 using FishNet.Managing;
 using FishNet.Object;
 using UnityEngine;
 
 namespace Core.Network
 {
-    public abstract class NetworkPool : NetworkBehaviour, IService
+    public abstract class NetworkPool : NetworkBehaviour, IService, IInitializeListener
     {
-        public event Action<NetworkObject> Spawned; 
-        public event Action<NetworkObject> Despawned; 
+        public event Action<NetworkObject> Spawned;
+        public event Action<NetworkObject> Despawned;
 
-        [SerializeField] private NetworkManager _networkManager;
-        [SerializeField] private NetworkObject _prefab;
-
-        private readonly List<NetworkObject> _instances = new();
+        public bool IsInitialized { get; set; }
+        protected NetworkManager networkManager { get; private set; }
 
         
-        [ServerRpc(RequireOwnership = false)]
-        public void Spawn(Vector3 position)
+        [SerializeField] private NetworkObject _prefab;
+      
+        private readonly List<NetworkObject> _instances = new();
+        
+        private GameEventDispatcher _gameEventDispatcher;
+
+        
+        public virtual UniTask Initialize()
         {
-            
-            if ( !InstanceFinder.NetworkManager.IsServerStarted)
-            {
-                Log.Warning("NetworkManager is not active or server is not started.");
-                return;
-            }
-            
+            _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
 
-            NetworkObject instance = InstanceFinder.NetworkManager.GetPooledInstantiated(_prefab, transform, true);
+            networkManager = InstanceFinder.NetworkManager;
 
-            if (instance == null)
-            {
-                Log.Warning("Failed to get pooled instance of item.");
-                return;
-            }
-
-            instance.transform.position = position;
-            
-            InstanceFinder.NetworkManager.ServerManager.Spawn(instance);
-            
-            _instances.Add(instance);
-            
-            OnSpawned(instance);
-            
-            Spawned?.Invoke(instance);
+            return UniTask.CompletedTask;
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void Despawn()
-        {
-            if (_instances.Count > 0)
-            {
-                NetworkObject lastInstance = _instances[^1];
-                
-                InstanceFinder.NetworkManager.ServerManager.Despawn(lastInstance);
-                
-                _instances.Remove(lastInstance);
-                
-                OnDespawned(lastInstance);
-                
-                Despawned?.Invoke(lastInstance);
-            }
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void Despawn(NetworkObject instance)
+        public virtual void Despawn(NetworkObject instance, NetworkConnection connection = null)
         {
             if (_instances.Contains(instance))
             {
-                InstanceFinder.NetworkManager.ServerManager.Despawn(instance);
+                _gameEventDispatcher.RemoveSpawnableListeners(getGameListeners(instance));
+
+                networkManager.ServerManager.Despawn(instance);
 
                 _instances.Remove(instance);
-                
-                OnDespawned(instance);
-                
+
+                onDespawned(instance, connection);
+
                 Despawned?.Invoke(instance);
             }
             else
             {
-                Log.Error(this, $"Pool has not object {instance.name}");
+                Log.Error(this, $"Pool has not the object with name'{instance.name}'");
             }
         }
 
-        protected virtual void OnSpawned(NetworkObject instance)
+        //[ServerRpc(RequireOwnership = false)]
+        protected void spawn(Vector3 position, NetworkConnection connection = null)
         {
+            NetworkObject instance = networkManager.GetPooledInstantiated(_prefab, transform, true);
+
+            instance.transform.position = position;
+
+            networkManager.ServerManager.Spawn(instance, connection);
+
+            onSpawned(instance, connection);
+
+            _instances.Add(instance);
             
+            Spawned?.Invoke(instance);
         }
 
-        protected virtual void OnDespawned(NetworkObject instance)
+        protected virtual void onSpawned(NetworkObject instance, NetworkConnection connection)
         {
-            
+        }
+
+        protected virtual void onDespawned(in NetworkObject instance, NetworkConnection connection)
+        {
+        }
+
+        protected virtual IGameListener[] getGameListeners(in NetworkObject networkBehaviour)
+        {
+            return networkBehaviour.GetComponentsInChildren<IGameListener>(true);
+        }
+
+        protected void registerGameListener(IGameListener[] listeners)
+        {
+            _gameEventDispatcher.AddSpawnableListeners(listeners);
         }
     }
 }

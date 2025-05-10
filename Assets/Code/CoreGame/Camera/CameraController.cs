@@ -43,8 +43,8 @@ namespace Code.CoreGame.Camera
             }
             else
             {
-                Log.Info(this, $"camera is null {_cameraView.Camera == null}. " +
-                               $"user is null {_userProvider.Hero == null}.", Log.Orange);
+                /*Log.Info(this, $"camera is null {_cameraView.Camera == null}. " +
+                               $"user is null {_userProvider.Hero == null}.", Log.Orange);*/
             }
         }
     }

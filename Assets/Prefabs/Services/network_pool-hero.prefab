@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 9113400576953121045}
   - component: {fileID: 8502057392140004762}
   - component: {fileID: 5358222265664871245}
-  - component: {fileID: 7667846392436447360}
   m_Layer: 0
   m_Name: network_pool-hero
   m_TagString: Untagged
@@ -49,7 +48,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 5358222265664871245}
   _networkObjectCache: {fileID: 0}
-  _heroPrefab: {fileID: 8329376548906989968, guid: 21ceab23df0a0094b8c75888ea23c5d4, type: 3}
+  _prefab: {fileID: 8329376548906989968, guid: 21ceab23df0a0094b8c75888ea23c5d4, type: 3}
 --- !u!114 &5358222265664871245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +71,7 @@ MonoBehaviour:
   RuntimeParentNetworkBehaviour: {fileID: 0}
   RuntimeChildNetworkBehaviours: []
   _isNetworked: 1
-  _isSpawnable: 0
+  _isSpawnable: 1
   _isGlobal: 0
   _initializeOrder: -1
   _preventDespawnOnDisconnect: 0
@@ -100,15 +99,3 @@ MonoBehaviour:
     Rotation: {x: 0, y: 0, z: 0, w: 0}
     Scale: {x: 0, y: 0, z: 0}
     IsValid: 0
---- !u!114 &7667846392436447360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4972153846337700059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a991d2f5fc044c18df7f1c2bf8fd727, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

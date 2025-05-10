@@ -4,6 +4,7 @@ using Core.Data;
 using Core.Extensions;
 using Core.Network;
 using Essential;
+using FishNet.Connection;
 using FishNet.Object;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -19,17 +20,7 @@ namespace Code.CoreGame.Harvest
         
         [SerializeField] private ResourcesLibrary _resourcesLibrary;
         
-        protected override void OnSpawned(NetworkObject instance)
-        {
-            var position = instance.transform.position.AsFloat2();
-            
-            Resource point = ResourcePoints.First(p => p.Position.Equals(position));
-         
-            
-            Log.Info(this, "on spawned");
-        }
-
-
+        
 #if UNITY_EDITOR
 
         [Space, Header("EDITOR")]

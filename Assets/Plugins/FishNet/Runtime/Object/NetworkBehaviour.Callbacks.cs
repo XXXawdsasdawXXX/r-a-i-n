@@ -171,8 +171,8 @@ namespace FishNet.Object
         
         internal void OnStartClient_Internal()
         {
-            OnStartClientCalled = true;
             OnStartClient();
+            OnStartClientCalled = true;
         }
         /// <summary>
         /// Called on the client after initializing this object.

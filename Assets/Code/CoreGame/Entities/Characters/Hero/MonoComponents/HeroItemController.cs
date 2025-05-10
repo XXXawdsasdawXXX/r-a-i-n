@@ -1,9 +1,7 @@
 ﻿using Core.Network;
-using Core.ServiceLocator;
 using FishNet.Object;
-using UnityEngine;
 
-namespace Code.CoreGame.Entities.Hero
+namespace Code.CoreGame.Entities.Characters.Hero
 {
     public class HeroItemController :  NetworkBehaviour
     {

@@ -1,13 +1,16 @@
-﻿using Code.CoreGame.Entities.Params;
+﻿using Code.CoreGame.Entities.Characters.Controllers;
+using Code.CoreGame.Entities.Params;
+using Core.Input;
 using Core.Network;
 using Core.ServiceLocator;
+using Essential;
 using FishNet;
 using FishNet.Object;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Hero
+namespace Code.CoreGame.Entities.Characters.Hero
 {
-    public class Hero : NetworkBehaviour
+    public class Hero : Character
     {
         [field: Header("Unity components")]
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
@@ -17,7 +20,6 @@ namespace Code.CoreGame.Entities.Hero
         [field: Header("Net components")]
         [field: SerializeField] public PersonName Name { get; private set; }
         [field: SerializeField] public Health Health { get; private set; }
-        [field: SerializeField] public HeroMovement Movement { get; private set; }
         [field: SerializeField] public HeroColor Color { get; private set; }
         [field: SerializeField] public HeroAnimation Animation { get; private set; }
         [field: SerializeField] public HeroItemController ItemController { get; private set; }
@@ -25,6 +27,7 @@ namespace Code.CoreGame.Entities.Hero
         
         public override void OnStartClient()
         {
+            Log.Info(this, $"on start client {IsOwner}", UnityEngine.Color.black);
             if (IsOwner)
             {
                 UserProvider userProvider = Container.Instance.GetService<UserProvider>();
@@ -33,6 +36,25 @@ namespace Code.CoreGame.Entities.Hero
 
                 Debug.Log($"[HeroClientTracker] Set local hero: {gameObject.name}");
             }
+        }
+
+        public override void InitializeComponents()
+        {
+            Log.Info(this, $"Initialize components {IsOwner}", UnityEngine.Color.black);
+            if (IsOwner)
+            {
+                InputManager inputManager = Container.Instance.GetService<InputManager>();
+                HeroSettings heroSettings = Container.Instance.GetConfig<HeroSettings>();
+
+                Components.Add(typeof(Movement),
+                    new Movement(Rigidbody, inputManager.Direction, heroSettings.MoveSpeed));
+                // Components.Add(typeof(Miner), new Miner());
+            }
+        }
+
+        public override void InitializeComponentConditions()
+        {
+            
         }
     }
 }

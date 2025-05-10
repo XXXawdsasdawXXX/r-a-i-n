@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Data;
 using Core.GameLoop;
 using Core.ServiceLocator;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Core.Input
         public event Action<EInputAction> ActionEnded;
 
         public string RuntimeListenerName => "InputManager";
-        public Vector2 Direction { get; private set; } = Vector2.zero;
+        public ReactiveProperty<Vector2> Direction { get; private set; } = new(Vector2.zero);
         public Vector3 MousePosition { get; private set; }
 
 
@@ -33,7 +34,7 @@ namespace Core.Input
 
         public void GameUpdate(float deltaTime)
         {
-            Direction = new Vector2(
+            Direction.Value = new Vector2(
                 UnityEngine.Input.GetAxisRaw("Horizontal"),
                 UnityEngine.Input.GetAxisRaw("Vertical"));
 
@@ -55,7 +56,7 @@ namespace Core.Input
 
         public void GameExit()
         {
-            Direction = Vector2.zero;
+            Direction.Dispose();
         }
     }
 }
