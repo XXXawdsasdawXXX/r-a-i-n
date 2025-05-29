@@ -1,4 +1,4 @@
-﻿using Code.CoreGame.Entities.Params;
+﻿using CoreGame.Entities.Params;
 using UI.Components;
 using UnityEngine;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Code.CoreGame.Grid
+namespace CoreGame.Grid
 {
     [CreateAssetMenu(fileName = "Settings_Grid", menuName = "Game/Settings/Grid")]
     public class GridSettings : ScriptableObject

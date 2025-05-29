@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Core.Editor;
 using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
@@ -64,8 +63,8 @@ namespace Core.GameLoop
             _initializeListeners(listeners);
 
             await _notifyGameInitialize();
-            await _notifyGameLoad();
             await _notifySubscribe();
+            await _notifyGameLoad();
             await _notifyGameStart();
 
             _isStarted = true;
@@ -311,8 +310,6 @@ namespace Core.GameLoop
                 subscriber.Unsubscribe();
             }
 
-            _gameModel.test++;
-            
             _saveService.Save(_saveService.LastUsedSlot, _gameModel);
 
             foreach (IExitListener listener in _exitListeners)
@@ -320,7 +317,7 @@ namespace Core.GameLoop
                 listener.GameExit();
             }
 
-            Log.Info(this, $"_notifyGameExit {_gameModel.test}", Color.red);
+            Log.Info(this, $"_notifyGameExit", Color.red);
             marker.End();
         }
     }

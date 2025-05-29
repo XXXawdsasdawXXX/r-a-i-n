@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Code.CoreGame.Collisions
+namespace CoreGame.Common.Collisions
 {
     public class Trigger : Essential.Mono
     {

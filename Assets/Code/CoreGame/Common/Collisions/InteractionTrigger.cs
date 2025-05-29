@@ -1,15 +1,14 @@
 ﻿using System;
-using Code.CoreGame.Collisions;
-using Code.CoreGame.Common.Selectable;
 using Core.Extensions;
 using Core.GameLoop;
 using Core.Input;
 using Core.ServiceLocator;
+using CoreGame.Common.Selectable;
 using Cysharp.Threading.Tasks;
 using Essential;
 using UnityEngine;
 
-namespace Code.CoreGame.Common.Collisions
+namespace CoreGame.Common.Collisions
 {
     public sealed class InteractionTrigger : Trigger, IInitializeListener
     {

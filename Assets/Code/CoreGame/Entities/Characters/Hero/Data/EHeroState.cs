@@ -1,4 +1,4 @@
-﻿namespace Code.CoreGame.Entities.Characters.Hero
+﻿namespace CoreGame.Entities.Characters.Hero
 {
     public enum EHeroState
     {

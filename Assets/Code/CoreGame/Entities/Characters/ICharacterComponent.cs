@@ -1,6 +1,6 @@
 ﻿using Core.Data;
 
-namespace Code.CoreGame.Entities.Characters
+namespace CoreGame.Entities.Characters
 {
     public interface ICharacterComponent
     {

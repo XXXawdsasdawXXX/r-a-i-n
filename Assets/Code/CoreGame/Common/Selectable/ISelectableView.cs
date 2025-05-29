@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Code.CoreGame.Common.Selectable
+﻿namespace CoreGame.Common.Selectable
 {
     public interface ISelectableView
     {

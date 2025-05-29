@@ -1,4 +1,4 @@
-﻿namespace Code.CoreGame.Harvest
+﻿namespace CoreGame.Harvest
 {
     public enum EResource
     {

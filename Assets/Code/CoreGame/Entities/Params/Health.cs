@@ -2,7 +2,7 @@
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 
-namespace Code.CoreGame.Entities.Params
+namespace CoreGame.Entities.Params
 {
     public class Health : NetworkBehaviour
     {
@@ -28,13 +28,21 @@ namespace Code.CoreGame.Entities.Params
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void UpdateHealth(int value)
+        public void Set(float value)
+        {
+            _health.Value = value;
+
+            Changed?.Invoke();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void UpdateHealth(float value)
         {
             _health.Value += value;
 
             Changed?.Invoke();
         }
-        
+
         public float GetNormalize()
         {
             return _health.Value / Max;

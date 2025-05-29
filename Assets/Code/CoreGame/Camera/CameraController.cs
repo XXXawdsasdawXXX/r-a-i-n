@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using Essential;
 using UnityEngine;
 
-namespace Code.CoreGame.Camera
+namespace CoreGame.Camera
 {
     public class CameraController : IMono, IInitializeListener, IStartListener, IUpdateListener
     {

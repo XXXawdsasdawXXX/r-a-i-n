@@ -2,7 +2,7 @@
 
 namespace UI.Windows.Base
 {
-    public abstract class UIWindowView : MonoBehaviour
+    public abstract class UIWindowView : Essential.Mono
     {
         [SerializeField] protected RectTransform body;
 

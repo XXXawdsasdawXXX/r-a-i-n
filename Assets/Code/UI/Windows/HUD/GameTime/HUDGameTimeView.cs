@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UI.Windows.HUD
 {
-    public class HUDWindowView : UIWindowView
+    public class HUDGameTimeView : UIWindowView
     {
         [field: SerializeField] public UIImage ImageGameTime { get; private set; }
     }

@@ -1,4 +1,4 @@
-﻿namespace Code.CoreGame.Grid
+﻿namespace CoreGame.Grid
 {
     public enum ETileType
     {

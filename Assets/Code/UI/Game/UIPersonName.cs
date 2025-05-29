@@ -1,5 +1,5 @@
-﻿using Code.CoreGame.Entities.Params;
-using Core.GameLoop;
+﻿using Core.GameLoop;
+using CoreGame.Entities.Params;
 using Cysharp.Threading.Tasks;
 using Essential;
 using UI.Components;

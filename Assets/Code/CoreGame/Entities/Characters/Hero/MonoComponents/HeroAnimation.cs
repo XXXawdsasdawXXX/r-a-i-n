@@ -1,11 +1,11 @@
-﻿using Code.CoreGame.Entities.Characters.Interfaces;
-using Core.Data;
+﻿using Core.Data;
 using Core.GameLoop;
+using CoreGame.Entities.Characters.Interfaces;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroAnimation : NetworkBehaviour, IHarvestAnimator, IInitializeListener, IUpdateListener
     {

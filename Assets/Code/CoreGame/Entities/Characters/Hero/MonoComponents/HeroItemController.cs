@@ -1,10 +1,10 @@
-﻿using Code.CoreGame.Entities.GameObjects.Items;
-using Core.Network;
+﻿using Core.Network;
 using Core.ServiceLocator;
+using CoreGame.Entities.GameObjects.Items;
 using FishNet.Object;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroItemController :  NetworkBehaviour
     {

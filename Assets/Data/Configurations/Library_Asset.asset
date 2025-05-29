@@ -23,5 +23,3 @@ MonoBehaviour:
   <SceneComponents>k__BackingField:
     _assets:
     - {fileID: 3537835706141628769, guid: 48d9e7bf9c5fc504d9e2baa4fecd7ba3, type: 3}
-    - {fileID: 4972153846337700059, guid: 1a411a0e306729549afdd3c354dcb3c2, type: 3}
-    - {fileID: 6750910372822967641, guid: 060f587b8a757e64dade0e84ce7c4e9f, type: 3}

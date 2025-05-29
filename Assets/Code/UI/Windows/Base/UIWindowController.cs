@@ -8,18 +8,29 @@ namespace UI.Windows.Base
 
         protected void OnEnable()
         {
-            SubscribeToEvents(true);
+            subscribeToEvents(true);
         }
 
         private void OnDisable()
         {
-            SubscribeToEvents(false);
+            subscribeToEvents(false);
         }
 
-        protected virtual void SubscribeToEvents(bool flag)
+        public void Open()
+        {
+            view.Open();
+        }
+
+        public void Close()
+        {
+            view.Close();
+        }
+
+        protected virtual void subscribeToEvents(bool flag)
         {
         }
 
+#if UNITY_EDITOR
         protected void OnValidate()
         {
             if (view == null && !TryGetComponent(out view))
@@ -27,5 +38,6 @@ namespace UI.Windows.Base
                 view = gameObject.AddComponent<UIView>();
             }
         }
+#endif
     }
 }

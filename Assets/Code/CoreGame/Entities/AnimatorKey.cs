@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Code.CoreGame.Entities
+namespace CoreGame.Entities
 {
     public static class AnimatorKey
     {

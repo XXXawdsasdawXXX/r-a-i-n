@@ -7,6 +7,7 @@
         public const string AUDIO_LIBRARY_PATH = "Library_Audio";
         public const string ASSET_LIBRARY_PATH = "Library_Asset";
         public const string CONFIG_LIBRARY_PATH = "Library_Config";
+        public const string RESOURCES_LIBRARY_PATH = "Library_Resources";
         
         //windows
         public const string CANVAS_PROFILER = "canvas_screen-profiler";

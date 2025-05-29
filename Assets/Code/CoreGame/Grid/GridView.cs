@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Code.CoreGame.Grid
+namespace CoreGame.Grid
 {
     public class GridView : MonoView
     {

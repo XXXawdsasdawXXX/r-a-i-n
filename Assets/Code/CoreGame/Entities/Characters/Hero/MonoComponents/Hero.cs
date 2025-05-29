@@ -1,17 +1,17 @@
-﻿using Code.CoreGame.Entities.Characters.Controllers;
-using Code.CoreGame.Entities.Params;
+﻿using Core.GameLoop;
 using Core.Input;
-using Core.Network;
+using Core.Save;
 using Core.ServiceLocator;
+using CoreGame.Entities.Characters.Controllers;
+using CoreGame.Entities.Params;
 using Essential;
-using FishNet;
-using FishNet.Object;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
-    public class Hero : Character
+    public class Hero : Character, ISubscriber
     {
+
         [field: Header("Unity components")]
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         
@@ -24,6 +24,7 @@ namespace Code.CoreGame.Entities.Characters.Hero
         [field: SerializeField] public HeroAnimation Animation { get; private set; }
         [field: SerializeField] public HeroItemController ItemController { get; private set; }
         
+        private HeroModel _model;
         
         public override void OnStartClient()
         {
@@ -46,6 +47,7 @@ namespace Code.CoreGame.Entities.Characters.Hero
             {
                 InputManager input = Container.Instance.GetService<InputManager>();
                 HeroSettings heroSettings = Container.Instance.GetConfig<HeroSettings>();
+                _model = Container.Instance.GetService<GameModel>().Hero; 
 
                 Movement movement = new Movement(Rigidbody, input.Direction, heroSettings.MoveSpeed);
                 Components.Add(typeof(Movement), movement);
@@ -53,18 +55,31 @@ namespace Code.CoreGame.Entities.Characters.Hero
                 Miner miner = new Miner(Animation, Health);
                 Components.Add(typeof(Miner), miner);
                 
-                
                 movement.Condition.Add(() => Health.Current > 0);
                 
                 miner.Condition.Add(() => Rigidbody.velocity.magnitude == 0);
                 miner.Condition.Add(() => Health.Current > 0);
-
                 
-                
+                Health.Set(_model.Health);
                 // Components.Add(typeof(Miner), new Miner());
             }
 
             IsConstructed = true;
+        }
+
+        public void Subscribe()
+        {
+            Health.Changed += _onHealthChanged;
+        }
+
+        public void Unsubscribe()
+        {
+            Health.Changed -= _onHealthChanged;
+        }
+
+        private void _onHealthChanged()
+        {
+            _model.Health = Health.Current;
         }
     }
 }

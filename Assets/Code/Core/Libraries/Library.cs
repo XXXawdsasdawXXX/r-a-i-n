@@ -27,7 +27,7 @@ namespace Core.Libraries
                 }
             }
 
-            throw new Exception($"Material library has not material with name {key}");
+            throw new Exception($"Library {GetType().Name} has not {typeof(TType).Name} with name {key}");
         }
 
         protected abstract bool ThisIs(TType value, TKey key);

@@ -44,4 +44,5 @@ namespace Core.Data
             _value = default;
         }
     }
+    
 }

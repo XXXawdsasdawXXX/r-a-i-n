@@ -26,12 +26,10 @@ namespace Core.StateMachine
         {
             InstallerLibrary installerLibrary = await AssetProvider
                 .LoadScriptableObject<InstallerLibrary>(AssetKey.INSTALLER_LIBRARY_PATH);
-            AssetLibrary assetLibrary = await AssetProvider
-                .LoadScriptableObject<AssetLibrary>(AssetKey.ASSET_LIBRARY_PATH);
-            ScriptableObject audioEventLibrary = await AssetProvider
-                .LoadScriptableObject(AssetKey.AUDIO_LIBRARY_PATH);
             ConfigLibrary configLibrary = await AssetProvider
                 .LoadScriptableObject<ConfigLibrary>(AssetKey.CONFIG_LIBRARY_PATH);
+
+            AssetLibrary assetLibrary = configLibrary.Get<AssetLibrary>();
 
             if (Log.PROFILER_IS_ACTIVE)
             {
@@ -43,24 +41,18 @@ namespace Core.StateMachine
             Container container = new(projectContext);
 
             container.AddConfig(installerLibrary);
-            container.AddConfig(assetLibrary);
-            container.AddConfig(audioEventLibrary);
             foreach (ScriptableObject config in configLibrary.Configs)
             {
                 container.AddConfig(config);
             }
 
-            var saveService = container.GetService<SaveService>();
-            var model = container.GetService<GameModel>();
-            var loadedModel = saveService.LoadLast<GameModel>() ?? new GameModel(); 
+            SaveService saveService = container.GetService<SaveService>();
+            GameModel model = container.GetService<GameModel>();
+            GameModel loadedModel = saveService.LoadLast<GameModel>() ?? new GameModel(); 
             
-            model.test = loadedModel.test;
+            model.CopyFrom(loadedModel);
 
             container.GetService<GameEventDispatcher>().Initialize();
-
-            /*GameEventDispatcher gameEventDispatcher = container.GetService<GameEventDispatcher>();
-           
-            await gameEventDispatcher.Register(container.GetGameListeners());*/
         }
 
         public UniTask Enter()

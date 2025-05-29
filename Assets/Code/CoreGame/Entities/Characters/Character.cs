@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Essential;
 using FishNet.Object;
 
-namespace Code.CoreGame.Entities.Characters
+namespace CoreGame.Entities.Characters
 {
     public abstract class Character : NetworkBehaviour
     {

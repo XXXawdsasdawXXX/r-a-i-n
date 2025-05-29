@@ -1,13 +1,14 @@
 ﻿using System;
-using Code.CoreGame._Test;
-using Code.CoreGame.Camera;
-using Code.CoreGame.Entities.Characters.Controllers;
-using Code.CoreGame.Grid;
-using Code.CoreGame.Time;
 using Core.ServiceLocator;
+using CoreGame._Test;
+using CoreGame.Camera;
+using CoreGame.Entities.Characters.Controllers;
+using CoreGame.Grid;
+using CoreGame.Harvest;
+using CoreGame.Time;
 using UnityEngine;
 
-namespace Code.CoreGame.Installers
+namespace CoreGame.Installers
 {
     [CreateAssetMenu(fileName = "Installer_CoreGame", menuName = "Game/Installers/CoreGame")]
     public  class CoreGameInstaller : Installer
@@ -22,6 +23,8 @@ namespace Code.CoreGame.Installers
                 typeof(GridService),
                 typeof(WorldMaterialController),
                 typeof(CameraController),
+                //storages
+                typeof(ResourceStorage),
                 //hero
                 typeof(Movement),
                 typeof(Miner),

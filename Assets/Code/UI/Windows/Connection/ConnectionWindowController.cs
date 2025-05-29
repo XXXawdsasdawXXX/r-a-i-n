@@ -33,7 +33,7 @@ namespace UI.Windows.Connection
             return UniTask.CompletedTask;
         }
         
-        protected override void SubscribeToEvents(bool flag)
+        protected override void subscribeToEvents(bool flag)
         {
             if (flag)
             {

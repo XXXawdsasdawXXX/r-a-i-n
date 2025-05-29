@@ -1,10 +1,9 @@
-﻿using System;
-using Core.ServiceLocator;
+﻿using Core.ServiceLocator;
 using Essential;
 using UnityEngine;
 using UnityEngine.Scripting;
 
-namespace Code.CoreGame.Camera
+namespace CoreGame.Camera
 {
     [Preserve]
     public class CameraView : MonoView

@@ -1,14 +1,13 @@
-﻿using Code.CoreGame.Time;
-using Core.Data;
+﻿using Core.Data;
 using Core.GameLoop;
 using Core.ServiceLocator;
+using CoreGame.Time;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UI.Windows.Base;
 
 namespace UI.Windows.HUD
 {
-    public class HUDWindowController : UIWindowController<HUDWindowView>,
+    public class HUDGameTimeController : UIWindowController<HUDGameTimeView>,
         IInitializeListener,
         IStartListener,
         IUpdateListener
@@ -19,8 +18,7 @@ namespace UI.Windows.HUD
         private GameTime _gameTime;
         private Cache<int> _lastUpdateMinute;
         private float _currentValue;
-        
-        
+
         public UniTask Initialize()
         {
             _gameTime = Container.Instance.GetService<GameTime>();
@@ -32,7 +30,7 @@ namespace UI.Windows.HUD
 
         public UniTask GameStart()
         {
-            view.Open();
+            Open();
 
             return UniTask.CompletedTask;
         }

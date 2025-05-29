@@ -1,12 +1,11 @@
 ﻿using Core.GameLoop;
-using Cysharp.Threading.Tasks;
 using Essential;
 using FishNet;
 using FishNet.Connection;
 using UnityEngine;
 using Channel = FishNet.Transporting.Channel;
 
-namespace Code.CoreGame.InteractionObjects.Activators
+namespace CoreGame.InteractionObjects.Activators
 {
     public class Laptop : InteractionObject, ISubscriber
     {

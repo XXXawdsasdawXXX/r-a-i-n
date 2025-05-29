@@ -1,9 +1,8 @@
 ﻿using System;
-using Code.CoreGame.Collisions;
-using Code.CoreGame.Common.Collisions;
+using CoreGame.Common.Collisions;
 using UnityEngine;
 
-namespace Code.CoreGame.InteractionObjects
+namespace CoreGame.InteractionObjects
 {
     public abstract class InteractionObject : Essential.Mono
     {

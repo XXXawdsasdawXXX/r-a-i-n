@@ -1,12 +1,12 @@
-﻿using Code.CoreGame.Entities.Params;
-using Core.GameLoop;
+﻿using Core.GameLoop;
 using Core.ServiceLocator;
+using CoreGame.Entities.Params;
 using DG.Tweening;
 using FishNet.Object;
 using Plugins.Demigiant.DOTween.Modules;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroColor : NetworkBehaviour, ISubscriber, IExitListener
     {

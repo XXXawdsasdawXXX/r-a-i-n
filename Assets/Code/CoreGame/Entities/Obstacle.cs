@@ -1,7 +1,7 @@
-﻿using Code.CoreGame.Entities.Params;
+﻿using CoreGame.Entities.Params;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities
+namespace CoreGame.Entities
 {
     public class Obstacle : MonoBehaviour
     {

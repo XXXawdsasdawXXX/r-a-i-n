@@ -3,10 +3,9 @@ using Core.GameLoop;
 using Core.Libraries.Assets;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using LiteNetLib.Utils;
 using UnityEngine;
 
-namespace Code.CoreGame.Time
+namespace CoreGame.Time
 {
     public class WorldMaterialController : IMono, IInitializeListener, IUpdateListener, IExitListener
     {

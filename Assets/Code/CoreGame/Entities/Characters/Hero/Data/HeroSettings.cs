@@ -1,7 +1,7 @@
 ﻿using Plugins.Demigiant.DOTween.Modules;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
     [CreateAssetMenu(fileName = "Settings_Hero", menuName = "Game/Settings/Hero")]
     public class HeroSettings : ScriptableObject

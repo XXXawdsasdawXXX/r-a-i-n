@@ -1,6 +1,4 @@
-﻿using FishNet.Object;
-
-namespace Code.CoreGame.Entities.Characters.Interfaces
+﻿namespace CoreGame.Entities.Characters.Interfaces
 {
     public interface IHarvestAnimator
     {

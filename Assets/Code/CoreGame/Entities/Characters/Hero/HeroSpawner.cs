@@ -10,8 +10,7 @@ using FishNet.Object;
 using FishNet.Transporting;
 using UnityEngine;
 
-
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroSpawner : NetworkPool, ISubscriber
     {

@@ -2,7 +2,7 @@
 using Core.GameLoop;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Controllers
+namespace CoreGame.Entities.Characters.Controllers
 {
     public class Movement : ICharacterComponent, IFixedUpdateListener
     {

@@ -1,15 +1,15 @@
-﻿using Code.CoreGame.Camera;
-using Code.CoreGame.Grid;
-using Core.GameLoop;
+﻿using Core.GameLoop;
 using Core.Input;
 using Core.ServiceLocator;
+using CoreGame.Camera;
+using CoreGame.Grid;
 using Cysharp.Threading.Tasks;
 using Essential;
 using LiteNetLib.Utils;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Code.CoreGame._Test
+namespace CoreGame._Test
 {
     [Preserve]
     public class TestService : IMono, IInitializeListener, ISubscriber

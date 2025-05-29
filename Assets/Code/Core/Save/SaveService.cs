@@ -37,6 +37,7 @@ namespace Core.Save
 
         private class SaveContainer
         {
+            public SettingsModel UserSettings = new();
             public Dictionary<string, string> Slots = new();
             public string LastSlot;
         }

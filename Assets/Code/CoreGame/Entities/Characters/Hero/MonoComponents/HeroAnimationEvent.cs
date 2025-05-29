@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using Essential;
 using UnityEngine;
 
-namespace Code.CoreGame.Entities.Characters.Hero
+namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroAnimationEvent : Essential.Mono, IInitializeListener
     {

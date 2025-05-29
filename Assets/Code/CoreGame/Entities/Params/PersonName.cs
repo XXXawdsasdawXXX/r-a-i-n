@@ -1,10 +1,9 @@
 ﻿using System;
 using Core.GameLoop;
-using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 
-namespace Code.CoreGame.Entities.Params
+namespace CoreGame.Entities.Params
 {
     public class PersonName : NetworkBehaviour, ISubscriber
     {

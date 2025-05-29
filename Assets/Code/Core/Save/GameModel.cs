@@ -6,12 +6,19 @@ namespace Core.Save
     [Serializable]
     public class GameModel : IService
     {
-
-        public int test = 10;
-
-        public void Copy(GameModel model)
+        public HeroModel Hero;
+        public WorldModel World;
+        
+        public GameModel()
         {
-           
+            World = new WorldModel();
+            Hero = new HeroModel();
+        }
+        
+        public void CopyFrom(GameModel model)
+        {
+            World = model.World ?? new WorldModel();
+            Hero = model.Hero ?? new HeroModel();
         }
     }
 }

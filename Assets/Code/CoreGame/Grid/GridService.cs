@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.Tilemaps;
 
-namespace Code.CoreGame.Grid
+namespace CoreGame.Grid
 {
     [Preserve]
     public class GridService : IService, IInitializeListener, IStartListener

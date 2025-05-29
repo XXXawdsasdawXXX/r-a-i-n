@@ -6,5 +6,10 @@ namespace Core.Save
     public class SettingsModel
     {
         public float SFXVolume;
+
+        public SettingsModel()
+        {
+            SFXVolume = 1;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Code.CoreGame.Common.Selectable
+namespace CoreGame.Common.Selectable
 {
     [Serializable]
     public sealed class SelectableMaterial : ISelectableView
