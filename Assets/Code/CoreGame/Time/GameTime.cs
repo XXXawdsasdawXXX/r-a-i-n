@@ -1,7 +1,9 @@
 ﻿using System;
 using Core.GameLoop;
+using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 using FishNet;
 using FishNet.Broadcast;
 using UnityEngine.Scripting;
@@ -10,7 +12,7 @@ using Channel = FishNet.Transporting.Channel;
 namespace CoreGame.Time
 {
     [Preserve]
-    public class GameTime : IService, ISubscriber, IInitializeListener, IUpdateListener
+    public class GameTime : IService, ISubscriber, IInitializeListener, IUpdateListener, ILoadListener
     {
         public struct GameTimeBroadcast : IBroadcast
         {
@@ -23,14 +25,17 @@ namespace CoreGame.Time
 
         public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "GameTime";
-        public TimeSpan Current { get; private set; }
+        public TimeSpan Current => _gameModel.World.Time;
 
+        private GameModel _gameModel;
         private float _timeScale;
         private double _lastUpdateTime;
-        
+
         public UniTask Initialize()
         {
             _timeScale = Container.Instance.GetConfig<GameTimeSettings>().TimeScale;
+
+            _gameModel = Container.Instance.GetService<GameModel>();
             
             return UniTask.CompletedTask;;
         }
@@ -47,6 +52,8 @@ namespace CoreGame.Time
 
         public void GameUpdate(float deltaTime)
         {
+//            Log.Info(this,$"update: {_gameModel.World.Time}");
+            
             if (InstanceFinder.IsServerStarted)
             {
                 _updateServerTime(deltaTime);
@@ -59,7 +66,7 @@ namespace CoreGame.Time
 
         private void _updateServerTime(float deltaTime)
         {
-            Current += TimeSpan.FromSeconds(deltaTime * _timeScale);
+            _gameModel.World.Time += TimeSpan.FromSeconds(deltaTime * _timeScale);
 
             if (UnityEngine.Time.time - _lastUpdateTime >= 1.0f)
             {
@@ -73,14 +80,21 @@ namespace CoreGame.Time
 
         private void _updateClientTime(float deltaTime)
         {
-            Current += TimeSpan.FromSeconds(deltaTime * _timeScale);
+            _gameModel.World.Time += TimeSpan.FromSeconds(deltaTime * _timeScale);
         }
 
         private void _onServerSendChanged(GameTimeBroadcast broadcast, Channel _)
         {
             TimeSpan serverTime = TimeSpan.FromSeconds(broadcast.TotalSeconds);
            
-            Current = serverTime;
+            _gameModel.World.Time = serverTime;
+        }
+
+        public UniTask GameLoad(GameModel model)
+        {
+            Log.Info(this, $"load: {model.World.Time}");
+            
+            return UniTask.CompletedTask;
         }
     }
 }

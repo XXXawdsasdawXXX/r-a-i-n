@@ -17,8 +17,8 @@ namespace Core.Save
         
         public void CopyFrom(GameModel model)
         {
-            World = model.World ?? new WorldModel();
-            Hero = model.Hero ?? new HeroModel();
+            World = model?.World ?? new WorldModel();
+            Hero = model?.Hero ?? new HeroModel();
         }
     }
 }

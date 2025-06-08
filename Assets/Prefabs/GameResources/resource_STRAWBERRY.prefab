@@ -149,6 +149,10 @@ PrefabInstance:
       propertyPath: _field
       value: 
       objectReference: {fileID: 5004555476975722460}
+    - target: {fileID: 5284249895744328850, guid: 6ea06861bccb4994ba2d6370418e1693, type: 3}
+      propertyPath: m_text
+      value: 000
+      objectReference: {fileID: 0}
     - target: {fileID: 6863432001258563077, guid: 6ea06861bccb4994ba2d6370418e1693, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.47

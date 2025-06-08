@@ -4,20 +4,32 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Core.Editor;
+using Core.Extensions;
 using Core.GameLoop;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using Essential;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Core.Save
 {
     internal sealed class SaveService : IService, IInitializeListener
     {
+        [Serializable]
+        public class SaveContainer
+        {
+            public SettingsModel UserSettings = new();
+            public string LastSlot;
+            public Dictionary<string, string> Slots = new();
+        }
+
         private static readonly string SavePath = Path.Combine(Application.persistentDataPath, "save_slots.dat");
         private static readonly string Password = _generateKey();
         private static readonly string HmacKey = "HMAC_SECRET_KEY_123";
+
+        public SaveContainer ModelsContainer => _container ??= _loadContainer();
+
+        private SaveContainer _container;
 
         private const bool _useEncryption = false;
         public bool IsInitialized { get; set; }
@@ -39,47 +51,30 @@ namespace Core.Save
         private SaveSettings _saveSettings;
 
         private string _lastSlot = "first_slot";
-        
+
+
         public UniTask Initialize()
         {
             _saveSettings = Container.Instance.GetConfig<SaveSettings>();
+            
+            Log.Info(this, $"initialize - {_saveSettings != null}");
 
             return UniTask.CompletedTask;
         }
 
-        private class SaveContainer
-        {
-            public SettingsModel UserSettings = new();
-            public Dictionary<string, string> Slots = new();
-            public string LastSlot;
-        }
-
-        public void Save<T>(string slotId, T data)
+        public void Save()
         {
             try
             {
-                SaveContainer container = _loadContainer();
-                string json = JsonConvert.SerializeObject(data);
+                string gameModelJson = Container.Instance.GetService<GameModel>().AsJson();
 
-                if (_useEncryption)
-                {
-                    byte[] encryptedData = _encrypt(json, Password);
-                    byte[] hmac = _computeHmac(encryptedData, HmacKey);
-                    byte[] fullBytes = new byte[hmac.Length + encryptedData.Length];
-                    Buffer.BlockCopy(hmac, 0, fullBytes, 0, hmac.Length);
-                    Buffer.BlockCopy(encryptedData, 0, fullBytes, hmac.Length, encryptedData.Length);
-                    container.Slots[slotId] = Convert.ToBase64String(fullBytes);
-                }
-                else
-                {
-                    container.Slots[slotId] = json;
-                }
+                ModelsContainer.Slots[LastUsedSlot] = gameModelJson;
+                
+                string json = ModelsContainer.AsJson();
 
-                container.LastSlot = slotId;
-                LastUsedSlot = slotId;
+                Log.Info(this, $"Save: {json} ");
 
-                string fullJson = JsonConvert.SerializeObject(container, _saveSettings.JSONSettings);
-                File.WriteAllText(SavePath, fullJson);
+                File.WriteAllText(SavePath, json);
             }
             catch (Exception e)
             {
@@ -87,91 +82,86 @@ namespace Core.Save
             }
         }
 
-        public T Load<T>(string slotId) where T : class
+        public GameModel LoadGameModel(string slotId) 
         {
             try
             {
-                if (!File.Exists(SavePath))
+                if (!ModelsContainer.Slots.TryGetValue(slotId, out string slotData))
                 {
-                    return null;
+                    GameModel newGameModel = new();
+                    
+                    newGameModel.CopyFrom(_saveSettings.DefaultModel);
+                    
+                    Log.Info(this, $"create new slot {slotId} {newGameModel.AsJson()}");
+                  
+                    ModelsContainer.Slots.Add(slotId, newGameModel.AsJson());
+                    
+                    return newGameModel;
                 }
 
-                string fileContent = File.ReadAllText(SavePath);
+                Log.Info(this, $"Load: {slotData}");
 
-                SaveContainer container = JsonConvert
-                    .DeserializeObject<SaveContainer>(fileContent, _saveSettings.JSONSettings);
-
-                if (!container.Slots.TryGetValue(slotId, out string slotData))
-                {
-                    container.Slots.Add(slotData, _saveSettings.DefaultModel.ToString());
-                }
-
-                LastUsedSlot = slotId;
-
-                if (_useEncryption)
-                {
-                    byte[] rawData = Convert.FromBase64String(slotData);
-                    if (rawData.Length < 32) return null;
-
-                    byte[] storedHmac = new byte[32];
-                    byte[] encryptedData = new byte[rawData.Length - 32];
-                    Buffer.BlockCopy(rawData, 0, storedHmac, 0, 32);
-                    Buffer.BlockCopy(rawData, 32, encryptedData, 0, encryptedData.Length);
-
-                    byte[] computedHmac = _computeHmac(encryptedData, HmacKey);
-                    if (!_compareBytes(storedHmac, computedHmac))
-                    {
-                        Debug.LogError("HMAC validation failed. Save file may have been tampered with.");
-                        return null;
-                    }
-
-                    string json = _decrypt(encryptedData, Password);
-                    return JsonConvert.DeserializeObject<T>(json);
-                }
-                else
-                {
-                    return JsonConvert.DeserializeObject<T>(slotData, _saveSettings.JSONSettings);
-                }
+                return slotData.AsData<GameModel>();
             }
             catch (Exception e)
             {
-                Debug.LogError($"Load failed: {e.Message}");
+                Debug.LogError($"Load failed: {e.Source} {e.Message}");
                 return null;
             }
         }
 
-        public T LoadLast<T>() where T : class
+        public GameModel LoadLastGameModel()
         {
-            SaveContainer container = _loadContainer();
-
-            if (!string.IsNullOrEmpty(container.LastSlot))
+            if (string.IsNullOrEmpty(ModelsContainer.LastSlot))
             {
-                return Load<T>(container.LastSlot ?? _lastSlot);
+                ModelsContainer.LastSlot = _lastSlot;
             }
-
-            return null;
+            
+            Log.Info(this, $"Load last game model. slot - {ModelsContainer.LastSlot}");
+            
+            return LoadGameModel(ModelsContainer.LastSlot);
         }
 
-        public void DeleteSlot(string slotId)
+        public void DeleteGameModel(string slotId)
         {
-            SaveContainer container = _loadContainer();
-            if (container.Slots.Remove(slotId))
+            if (ModelsContainer.Slots.Remove(slotId))
             {
-                if (container.LastSlot == slotId)
+                if (ModelsContainer.LastSlot == slotId)
                 {
-                    container.LastSlot = null;
+                    ModelsContainer.LastSlot = null;
                     LastUsedSlot = null;
                 }
 
-                string fullJson = JsonConvert.SerializeObject(container);
-                File.WriteAllText(SavePath, fullJson);
+                File.WriteAllText(SavePath, ModelsContainer.AsJson());
+            }
+        }
+
+        private SaveContainer _loadContainer()
+        {
+            Log.Info(this, $"_loadContainer: {SavePath}");
+
+            if (!File.Exists(SavePath))
+            {
+                Log.Info(this, $"_loadContainer: not exists path. return new save container");
+                return new SaveContainer();
+            }
+
+            try
+            {
+                string json = File.ReadAllText(SavePath);
+                Log.Info(this, $"_loadContainer: try deserialize {json}");
+                return json.AsData<SaveContainer>();
+            }
+            catch
+            {
+                Log.Info(this, $"_loadContainer: deserialization error. return new save container");
+                return new SaveContainer();
             }
         }
 
         public List<string> GetSlotIds()
         {
-            SaveContainer container = _loadContainer();
-            return new List<string>(container.Slots.Keys);
+            return new List<string>(ModelsContainer.Slots.Keys);
         }
 
         private static string _generateKey()
@@ -239,22 +229,6 @@ namespace Core.Save
             }
 
             return true;
-        }
-
-        private SaveContainer _loadContainer()
-        {
-            Log.Info(this, $"{SavePath}");
-            if (!File.Exists(SavePath)) return new SaveContainer();
-            try
-            {
-                string json = File.ReadAllText(SavePath);
-                return JsonConvert.DeserializeObject<SaveContainer>(json, _saveSettings.JSONSettings) 
-                       ?? new SaveContainer();
-            }
-            catch
-            {
-                return new SaveContainer();
-            }
         }
     }
 }

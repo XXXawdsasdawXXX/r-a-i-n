@@ -1,4 +1,5 @@
-﻿using Core.GameLoop;
+﻿using Core.Extensions;
+using Core.GameLoop;
 using Core.Network;
 using Core.Save;
 using Core.ServiceLocator;
@@ -6,6 +7,7 @@ using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +16,7 @@ namespace CoreGame.Harvest
     public class ResourcesManager : Essential.Mono, IService, IInitializeListener, ILoadListener, ISubscriber
     {
         public bool IsInitialized { get; set; }
+        public string RuntimeListenerName => "ResourceManager";
 
         [SerializeField] private ResourceCollection _resourceCollection;
         [SerializeField] private Resource[] _resources;
@@ -35,19 +38,20 @@ namespace CoreGame.Harvest
         {
             foreach (Resource resource in _resources)
             {
-                if (model.World.SceneResources.ContainsKey(resource.Position))
+                string resourcePosition = resource.Position.AsString();
+                if (model.World.SceneResources.ContainsKey(resourcePosition))
                 {
-                    resource.SetValue(model.World.SceneResources[resource.Position]);
+                    resource.SetValue(model.World.SceneResources[resourcePosition]);
                 }
                 else
                 {
-                    model.World.SceneResources.Add(resource.Position, resource.CurrentValue);
+                    model.World.SceneResources.Add(resourcePosition, resource.CurrentValue);
                 }
             }
             
             return UniTask.CompletedTask;
         }
-
+        
         public void Subscribe()
         {
             _userProvider.HeroCreated += _onHeroCreated;
@@ -72,7 +76,7 @@ namespace CoreGame.Harvest
 
         private void _onChangedResource(Resource resource)
         {
-            _gameModel.World.SceneResources[resource.Position] = resource.CurrentValue;
+            _gameModel.World.SceneResources[resource.Position.AsString()] = resource.CurrentValue;
         }
 
         private void _onHeroCreated()
@@ -109,5 +113,6 @@ namespace CoreGame.Harvest
             _resources = GetComponentsInChildren<Resource>(true);
         }
 #endif
+ 
     }
 }

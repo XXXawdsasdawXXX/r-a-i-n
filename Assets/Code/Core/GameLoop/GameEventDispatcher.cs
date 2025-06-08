@@ -26,9 +26,15 @@ namespace Core.GameLoop
 
         private SaveService _saveService;
         private GameModel _gameModel;
-
+        
         private bool _isStarted;
 
+        public void Initialize()
+        {
+            _saveService = Container.Instance.GetService<SaveService>();
+            _gameModel = Container.Instance.GetService<GameModel>();
+        }
+        
         private void Update()
         {
             if (_isStarted)
@@ -52,13 +58,7 @@ namespace Core.GameLoop
                 _notifyGameExit();
             }
         }
-
-        public void Initialize()
-        {
-            _saveService = Container.Instance.GetService<SaveService>();
-            _gameModel = Container.Instance.GetService<GameModel>();
-        }
-
+        
         public async UniTask Register(List<IGameListener> listeners)
         {
             _initializeListeners(listeners);
@@ -313,7 +313,7 @@ namespace Core.GameLoop
                 subscriber.Unsubscribe();
             }
 
-            _saveService.Save(_saveService.LastUsedSlot, _gameModel);
+            _saveService.Save();
 
             foreach (IExitListener listener in _exitListeners)
             {

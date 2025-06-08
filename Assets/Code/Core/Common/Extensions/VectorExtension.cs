@@ -21,6 +21,13 @@ namespace Core.Extensions
         public static float2 AsFloat2(this Vector2Int vector) => new float2(vector.x, vector.y);
         public static float2 AsFloat2(this Vector3 vector) => new float2(vector.x, vector.y);
         public static float2 AsFloat2(this Vector3Int vector) => new float2(vector.x, vector.y);
+        public static string AsString(this float2 pos) => $"{pos.x:F2}_{pos.y:F2}";
+        public static float2 AsFloat2(this string key)
+        {
+            string[] parts = key.Split('_');
+            return new float2(float.Parse(parts[0]), float.Parse(parts[1]));
+        }
+        
         #endregion
     }
 }

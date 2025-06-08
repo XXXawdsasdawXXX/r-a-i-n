@@ -26,9 +26,9 @@ namespace Core.StateMachine
         {
             Container container = await InitializeProjectContext();
 
-            LoadGame(container);
-
             container.GetService<GameEventDispatcher>().Initialize();
+            
+            LoadGame(container);
         }
 
         private async UniTask<Container> InitializeProjectContext()
@@ -61,8 +61,14 @@ namespace Core.StateMachine
         private static void LoadGame(Container container)
         {
             SaveService saveService = container.GetService<SaveService>();
+         
+            saveService.Initialize();
+            
             GameModel model = container.GetService<GameModel>();
-            GameModel loadedModel = saveService.LoadLast<GameModel>() ?? new GameModel();
+
+            Log.Info($"Bootstrap load game {saveService.LoadLastGameModel() != null}");
+            
+            GameModel loadedModel = saveService.LoadLastGameModel();
 
             model.CopyFrom(loadedModel);
         }

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using Newtonsoft.Json;
 using Unity.Mathematics;
 
-namespace Core.Save
+namespace Core.Conversion
 {
 
-    public class Float2Converter : JsonConverter<float2>
+    public class Float2JsonConverter : JsonConverter<float2>
     {
         public override void WriteJson(JsonWriter writer, float2 value, JsonSerializer serializer)
         {
@@ -27,8 +28,16 @@ namespace Core.Save
                 {
                     string prop = (string)reader.Value;
                     reader.Read();
-                    if (prop == "x") x = Convert.ToSingle(reader.Value);
-                    if (prop == "y") y = Convert.ToSingle(reader.Value);
+                    
+                    if (prop == "x")
+                    {
+                        x = float.Parse(reader.Value.ToString(), CultureInfo.InvariantCulture);
+                    }
+
+                    if (prop == "y")
+                    {
+                        y = float.Parse(reader.Value.ToString(), CultureInfo.InvariantCulture);
+                    }
                 }
                 else if (reader.TokenType == JsonToken.EndObject)
                 {
