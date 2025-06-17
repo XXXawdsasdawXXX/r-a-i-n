@@ -26,7 +26,7 @@ namespace UI.Windows.MainMenu.Game
 
         public void Subscribe()
         {
-            _heroWindow.HeroListChanged += _updateObjectLockerState;
+            windowManager.GetWindow<HeroWindowController>().HeroListChanged += _updateObjectLockerState;
             
             view.ButtonContinue.Clicked += _continueGame;
             view.ButtonJoin.Clicked += _openJoinWindow;
@@ -37,8 +37,6 @@ namespace UI.Windows.MainMenu.Game
 
         public UniTask GameStart()
         {
-            _heroWindow = windowManager.GetWindow<HeroWindowController>();
-            
             return UniTask.CompletedTask;
         }
 
@@ -53,8 +51,12 @@ namespace UI.Windows.MainMenu.Game
 
         public void Unsubscribe()
         {
+            windowManager.GetWindow<HeroWindowController>().HeroListChanged -= _updateObjectLockerState;
             
-
+            view.ButtonContinue.Clicked -= _continueGame;
+            view.ButtonJoin.Clicked -= _openJoinWindow;
+            view.TextUserIP.Clicked -= _copyIpToBuffer;
+            view.WorldsRadioGroup.Selected -= _changeSelectedWorld;
         }
 
         private void _continueGame()
