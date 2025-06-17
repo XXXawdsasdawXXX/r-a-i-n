@@ -1,85 +1,126 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.GameLoop;
+using Core.ServiceLocator;
+using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace UI.Components
 {
-    [Serializable]
-    public class UIElementPool<UIElement> where UIElement : MonoBehaviour, IPoolableUIElement
+    public interface IPoolableUIElement 
     {
-        [SerializeField] private Transform _root;
-        [SerializeField] private UIElement _prefab;
-        [SerializeField] private List<UIElement> _all = new();
-        [SerializeField] private List<UIElement> _enabled = new();
+        void Enable();
+        void Disable();
+    }
 
-        public UIElement GetNext()
+    [Serializable]
+    public class UIElementPool<TUIElement> where TUIElement : UISelectable, IPoolableUIElement
+    {
+        public event Action Changed;
+        
+        [field: SerializeField] public List<TUIElement> All { get; private set; } = new();
+        [field: SerializeField] public List<TUIElement> Enabled { get; private set; } = new();
+     
+        [SerializeField] private Transform _root;
+        [SerializeField] private TUIElement _prefab;
+        
+        private GameEventDispatcher _gameEventDispatcher;
+
+        public UIElementPool(Transform root, TUIElement prefab)
         {
-            UIElement entity = GetDisabledEntity() ?? AddNewEntity();
-          
-            _enabled.Add(entity);
-            
+            _root = root;
+            _prefab = prefab;
+        }
+
+        public void Initialize()
+        {
+            _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
+        }
+        
+        public TUIElement GetNext()
+        {
+            TUIElement entity = _getDisabledEntity() ?? _addNewEntity();
+
+            Enabled.Add(entity);
+
             entity.Enable();
             
+            Changed?.Invoke();
+
             return entity;
         }
-
-        private UIElement GetDisabledEntity()
-        {
-            return _all.FirstOrDefault(entity => entity != null && !entity.gameObject.activeSelf);
-        }
-
-        private UIElement AddNewEntity()
-        {
-            UIElement entity = Object.Instantiate(_prefab, _root);
-         
-            _all.Add(entity);
-            
-            return entity;
-        }
-
-        public IReadOnlyList<UIElement> GetAll()
-        {
-            return _all;
-        }
-
-        public IEnumerable<UIElement> GetAllEnabled()
-        {
-            return _enabled;
-        }
-
-        public void Disable(UIElement entity)
+        
+        public void Disable(TUIElement entity)
         {
             if (entity == null || !entity.gameObject.activeSelf)
             {
                 return;
             }
-            
+
             entity.Disable();
-            
-            _enabled.Remove(entity);
+
+            Enabled.Remove(entity);
         }
 
         public void DisableAll()
         {
-            foreach (UIElement entity in _all)
+            foreach (TUIElement entity in All)
             {
                 entity.Disable();
             }
 
-            _enabled.Clear();
+            Enabled.Clear();
+            
+            Changed?.Invoke();
         }
 
-        public UIElement GetByIndex(int tabIndex)
+        public TUIElement GetByIndex(int tabIndex)
         {
-            return _all[tabIndex];
+            return All[tabIndex];
         }
-    }
-    
-    public interface IPoolableUIElement
-    {
-        void Enable();
-        void Disable();
+        
+        private TUIElement _getDisabledEntity()
+        {
+            return All.FirstOrDefault(entity => entity != null && !entity.gameObject.activeSelf);
+        }
+
+        private TUIElement _addNewEntity()
+        {
+            TUIElement entity = Object.Instantiate(_prefab, _root);
+
+            All.Add(entity);
+
+            entity.SetIndex(All.Count);
+
+            IGameListener[] listeners = entity.GetComponentsInChildren<IGameListener>(true);
+
+            if (listeners is { Length: > 0 })
+            {
+                _gameEventDispatcher.InitializeListeners(listeners);
+            }
+            
+            return entity;
+        }
+
+#if UNITY_EDITOR
+        [Button]
+        private void _findInChildren()
+        {
+            All = _root.GetComponentsInChildren<TUIElement>().ToList();
+            
+            Enabled = All.Where(entity => entity != null && !entity.gameObject.activeSelf).ToList();
+
+            for (int index = 0; index < All.Count; index++)
+            {
+                TUIElement element = All[index];
+                element.SetIndex(index);
+            }
+
+            AssetDatabase.SaveAssets();
+        }
+#endif
     }
 }

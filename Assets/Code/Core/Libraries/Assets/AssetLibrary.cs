@@ -7,7 +7,8 @@ namespace Core.Libraries.Assets
     public class AssetLibrary : ScriptableObject
     {
         [field: SerializeField, GUIColor(0.1f, 0.7f, 0.9f, 0.5f)] public MaterialLibrary Material { get; private set; }
-        [field: SerializeField, GUIColor(0.1f, 0.9f, 0.9f, 0.5f)] public PrefabLibrary Windows { get; private set; }
+        [field: SerializeField, GUIColor(0.1f, 0.9f, 0.9f, 0.5f)] public PrefabLibrary UICanvases { get; private set; }
+        [field: SerializeField, GUIColor(0.1f, 0.9f, 0.9f, 0.5f)] public PrefabLibrary UIElements { get; private set; }
         [field: SerializeField, GUIColor(0.3f, 0.9f, 0.7f, 0.5f)] public PrefabLibrary SceneComponents { get; private set; }
     }
 }

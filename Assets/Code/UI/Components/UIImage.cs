@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using Plugins.Demigiant.DOTween.Modules;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Components
@@ -7,11 +9,21 @@ namespace UI.Components
     {
         [SerializeField] private Image _image;
 
-        
+        private Tween _tween;
+
+
         public void SetFillAmount(float normalizedValue)
         {
             _image.fillAmount = normalizedValue;
         }
+
+        public void Colorize(ColorTweenData colorTweenData)
+        {
+            _tween?.Kill();
+            _tween = _image.DOColor(colorTweenData.Color, colorTweenData.Duration)
+                .SetLink(gameObject, LinkBehaviour.KillOnDisable);
+        }
+
         public float GetFillAmount()
         {
             return _image.fillAmount;
@@ -23,6 +35,7 @@ namespace UI.Components
             _image.sprite = sprite;
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             if (_image == null)
@@ -30,5 +43,6 @@ namespace UI.Components
                 TryGetComponent(out _image);
             }
         }
+#endif
     }
 }

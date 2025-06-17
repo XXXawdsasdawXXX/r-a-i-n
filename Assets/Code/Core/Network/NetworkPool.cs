@@ -43,7 +43,7 @@ namespace Core.Network
         {
             if (_instances.Contains(instance))
             {
-                _gameEventDispatcher.RemoveSpawnableListeners(getGameListeners(instance));
+                _gameEventDispatcher.RemoveListeners(getGameListeners(instance));
 
                 networkManager.ServerManager.Despawn(instance);
 
@@ -96,7 +96,7 @@ namespace Core.Network
 
         protected void registerGameListener(IGameListener[] listeners)
         {
-            _gameEventDispatcher.AddSpawnableListeners(listeners);
+            _gameEventDispatcher.InitializeListeners(listeners);
         }
     }
 }

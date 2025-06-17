@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace UI.Windows.Base
 {
-    public abstract class UIWindowController<UIView> : Essential.Mono where UIView : UIWindowView
+    public abstract class UIWindowController<UIView> : Essential.Mono, IWindowController where UIView : UIWindowView
     {
         [SerializeField] protected UIView view;
+        [SerializeField] protected UIWindowManager windowManager;
 
         protected void OnEnable()
         {
@@ -36,6 +37,11 @@ namespace UI.Windows.Base
             if (view == null && !TryGetComponent(out view))
             {
                 view = gameObject.AddComponent<UIView>();
+            }
+
+            if (windowManager == null)
+            {
+                windowManager = GetComponentInParent<UIWindowManager>(true);
             }
         }
 #endif

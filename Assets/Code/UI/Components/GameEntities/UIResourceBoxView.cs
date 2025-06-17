@@ -1,8 +1,10 @@
-﻿using Core.GameLoop;
+﻿using System;
+using Core.GameLoop;
 using Core.ServiceLocator;
 using CoreGame.Harvest;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.Components
 {
@@ -48,6 +50,23 @@ namespace UI.Components
         public void UpdateIcon()
         {
             _icon.SetSprite(_resourceCollection.Library.Get(ResourceType).Icon);
+        }
+
+        public Action Clicked { get; }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+       
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+       
         }
     }
 }

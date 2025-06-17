@@ -4,6 +4,7 @@ using Core.Libraries.Assets;
 using Core.Scenes;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 
 namespace Core.StateMachine
 {
@@ -31,7 +32,8 @@ namespace Core.StateMachine
         {
             await _sceneService.LoadSceneAsync(EScene.Menu);
 
-            AssetProvider.Instantiate(_assetLibrary.Windows.Get(AssetKey.CANVAS_MAIN_MENU));
+            AssetProvider.Instantiate(_assetLibrary.UICanvases.Get(AssetKey.CANVAS_MAIN_MENU));
+
             AssetProvider.Instantiate(_assetLibrary.SceneComponents.Get(AssetKey.CAMERA));
             
             Container.Instance.Context.BuildChildContext();

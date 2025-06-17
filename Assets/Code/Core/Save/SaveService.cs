@@ -13,16 +13,8 @@ using UnityEngine;
 
 namespace Core.Save
 {
-    internal sealed class SaveService : IService, IInitializeListener
+    public sealed class SaveService : IService, IInitializeListener
     {
-        [Serializable]
-        public class SaveContainer
-        {
-            public SettingsModel UserSettings = new();
-            public string LastSlot;
-            public Dictionary<string, string> Slots = new();
-        }
-
         private static readonly string SavePath = Path.Combine(Application.persistentDataPath, "save_slots.dat");
         private static readonly string Password = _generateKey();
         private static readonly string HmacKey = "HMAC_SECRET_KEY_123";
@@ -56,8 +48,6 @@ namespace Core.Save
         public UniTask Initialize()
         {
             _saveSettings = Container.Instance.GetConfig<SaveSettings>();
-            
-            Log.Info(this, $"initialize - {_saveSettings != null}");
 
             return UniTask.CompletedTask;
         }

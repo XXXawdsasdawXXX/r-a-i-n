@@ -6,9 +6,9 @@ using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.Connection
+namespace UI.Windows.MainMenu.Connection.Legacy
 {
-    public class ConnectionWindowController : UIWindowController<ConnectionWindowView>, IInitializeListener
+    public class Legacy_ConnectionWindowController : UIWindowController<Legacy_ConnectionWindowView>, IInitializeListener
     {
         public bool IsInitialized { get; set; }
         
@@ -23,7 +23,6 @@ namespace UI.Windows.Connection
             view.TextUserIP.SetText("your ip: " + ConnectionHandler.GetLocalIPAddress());
           
             view.InputFieldHostIP.SetTextWithoutNotify(_connectionHandler.LastJoinedIP);
-            
             
             view.InputFieldHostIP.SetTextWithoutNotify(
                 PlayerPrefs.GetString(ConnectionHandler.SAVE_KEY, view.InputFieldHostIP.Value));

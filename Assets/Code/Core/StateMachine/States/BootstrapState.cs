@@ -42,7 +42,7 @@ namespace Core.StateMachine
 
             if (Log.PROFILER_IS_ACTIVE)
             {
-                AssetProvider.Instantiate(assetLibrary.Windows.Get(AssetKey.CANVAS_PROFILER));
+                AssetProvider.Instantiate(assetLibrary.UICanvases.Get(AssetKey.CANVAS_PROFILER));
             }
 
             ContextEntities projectContext = ContextBuilder.BuildContext(installerStorage.ProjectsInstaller.GetTypes());

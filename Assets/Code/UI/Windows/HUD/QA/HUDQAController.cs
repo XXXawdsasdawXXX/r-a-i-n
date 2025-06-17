@@ -33,7 +33,7 @@ namespace UI.Windows.HUD.QA
 
         public UniTask GameStart()
         {
-            EResource[] resourceTypes = Enum.GetValues(typeof(EResource)).Cast<EResource>().ToArray();
+            List<EResource> resourceTypes = Enum.GetValues(typeof(EResource)).Cast<EResource>().ToList();
 
             view.DropDownResourceType.DropDown.ClearOptions();
 

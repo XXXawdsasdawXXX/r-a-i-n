@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Essential;
 using Object = UnityEngine.Object;
 
 namespace Core.ServiceLocator
@@ -19,16 +20,17 @@ namespace Core.ServiceLocator
             
             foreach (Essential.Mono mono in newContext.Objects)
             {
-                _registry(mono,  newContext);
+                _registry(mono, newContext);
             }
 
             foreach (Type type in allTypes) 
             {
-                _createAndRegistry(type,  newContext);
+                _createAndRegistry(type, newContext);
             }
 
             return newContext;
         }
+        
         internal static void BuildChildContext(this ContextEntities existingContext)
         {
             existingContext.SetChildContext(BuildContext(existingContext));
@@ -144,23 +146,23 @@ namespace Core.ServiceLocator
         }
         
         
-        private static void _registry(Essential.Mono mono, ContextEntities newContext)
+        private static void _registry(Essential.Mono mono, ContextEntities context)
         {
             Type type = mono.GetType();
 
-            if (mono is IMono monoInterface  && !newContext.Mono.ContainsKey(type))
+            if (mono is IMono monoInterface  && !context.Mono.ContainsKey(type))
             {
-                newContext.Mono[type] = monoInterface;
+                context.Mono[type] = monoInterface;
             }
 
-            else if (mono is IService service && !newContext.Services.ContainsKey(type))
+            else if (mono is IService service && !context.Services.ContainsKey(type))
             {
-                newContext.Services[type] = service;
+                context.Services[type] = service;
             }
 
-            else if (mono is MonoView view  && !newContext.Views.ContainsKey(type))
+            else if (mono is MonoView view  && !context.Views.ContainsKey(type))
             {
-                newContext.Views[type] = view;
+                context.Views[type] = view;
             }
         }
 

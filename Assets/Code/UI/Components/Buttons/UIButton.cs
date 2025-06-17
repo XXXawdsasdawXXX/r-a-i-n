@@ -1,21 +1,18 @@
-using System;
 using Core.Audio;
 using Core.GameLoop;
 using Core.Libraries;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Components
 {
-    public class UIButton : Essential.Mono ,IPointerDownHandler, IPointerUpHandler, IInitializeListener
+    public class UIButton : UISelectable, IPointerUpHandler, IInitializeListener
     {
-        public event Action Clicked;
         public bool IsInitialized { get; set; }
-        
+
         [SerializeField] private Button _button;
         
         private AudioService _audio;
@@ -23,22 +20,20 @@ namespace UI.Components
         public UniTask Initialize()
         {
             _audio = Container.Instance.GetService<AudioService>();
-          
-            _button.onClick.AddListener(Click);
             
             return UniTask.CompletedTask;
         }
 
-        protected virtual void Click()
+        public override void SetInteractable(bool isInteractable)
         {
-            Clicked?.Invoke();
+            _button.interactable = isInteractable;
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        protected override void onClick()
         {
             _audio.OneShot(AudioEventLibrary.BUTTON_DOWN);   
         }
-
+        
         public void OnPointerUp(PointerEventData eventData)
         {
             _audio.OneShot(AudioEventLibrary.BUTTON_UP);

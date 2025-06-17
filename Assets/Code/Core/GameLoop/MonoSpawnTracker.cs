@@ -50,7 +50,7 @@ namespace Core.GameLoop
             if (obj is IGameListener gameListener && _observeMono.Add(obj))
             {
                 Log.Info(this, $"Mono started {obj.GetType().Name} add to collection");
-                _gameEventDispatcher.AddSpawnableListener(gameListener);
+                _gameEventDispatcher.InitializeListener(gameListener);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Core.GameLoop
         {
             if (obj is IGameListener gameListener && _observeMono.Remove(obj))
             {
-                _gameEventDispatcher.RemoveSpawnableListener(gameListener);
+                _gameEventDispatcher.RemoveListener(gameListener);
             }
         }
     }
