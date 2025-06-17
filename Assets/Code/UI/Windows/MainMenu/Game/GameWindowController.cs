@@ -24,6 +24,12 @@ namespace UI.Windows.MainMenu.Game
             return UniTask.CompletedTask;
         }
 
+        protected override void OnDestroy()
+        {
+            Unsubscribe();
+            base.OnDestroy();
+        }
+
         public void Subscribe()
         {
             windowManager.GetWindow<HeroWindowController>().HeroListChanged += _updateObjectLockerState;
@@ -66,7 +72,7 @@ namespace UI.Windows.MainMenu.Game
 
         private void _updateObjectLockerState()
         {
-            view.ObjectLocker.SetActive(_gameModel.Heroes.Count == 0);
+            view?.ObjectLocker?.SetActive(_gameModel.Heroes.Count == 0);
         }
 
         private void _openJoinWindow()

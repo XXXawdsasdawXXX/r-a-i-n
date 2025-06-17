@@ -5,30 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="540b8f42-2d63-4d71-ad37-73b5d9f5eb8c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Characters/Hero/MonoComponents/HeroAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/CoreGame/Entities/Characters/Hero/MonoComponents/HeroAnimation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Components/Buttons/UIButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Components/Buttons/UIButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Configurations/Library_Audio.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Configurations/Library_Audio.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/DefaultPrefabObjects.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DefaultPrefabObjects.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CustomPlayButton/BookmarkSetting.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CustomPlayButton/BookmarkSetting.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CustomPlayButton/BookmarkSetting.asset.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CustomPlayButton/BookmarkSetting.asset.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphics/2D/Animation/Character_eat.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Graphics/2D/Animation/Character_eat.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Materials/World.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Graphics/Materials/World.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudio.bundle/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudio.bundle/Contents/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudioL.bundle/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudioL.bundle/Contents/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/resonanceaudio.bundle/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/resonanceaudio.bundle/Contents/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FishNet/CodeGenerating/cecil-0.11.4/Mono.Cecil.sln.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FishNet/Runtime/Transporting/Transports/Tugboat/LiteNetLib/LiteNetLib.csproj.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/Sirenix/Demos/Custom Attribute Processors.unitypackage.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/Sirenix/Demos/Custom Drawers.unitypackage.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/Sirenix/Demos/Editor Windows.unitypackage.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/Sirenix/Demos/Sample - RPG Editor.unitypackage.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/hero.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/hero.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/DOTweenSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/DOTweenSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Fonts/000webfont SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Fonts/000webfont SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/UI/Windows/MainMenu/Game/GameWindowController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Code/UI/Windows/MainMenu/Game/GameWindowController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/MainMenu/canvas_screen-main-menu.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/MainMenu/canvas_screen-main-menu.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Fonts/square_pixel-7.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Fonts/square_pixel-7.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,7 +209,7 @@
       <workItem from="1749910134591" duration="1697000" />
       <workItem from="1749987688002" duration="10167000" />
       <workItem from="1750175446125" duration="5498000" />
-      <workItem from="1750191107084" duration="1075000" />
+      <workItem from="1750191107084" duration="1484000" />
     </task>
     <task id="LOCAL-00001" summary="hero harvest animation">
       <created>1746962947228</created>
