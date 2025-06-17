@@ -4,11 +4,10 @@ using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using UI.Components;
 using UI.Windows.Base;
-using UnityEngine;
 
-namespace UI.Windows.MainMenu.Connection
+namespace UI.Windows.MainMenu.JoinToGame
 {
-    public class ConnectionWindowController : UIWindowController<ConnectionWindowView>, 
+    public class JoinToGameWindowController : UIWindowController<JoinToGameWindowView>, 
         IInitializeListener, ILoadListener
     {
         public bool IsInitialized { get; set; }
@@ -89,13 +88,5 @@ namespace UI.Windows.MainMenu.Connection
             
             
         }
-    }
-
-    public class ConnectionWindowView : UIWindowView
-    {
-        [field: SerializeField] public UIDropDown DropDownPreviousIPs { get; private set; }
-        [field: SerializeField] public UIInputField InputFieldConnectionIP { get; private set; }
-        [field: SerializeField] public UIButton ButtonConnection { get; private set; }
-        [field: SerializeField] public UIButton ButtonClose { get; private set; }
     }
 }

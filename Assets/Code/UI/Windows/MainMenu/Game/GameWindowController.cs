@@ -19,6 +19,8 @@ namespace UI.Windows.MainMenu.Game
         {
             _gameModel = Container.Instance.GetService<GameModel>();    
             
+            view.WorldsRadioGroup.Initialize();
+            
             return UniTask.CompletedTask;
         }
 
@@ -26,10 +28,11 @@ namespace UI.Windows.MainMenu.Game
         {
             _heroWindow.HeroListChanged += _updateObjectLockerState;
             
+            view.ButtonContinue.Clicked += _continueGame;
+            view.ButtonJoin.Clicked += _openJoinWindow;
             view.TextUserIP.Clicked += _copyIpToBuffer;
-            view.TextUserIP.Clicked += _copyIpToBuffer;
-            
-            view.WorldsRadioGroup.Initialize();
+            view.WorldsRadioGroup.Selected += _changeSelectedWorld;
+
         }
 
         public UniTask GameStart()
@@ -50,12 +53,28 @@ namespace UI.Windows.MainMenu.Game
 
         public void Unsubscribe()
         {
-            _heroWindow.HeroListChanged -= _updateObjectLockerState;
+            
+
+        }
+
+        private void _continueGame()
+        {
+            
         }
 
         private void _updateObjectLockerState()
         {
             view.ObjectLocker.SetActive(_gameModel.Heroes.Count == 0);
+        }
+
+        private void _openJoinWindow()
+        {
+            
+        }
+
+        private void _changeSelectedWorld(int worldIndex)
+        {
+            
         }
 
         private void _copyIpToBuffer()

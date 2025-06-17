@@ -43,13 +43,13 @@ namespace UI.Windows.MainMenu.Hero
             view.ButtonSettings.Clicked += _openHeroSettingsWindow;
             view.HeroesRadioGroup.Selected += _updateSelectedHeroView;
      
-            windowManager.GetWindow<NewHeroWindowController>().HeroCreated += _updateHeroesList;
-            windowManager.GetWindow<DeleteHeroWindowController>().HeroDeleted += _updateHeroesList;
+            windowManager.GetWindow<NewHeroWindowController>().HeroCreated += _updatePressesList;
+            windowManager.GetWindow<DeleteWindowController>().PressDeleted += _updatePressesList;
         }
 
         public UniTask GameLoad(GameModel model)
         {
-            _updateHeroesList();
+            _updatePressesList();
 
             _updateOptionButtonsView();
 
@@ -65,8 +65,8 @@ namespace UI.Windows.MainMenu.Hero
             view.ButtonSettings.Clicked -= _openHeroSettingsWindow;
             view.HeroesRadioGroup.Selected -= _updateSelectedHeroView;
          
-            windowManager.GetWindow<NewHeroWindowController>().HeroCreated -= _updateHeroesList;
-            windowManager.GetWindow<DeleteHeroWindowController>().HeroDeleted -= _updateHeroesList;
+            windowManager.GetWindow<NewHeroWindowController>().HeroCreated -= _updatePressesList;
+            windowManager.GetWindow<DeleteWindowController>().PressDeleted -= _updatePressesList;
         }
 
         private void _openNewHeroWindow()
@@ -81,7 +81,7 @@ namespace UI.Windows.MainMenu.Hero
 
         private void _openDeleteHeroWindow()
         {
-            windowManager.OpenWindow<DeleteHeroWindowController>();
+            windowManager.OpenWindow<DeleteWindowController>();
         }
 
         private void _updateSelectedHeroView(int heroIndex)
@@ -100,7 +100,7 @@ namespace UI.Windows.MainMenu.Hero
             }
         }
 
-        private void _updateHeroesList()
+        private void _updatePressesList()
         {
             view.HeroesRadioGroup.Pool.DisableAll();
 
