@@ -9,5 +9,9 @@ namespace UI.Data
     {
         [field: BoxGroup("Selected"), SerializeField] public ColorTweenData SelectedTween { get; private set; }
         [field: BoxGroup("Selected"), SerializeField] public ColorTweenData DeselectedTween { get; private set; }
+        
+        [field: Space]
+        [field: BoxGroup("Ghost tab"), SerializeField] public FloatTweenData GhostTabAlpaTween { get; private set; }
+        [field: BoxGroup("Ghost tab"), SerializeField] public FloatTweenData GhostTabMoveYTween { get; private set; }
     }
 }

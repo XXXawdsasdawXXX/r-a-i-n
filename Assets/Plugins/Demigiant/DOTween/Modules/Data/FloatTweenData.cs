@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using DG.Tweening;
-using UnityEngine;
 
 namespace Plugins.Demigiant.DOTween.Modules
 {
     [Serializable]
-    public struct ColorTweenData
+    public struct FloatTweenData
     {
-        public Color Color;
+        public float Value;
         public float Duration;
         public Ease Ease;
     }

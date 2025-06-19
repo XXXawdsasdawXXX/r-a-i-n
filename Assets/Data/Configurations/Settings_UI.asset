@@ -15,6 +15,16 @@ MonoBehaviour:
   <SelectedTween>k__BackingField:
     Color: {r: 1, g: 1, b: 1, a: 1}
     Duration: 0.5
+    Ease: 0
   <DeselectedTween>k__BackingField:
     Color: {r: 0.77725613, g: 0.8206298, b: 0.8537736, a: 1}
     Duration: 0.5
+    Ease: 0
+  <GhostTabAlpaTween>k__BackingField:
+    Value: 0.7
+    Duration: 1
+    Ease: 1
+  <GhostTabMoveYTween>k__BackingField:
+    Value: 2
+    Duration: 1
+    Ease: 1

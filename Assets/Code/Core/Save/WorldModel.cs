@@ -6,7 +6,10 @@ namespace Core.Save
     [Serializable]
     public class WorldModel
     {
-        public TimeSpan Time;
+        public string Name;
+        public TimeSpan CreateTime;
+        public TimeSpan ExitTime;
+        public TimeSpan GameTime;
         public Dictionary<int, int> ResourcesStorage = new();
         public Dictionary<string, int> SceneResources = new();
 

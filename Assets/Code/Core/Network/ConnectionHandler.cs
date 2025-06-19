@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Core.ServiceLocator;
 using FishNet;
 using FishNet.Transporting;
 using FishNet.Transporting.Tugboat;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Core.Network
 {
-    public sealed class ConnectionHandler : MonoBehaviour
+    public sealed class ConnectionHandler : Essential.Mono, IService
     {
         public const string SAVE_KEY = "last_connection_ip";
         public string LastJoinedIP => _serverIP;

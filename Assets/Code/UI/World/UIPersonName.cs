@@ -5,7 +5,7 @@ using Essential;
 using UI.Components;
 using UnityEngine;
 
-namespace UI.Game
+namespace UI.World
 {
     public class UIPersonName : Essential.Mono, IStartListener ,ISubscriber
     {

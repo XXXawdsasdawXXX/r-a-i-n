@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,20 +13,27 @@ namespace UI.Components
         public event Action Deselected;
         public event Action Clicked;
 
+        [field: BoxGroup("Selectable")]
+        [field: SerializeField] public bool AutoSelect { get; private set; }
+        [field: BoxGroup("Selectable")]
         [field: SerializeField] public int Index { get; private set; }
+        [field: BoxGroup("Selectable")]
         [field: SerializeField] public bool IsSelected { get; private set; }
+        [field: BoxGroup("Selectable")]
         [field: SerializeField] protected GameObject body { get; private set; }
 
+        [field: BoxGroup("Selectable")]
+        [Header("Can be null")]
         [SerializeField, CanBeNull] private UISelectableAnimation _selectableAnimation;
         
         void IPoolableUIElement.Enable()
         {
-            body.SetActive(false);
+            body.SetActive(true);
         }
 
         void IPoolableUIElement.Disable()
         {
-            body.SetActive(true);
+            body.SetActive(false);
         }
 
         public void SetIndex(int index)
@@ -46,6 +54,7 @@ namespace UI.Components
             {
                 _selectableAnimation.Select();
             }
+            
             IsSelected = true;
         }
 
@@ -55,6 +64,7 @@ namespace UI.Components
             {
                 _selectableAnimation.Deselect();
             }
+            
             IsSelected = false;
         }
         
@@ -63,6 +73,12 @@ namespace UI.Components
         public void OnPointerEnter(PointerEventData eventData)
         {
             onEnter();
+
+            if (AutoSelect)
+            {
+                Select();
+            }
+            
             Selected?.Invoke();
         }
 
@@ -75,6 +91,12 @@ namespace UI.Components
         public void OnPointerExit(PointerEventData eventData)
         {
             onExit();
+         
+            if (AutoSelect)
+            {
+                Deselect();
+            }
+            
             Deselected?.Invoke();
         }
 

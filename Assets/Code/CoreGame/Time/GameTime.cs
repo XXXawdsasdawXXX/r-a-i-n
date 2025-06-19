@@ -25,7 +25,7 @@ namespace CoreGame.Time
 
         public bool IsInitialized { get; set; }
         public string RuntimeListenerName => "GameTime";
-        public TimeSpan Current => _gameModel.World.Time;
+        public TimeSpan Current => _gameModel.World.GameTime;
 
         private GameModel _gameModel;
         private float _timeScale;
@@ -66,7 +66,7 @@ namespace CoreGame.Time
 
         private void _updateServerTime(float deltaTime)
         {
-            _gameModel.World.Time += TimeSpan.FromSeconds(deltaTime * _timeScale);
+            _gameModel.World.GameTime += TimeSpan.FromSeconds(deltaTime * _timeScale);
 
             if (UnityEngine.Time.time - _lastUpdateTime >= 1.0f)
             {
@@ -80,19 +80,19 @@ namespace CoreGame.Time
 
         private void _updateClientTime(float deltaTime)
         {
-            _gameModel.World.Time += TimeSpan.FromSeconds(deltaTime * _timeScale);
+            _gameModel.World.GameTime += TimeSpan.FromSeconds(deltaTime * _timeScale);
         }
 
         private void _onServerSendChanged(GameTimeBroadcast broadcast, Channel _)
         {
             TimeSpan serverTime = TimeSpan.FromSeconds(broadcast.TotalSeconds);
            
-            _gameModel.World.Time = serverTime;
+            _gameModel.World.GameTime = serverTime;
         }
 
         public UniTask GameLoad(GameModel model)
         {
-            Log.Info(this, $"load: {model.World.Time}");
+            Log.Info(this, $"load: {model.World.GameTime}");
             
             return UniTask.CompletedTask;
         }

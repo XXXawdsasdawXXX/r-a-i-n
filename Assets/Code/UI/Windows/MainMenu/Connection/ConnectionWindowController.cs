@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace UI.Windows.MainMenu.Connection.Legacy
 {
-    public class Legacy_ConnectionWindowController : UIWindowController<Legacy_ConnectionWindowView>, IInitializeListener
+    public class ConnectionWindowController : UIWindowController<ConnectionWindowView>, IInitializeListener
     {
         public bool IsInitialized { get; set; }
         
@@ -26,8 +26,6 @@ namespace UI.Windows.MainMenu.Connection.Legacy
             
             view.InputFieldHostIP.SetTextWithoutNotify(
                 PlayerPrefs.GetString(ConnectionHandler.SAVE_KEY, view.InputFieldHostIP.Value));
-            
-            view.Open();
             
             return UniTask.CompletedTask;
         }

@@ -44,7 +44,7 @@ namespace UI.Windows.MainMenu.DeleteHero
         public void SetObservedIcon(Sprite objectSprite)
         {
             view.ImageIcon.SetSprite(objectSprite);
-            view.ImageIcon.gameObject.SetActive(objectSprite != null);
+            view.ObjectIcon.SetActive(objectSprite != null);
         }
         
         private void _invokeDelete()

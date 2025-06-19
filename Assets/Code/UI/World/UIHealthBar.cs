@@ -2,7 +2,7 @@
 using UI.Components;
 using UnityEngine;
 
-namespace UI.Game
+namespace UI.World
 {
     public class UIHealthBar : MonoBehaviour
     {

@@ -77,6 +77,5 @@ namespace UI.Windows.Base
             
             return null;
         }
-        
     }
 }

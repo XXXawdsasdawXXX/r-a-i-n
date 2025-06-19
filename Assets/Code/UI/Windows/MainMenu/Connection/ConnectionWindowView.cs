@@ -2,9 +2,9 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.MainMenu.Connection.Legacy
+namespace UI.Windows.MainMenu.Connection
 {
-    public class Legacy_ConnectionWindowView : UIWindowView
+    public class ConnectionWindowView : UIWindowView
     {
         [field: SerializeField] public UIText TextUserIP { get; private set; }
         [field: SerializeField] public UIButton ButtonServer { get; private set; }

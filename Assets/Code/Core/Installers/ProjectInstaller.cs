@@ -6,6 +6,7 @@ using Core.Network;
 using Core.Save;
 using Core.Scenes;
 using Core.ServiceLocator;
+using Core.TIme;
 using UnityEngine;
 
 namespace Core.Installers
@@ -18,6 +19,7 @@ namespace Core.Installers
             return new[]
             {
                 typeof(SaveService),
+                typeof(UtcTime),
                 typeof(GameModel),
                 typeof(SceneService),
                 typeof(MonoSpawnTracker),

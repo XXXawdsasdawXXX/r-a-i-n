@@ -3,7 +3,7 @@ using CoreGame.Harvest;
 using UI.Components;
 using UnityEngine;
 
-namespace UI.Game
+namespace UI.World
 {
     public class UIResourceValueTab : Essential.Mono, ISubscriber
     {

@@ -8,6 +8,8 @@ namespace UI.Windows.MainMenu.Delete
     {
         [field: SerializeField] public UIText TextName { get; private set; }
         [field: SerializeField] public UIImage ImageIcon { get; private set; }
+        [field: SerializeField] public GameObject ObjectIcon { get; private set; }
         [field: SerializeField] public UIButton ButtonDelete { get; private set; }
+        [field: SerializeField] public UIButton ButtonReturn { get; private set; }
     }
 }

@@ -16,6 +16,9 @@ namespace Core.Save
         public int LastHeroIndex;
         public int LastWorldIndex;
         
+        public DateTime GameEnterTime;
+        public DateTime GameExitTime;
+        
         public GameModel()
         {
             World = new WorldModel();
@@ -32,6 +35,9 @@ namespace Core.Save
             
             Heroes = model?.Heroes ?? new List<HeroModel>();
             Worlds = model?.Worlds ?? new List<WorldModel>();
+
+            GameEnterTime = model?.GameEnterTime ?? default;
+            GameExitTime = model?.GameExitTime ?? default;
         }
     }
 }
