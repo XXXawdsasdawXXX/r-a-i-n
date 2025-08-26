@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="MixerGroup" id="{47dedb84-da10-424d-a334-e9386c9b01bd}">
 		<property name="name">
-			<value>Mucic proto</value>
+			<value>Music proto</value>
 		</property>
 		<relationship name="masters">
 			<destination>{1a936381-36e4-421c-b7b3-98b2f3de03b2}</destination>

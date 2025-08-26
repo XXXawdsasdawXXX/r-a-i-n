@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="540b8f42-2d63-4d71-ad37-73b5d9f5eb8c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tiny_thing/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Assets/Music/music_game_proto.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/Asset/{0d9224a0-b44d-4509-9ce1-76fc900f56d7}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/Asset/{d6846c4b-e59e-41bb-9ad3-d3c8d7288a74}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/AudioFile/{a6fbd62b-9b16-4609-890d-885f780ae6d7}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/Event/{97fd7662-5b00-436c-8d27-343173580ade}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/Group/{0d1f641b-0f86-46e4-8d1f-65f651d74860}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/Group/{47dedb84-da10-424d-a334-e9386c9b01bd}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/Return/{4ed157ef-50dc-4121-830d-0102654bf6f2}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/VCA/{1a936381-36e4-421c-b7b3-98b2f3de03b2}.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tiny_thing.FMOD/Metadata/VCA/{f6142e06-8d14-475f-aa47-67f606105eee}.xml" afterDir="false" />
     </list>
     <list id="8240115f-6e3a-4cd6-bfd3-fc8a48a5ab01" name="Compilation" comment="">
       <change beforePath="$PROJECT_DIR$/Assets/DefaultPrefabObjects.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DefaultPrefabObjects.asset" afterDir="false" />
@@ -34,18 +43,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "CMD094"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;CMD094&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/XXXawdsasdawXXX/tiny_thing.git",
-    "accountId": "c73b8382-a554-441c-a1e0-43b3fb4858be"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/XXXawdsasdawXXX/tiny_thing.git&quot;,
+    &quot;accountId&quot;: &quot;c73b8382-a554-441c-a1e0-43b3fb4858be&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Code/Core/Audio/AudioEvents/AudioEvent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Code/Core/Editor/ParrelSyncUtility.cs" root0="FORCE_HIGHLIGHTING" />
@@ -53,9 +62,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Code/UI/Windows/MainMenu/Connection/ConnectionWindowController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Code/UI/Windows/MainMenu/Delete/DeleteWindowController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://C:/Github/tiny_thing/Assets/Editor/CustomPlayButton/BookmarkSetting.asset" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Github/tiny_thing/Assets/Editor/CustomPlayButton/BookmarkSetting.asset.meta" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Github/tiny_thing/Assets/Plugins/FMOD/Resources/FMODStudioSettings.asset" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Github/tiny_thing/Assets/Scenes/Game_0.unity" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Github/tiny_thing/Assets/Editor/CustomPlayButton/BookmarkSetting.asset" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.cysharp.unitask@8042b29ff8/Runtime/CompilerServices/StateMachineRunner.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.cysharp.unitask@8042b29ff8/Runtime/Internal/PooledDelegate.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.mathematics@1.2.6/Unity.Mathematics/float2.gen.cs" root0="SKIP_HIGHLIGHTING" />
@@ -80,25 +87,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Discover.Launch.Via.Unity": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "TODO_SCOPE": "All Places",
-    "WebServerToolWindowFactoryState": "false",
-    "XThreadsFramesViewSplitterKey": "0.5040486",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.5040486&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.51f1\Editor\Unity.exe" />
@@ -251,6 +258,7 @@
       <workItem from="1751045277834" duration="350000" />
       <workItem from="1751292780621" duration="1326000" />
       <workItem from="1756204290791" duration="2871000" />
+      <workItem from="1756239405339" duration="650000" />
     </task>
     <task id="LOCAL-00001" summary="hero harvest animation">
       <created>1746962947228</created>
@@ -297,7 +305,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756235803886</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="vca upd">
+      <option name="closed" value="true" />
+      <created>1756239429838</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1756239429838</updated>
+    </task>
+    <task id="LOCAL-00008" summary="update fmod">
+      <option name="closed" value="true" />
+      <created>1756241535149</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1756241535149</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -331,7 +355,9 @@
     <MESSAGE value="update fmod banks" />
     <MESSAGE value="asset and audiobanks upd" />
     <MESSAGE value="upd" />
-    <option name="LAST_COMMIT_MESSAGE" value="upd" />
+    <MESSAGE value="vca upd" />
+    <MESSAGE value="update fmod" />
+    <option name="LAST_COMMIT_MESSAGE" value="update fmod" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
