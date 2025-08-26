@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="MixerGroup" id="{0d1f641b-0f86-46e4-8d1f-65f651d74860}">
+		<property name="name">
+			<value>Music</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{00afe4e2-ac9b-48af-b773-fb5e755511c9}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{f8e02395-0707-4c92-8532-7cd70eb95336}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{c522514d-0268-4e34-9b91-a885c3467c91}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{00afe4e2-ac9b-48af-b773-fb5e755511c9}">
+		<relationship name="effects">
+			<destination>{95d5650a-2198-4d97-86d8-9b58874a1a3f}</destination>
+			<destination>{c4d59072-5b03-49ba-bcb5-f3ad43285130}</destination>
+			<destination>{b42b2799-bbed-4129-b6b7-5888914ea748}</destination>
+			<destination>{be23a6a4-2fa8-4a88-a039-489ddc49368b}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{f8e02395-0707-4c92-8532-7cd70eb95336}" />
+	<object class="ParamEqEffect" id="{95d5650a-2198-4d97-86d8-9b58874a1a3f}">
+		<property name="centreFrequency">
+			<value>800</value>
+		</property>
+		<property name="gain">
+			<value>-8</value>
+		</property>
+		<property name="bandwidth">
+			<value>5</value>
+		</property>
+	</object>
+	<object class="MultibandEqEffect" id="{c4d59072-5b03-49ba-bcb5-f3ad43285130}">
+		<property name="filterTypeA">
+			<value>9</value>
+		</property>
+		<property name="filterTypeB">
+			<value>9</value>
+		</property>
+		<property name="frequencyA">
+			<value>2770.78125</value>
+		</property>
+		<property name="frequencyB">
+			<value>134.544098</value>
+		</property>
+		<property name="qualityA">
+			<value>0.620000005</value>
+		</property>
+		<property name="qualityB">
+			<value>1.5</value>
+		</property>
+		<property name="gainA">
+			<value>-10.0487595</value>
+		</property>
+		<property name="gainB">
+			<value>-16</value>
+		</property>
+	</object>
+	<object class="LimiterEffect" id="{b42b2799-bbed-4129-b6b7-5888914ea748}">
+		<property name="boost">
+			<value>12</value>
+		</property>
+		<property name="ceiling">
+			<value>-12</value>
+		</property>
+	</object>
+	<object class="MixerBusFader" id="{be23a6a4-2fa8-4a88-a039-489ddc49368b}" />
+</objects>

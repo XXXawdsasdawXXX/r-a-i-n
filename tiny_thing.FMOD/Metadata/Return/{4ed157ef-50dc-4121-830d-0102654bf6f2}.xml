@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="MixerReturn" id="{4ed157ef-50dc-4121-830d-0102654bf6f2}">
+		<property name="name">
+			<value>Ambience chain</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{b472f8b0-b537-44dc-b44a-3f29ff3e8a0e}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{c91e02fb-5313-413b-b379-b9b9a4c7d63d}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{c522514d-0268-4e34-9b91-a885c3467c91}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{b472f8b0-b537-44dc-b44a-3f29ff3e8a0e}">
+		<relationship name="effects">
+			<destination>{6a5d072f-1ed2-4752-9824-9cd79db15ffb}</destination>
+			<destination>{18de1470-ba16-4c15-aa3a-035c0d95a29a}</destination>
+			<destination>{5621a20d-03f1-4d73-80d5-91b4e74d3952}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{c91e02fb-5313-413b-b379-b9b9a4c7d63d}" />
+	<object class="DelayEffect" id="{6a5d072f-1ed2-4752-9824-9cd79db15ffb}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
+		<property name="delay">
+			<value>76</value>
+		</property>
+		<property name="feedback">
+			<value>30</value>
+		</property>
+		<property name="level">
+			<value>-14</value>
+		</property>
+	</object>
+	<object class="SFXReverbEffect" id="{18de1470-ba16-4c15-aa3a-035c0d95a29a}">
+		<property name="earlyDelay">
+			<value>179</value>
+		</property>
+		<property name="lateDelay">
+			<value>100</value>
+		</property>
+		<property name="diffusion">
+			<value>21</value>
+		</property>
+		<property name="lowShelfGain">
+			<value>5</value>
+		</property>
+		<property name="highCut">
+			<value>1670</value>
+		</property>
+		<property name="earlyLateMix">
+			<value>65</value>
+		</property>
+		<property name="wetLevel">
+			<value>-25.5</value>
+		</property>
+		<property name="dryLevel">
+			<value>-2</value>
+		</property>
+	</object>
+	<object class="MixerBusFader" id="{5621a20d-03f1-4d73-80d5-91b4e74d3952}" />
+</objects>

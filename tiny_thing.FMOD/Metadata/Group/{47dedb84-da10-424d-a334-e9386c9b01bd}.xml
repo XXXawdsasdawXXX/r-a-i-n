@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="MixerGroup" id="{47dedb84-da10-424d-a334-e9386c9b01bd}">
+		<property name="name">
+			<value>Mucic proto</value>
+		</property>
+		<relationship name="masters">
+			<destination>{1a936381-36e4-421c-b7b3-98b2f3de03b2}</destination>
+		</relationship>
+		<relationship name="effectChain">
+			<destination>{a2062d7e-f78b-40ee-a771-2256823a5927}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{919029de-bc02-45ea-81f0-fc83cac8c0f4}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{c522514d-0268-4e34-9b91-a885c3467c91}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{a2062d7e-f78b-40ee-a771-2256823a5927}">
+		<relationship name="effects">
+			<destination>{543a0c16-6b0e-4aa8-98df-e34dc77da367}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{919029de-bc02-45ea-81f0-fc83cac8c0f4}" />
+	<object class="MixerBusFader" id="{543a0c16-6b0e-4aa8-98df-e34dc77da367}" />
+</objects>
