@@ -23,9 +23,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{c91e02fb-5313-413b-b379-b9b9a4c7d63d}" />
 	<object class="DelayEffect" id="{6a5d072f-1ed2-4752-9824-9cd79db15ffb}">
-		<property name="bypass">
-			<value>true</value>
-		</property>
 		<property name="delay">
 			<value>76</value>
 		</property>

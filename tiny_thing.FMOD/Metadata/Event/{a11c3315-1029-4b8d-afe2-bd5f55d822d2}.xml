@@ -75,14 +75,17 @@
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{c3c3ff5c-71d7-4f00-8ab3-af8de83f9282}">
+		<property name="start">
+			<value>0.0024635304644502268</value>
+		</property>
 		<property name="length">
-			<value>0.0050869837746868093</value>
+			<value>0.002623453310236592</value>
 		</property>
 		<property name="timelockedOffset">
-			<value>0.002101224842093222</value>
+			<value>0.0045647553065434419</value>
 		</property>
-		<property name="volume">
-			<value>-5</value>
+		<property name="pitch">
+			<value>-2.20000005</value>
 		</property>
 		<relationship name="audioFile">
 			<destination>{f0ed94ed-b223-473a-a1c7-da362e8377dc}</destination>
@@ -110,7 +113,7 @@
 	</object>
 	<object class="GainEffect" id="{2531e10c-b481-41cf-9dd4-f3f0f3e3186d}">
 		<property name="gain">
-			<value>6.5</value>
+			<value>10</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{3a00b109-2cab-4393-a8a3-55f0865086a0}" />
