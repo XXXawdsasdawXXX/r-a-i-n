@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Sockets;
 using Core.ServiceLocator;
 using FishNet;
 using FishNet.Transporting;
@@ -81,18 +82,16 @@ namespace Core.Network
 
         public static string GetLocalIPAddress()
         {
-            string localIP = "127.0.0.1"; 
-            
-            foreach (IPAddress ip in Dns.GetHostAddresses(Dns.GetHostName()))
+            try
             {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    localIP = ip.ToString();
-                    break;
-                }
+                using Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
+                socket.Connect("8.8.8.8", 65530);
+                return (socket.LocalEndPoint as IPEndPoint)?.Address.ToString() ?? "127.0.0.1";
             }
-            
-            return localIP;
+            catch
+            {
+                return "127.0.0.1";
+            }
         }
     }
 }
