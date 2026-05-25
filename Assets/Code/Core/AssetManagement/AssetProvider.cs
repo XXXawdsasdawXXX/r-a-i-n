@@ -14,15 +14,6 @@ namespace Core.AssetManagement
             return request.asset as T;
         }
         
-        public static async UniTask<ScriptableObject> LoadScriptableObject(string path)
-        {
-            ResourceRequest request = Resources.LoadAsync<ScriptableObject>(path);
-            
-            await request;
-
-            return request.asset as ScriptableObject;
-        }
-
         public static GameObject Instantiate(GameObject prefab)
         {
             return Object.Instantiate(prefab);

@@ -8,10 +8,10 @@ using CoreGame.Harvest;
 using CoreGame.Time;
 using UnityEngine;
 
-namespace CoreGame.Installers
+namespace CoreGame
 {
     [CreateAssetMenu(fileName = "Installer_CoreGame", menuName = "Game/Installers/CoreGame")]
-    public  class CoreGameInstaller : Installer
+    public class CoreGameInstaller : Installer
     {
         public override Type[] GetTypes()
         {

@@ -12,6 +12,7 @@ namespace UI.Components
         public event Action<int> Changed;
         [field: SerializeField] public TMP_Dropdown DropDown { get; private set; }
 
+        
         public void Subscribe()
         {
             DropDown.onValueChanged.AddListener(_onChanged);

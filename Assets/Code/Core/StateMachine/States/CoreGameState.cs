@@ -22,7 +22,7 @@ namespace Core.StateMachine
         private SceneService _sceneService;
         private GameEventDispatcher _gameEventDispatcher;
 
-        private List<GameObject> _coreEntities = new();
+        private readonly List<GameObject> _coreEntities = new();
 
 
         public UniTask Initialize()

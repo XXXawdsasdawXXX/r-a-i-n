@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.GameLoop;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 
@@ -47,6 +46,5 @@ namespace Core.StateMachine
             
             await _states[type].Enter();
         }
-        
     }
 }
