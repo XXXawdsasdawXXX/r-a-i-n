@@ -107,3 +107,4 @@ fmod_editor.log
 # FMOD 1.10.x (Legacy)
 /Assets/FMODStudioCache.meta
 
+/Assets/Graphics/Shaders/AllIn1SpriteShader
