@@ -59,6 +59,7 @@ namespace CoreGame.InteractionObjects.Activators
 
         private ActivatorBroadcast _getActivatorBroadcast()
         {
+            //todo все объекты с этим бродкастом реагируют на вызов одного.
             return string.IsNullOrEmpty(_activatorBroadcast.ObjectID)
                 ? new ActivatorBroadcast()
                 {

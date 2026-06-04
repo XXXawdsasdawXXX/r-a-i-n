@@ -11,14 +11,14 @@ namespace Core.TIme
 {
     public class UtcTime : IService, IInitializeListener, ILoadListener, IUpdateListener, IExitListener
     {
+        public bool IsInitialized { get; set; }
+        public string RuntimeListenerName => "UserTime";
+        public DateTime Current { get; private set; }
         public event Action OnDayStarted;
         public event Action OnNightStarted;
 
         private static readonly TimeSpan NightStart = new(22, 0, 0);
         private static readonly TimeSpan NightEnd = new(6, 0, 0);
-        public bool IsInitialized { get; set; }
-        public string RuntimeListenerName => "UserTime";
-        public DateTime Current { get; private set; }
         
         private float _currentDeltaTime;
         private bool _isNight;

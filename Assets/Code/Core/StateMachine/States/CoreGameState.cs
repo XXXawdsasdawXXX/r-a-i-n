@@ -29,8 +29,8 @@ namespace Core.StateMachine
             _sceneService = Container.Instance.GetService<SceneService>();
             _gameEventDispatcher = Container.Instance.GetService<GameEventDispatcher>();
 
-            _installerStorage = Container.Instance.GetConfig<InstallerStorage>();
-            _assetLibrary = Container.Instance.GetConfig<AssetLibrary>();
+            _installerStorage = Container.Instance.GetSO<InstallerStorage>();
+            _assetLibrary = Container.Instance.GetSO<AssetLibrary>();
 
             return UniTask.CompletedTask;
         }

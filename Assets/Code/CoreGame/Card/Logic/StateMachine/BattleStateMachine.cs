@@ -39,7 +39,7 @@ namespace CoreGame.Card.Logic.StateMachine
 
         public UniTask Initialize()
         {
-            _cardLibrary = Container.Instance.GetConfig<CardLibrary>();
+            _cardLibrary = Container.Instance.GetSO<CardLibrary>();
             
             return UniTask.CompletedTask;
         }

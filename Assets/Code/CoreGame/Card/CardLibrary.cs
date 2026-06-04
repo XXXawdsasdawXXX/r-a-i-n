@@ -10,7 +10,7 @@ namespace CoreGame.Card
     {
         [field: SerializeField] public AllCardCollection AllCards { get; private set; }
 
-        [field: SerializeField] public CardConfiguration[] DefaultCardsDeck { get; private set; }
+        [field: SerializeField] public string[] DefaultCardsDeck { get; private set; }
     }
 
     [Serializable]

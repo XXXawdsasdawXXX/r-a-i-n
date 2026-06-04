@@ -13,6 +13,7 @@ namespace Core.ServiceLocator
         
         private readonly List<ScriptableObject> _configs = new();
         
+        
         internal Container(ContextEntities projectContext)
         {
             Context = projectContext;
@@ -25,7 +26,7 @@ namespace Core.ServiceLocator
             return _getContainerComponents<IGameListener>();
         }
 
-        public T GetConfig<T>() where T : ScriptableObject
+        public T GetSO<T>() where T : ScriptableObject
         {
             foreach (ScriptableObject scriptableObject in _configs)
             {
@@ -35,7 +36,7 @@ namespace Core.ServiceLocator
                 }
             }
 
-            return null;
+            throw new Exception($"Container has not SO with type {typeof(T).Name}");
         }
 
         public T GetService<T>() where T : class, IService
@@ -58,8 +59,8 @@ namespace Core.ServiceLocator
 
                 lowContext = lowContext.Parent;
             }
-            
-            return default;
+
+            throw new Exception($"Container has not service with type {type.Name}");
         }
 
         public T GetView<T>() where T : MonoView
@@ -83,7 +84,7 @@ namespace Core.ServiceLocator
                 lowContext = lowContext.Parent;
             }
 
-            return default;
+            throw new Exception($"Container has not view with type {type.Name}");
         }
 
         public void AddConfig(ScriptableObject config)

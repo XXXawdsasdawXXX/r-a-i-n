@@ -134,5 +134,16 @@ namespace Essential
         {
             Debug.LogException(e);
         }
+        
+        [Conditional("UNITY_EDITOR"), Conditional("DEBUG")]
+        public static void Exception(string context, Exception e)
+        {
+            Debug.Log(_getColorText($"{context}.\n{e}", Color.red));
+        }
+        
+        private static string _getColorText(string text, Color color)
+        {
+            return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{text}</color>";
+        }
     }
 }

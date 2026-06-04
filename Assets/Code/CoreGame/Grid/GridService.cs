@@ -19,7 +19,7 @@ namespace CoreGame.Grid
         
         public UniTask Initialize()
         {
-            _settings = Container.Instance.GetConfig<GridSettings>();
+            _settings = Container.Instance.GetSO<GridSettings>();
 
             return UniTask.CompletedTask;
         }

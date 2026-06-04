@@ -33,7 +33,7 @@ namespace Core.Save
 
         public UniTask Initialize()
         {
-            _saveSettings = Container.Instance.GetConfig<SaveSettings>();
+            _saveSettings = Container.Instance.GetSO<SaveSettings>();
 
             return UniTask.CompletedTask;
         }

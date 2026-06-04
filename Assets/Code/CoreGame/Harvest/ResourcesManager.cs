@@ -23,7 +23,7 @@ namespace CoreGame.Harvest
 
         private UserProvider _userProvider;
         private Hero _hero;
-        private Miner _miner;
+        private Mainer _mainer;
         private GameModel _gameModel;
 
         public UniTask Initialize()
@@ -82,14 +82,14 @@ namespace CoreGame.Harvest
         private void _onHeroCreated()
         {
             _hero = _userProvider.GetHeroComponent<Hero>();
-            _miner = _hero.GetCharacterComponent<Miner>();
+            _mainer = _hero.GetCharacterComponent<Mainer>();
         }
 
         private void _onHarvestStarted(Resource resource)
         {
-            if (!_miner.IsMining)
+            if (!_mainer.IsMining)
             {
-                _miner.StartHarvest(resource);
+                _mainer.StartHarvest(resource);
             }
         }
 

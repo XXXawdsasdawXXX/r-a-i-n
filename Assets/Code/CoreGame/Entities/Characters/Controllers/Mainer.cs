@@ -9,7 +9,7 @@ using Essential;
 
 namespace CoreGame.Entities.Characters.Controllers
 {
-    public class Miner : IUpdateListener, ICharacterComponent
+    public class Mainer : IUpdateListener, ICharacterComponent
     {
         public event Action Started;
         public event Action Ended;
@@ -24,7 +24,7 @@ namespace CoreGame.Entities.Characters.Controllers
         private readonly IHarvestAnimator _animator;
         private readonly Health _health;
 
-        public Miner(IHarvestAnimator animator, Health health)
+        public Mainer(IHarvestAnimator animator, Health health)
         {
             _resourceStorage = Container.Instance.GetService<ResourceStorage>();
             

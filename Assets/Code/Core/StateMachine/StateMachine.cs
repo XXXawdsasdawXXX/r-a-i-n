@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
+using Essential;
 
 namespace Core.StateMachine
 {
@@ -13,26 +14,43 @@ namespace Core.StateMachine
         
         public async void SwitchState(Type type)
         {
-            if (currentState != null)
+            try
             {
-                await currentState.Exit();
-            }
+                if (currentState != null)
+                {
+                    await currentState.Exit();
+                }
 
-            await setState(type);
+                await setState(type);
+            }
+            catch (Exception e)
+            {
+                Log.Exception($"State machine can not switch state to {type.Name}",e);
+              
+                throw;
+            }
         }
 
         protected virtual async UniTask setState(Type type)
         {
-            currentState = states[type];
-
-            if (!currentState.IsInitialized)
+            try
             {
-                await currentState.Initialize();
+                currentState = states[type];
 
-                currentState.IsInitialized = true;
-            }
+                if (!currentState.IsInitialized)
+                {
+                    await currentState.Initialize();
+
+                    currentState.IsInitialized = true;
+                }
             
-            await states[type].Enter();
+                await states[type].Enter();
+            }
+            catch (Exception e)
+            {
+                Log.Exception($"State machine can not set set {type.Name}",e);
+                throw;
+            }
         }
     }
 }

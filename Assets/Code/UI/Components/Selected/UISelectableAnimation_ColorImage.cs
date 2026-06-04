@@ -16,7 +16,7 @@ namespace UI.Components
 
         public UniTask Initialize()
         {
-            _uiSettings = Container.Instance.GetConfig<UISettings>();
+            _uiSettings = Container.Instance.GetSO<UISettings>();
       
             return UniTask.CompletedTask;
         }

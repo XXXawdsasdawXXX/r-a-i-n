@@ -33,7 +33,7 @@ namespace CoreGame.Time
 
         public UniTask Initialize()
         {
-            _timeScale = Container.Instance.GetConfig<GameTimeSettings>().TimeScale;
+            _timeScale = Container.Instance.GetSO<GameTimeSettings>().TimeScale;
 
             _gameModel = Container.Instance.GetService<GameModel>();
             

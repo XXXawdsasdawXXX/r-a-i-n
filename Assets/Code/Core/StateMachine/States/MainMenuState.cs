@@ -23,7 +23,7 @@ namespace Core.StateMachine
 
             _sceneService = Container.Instance.GetService<SceneService>();
 
-            _assetLibrary = Container.Instance.GetConfig<AssetLibrary>();
+            _assetLibrary = Container.Instance.GetSO<AssetLibrary>();
 
             return UniTask.CompletedTask;
         }

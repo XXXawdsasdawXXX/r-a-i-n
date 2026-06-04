@@ -17,8 +17,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 5cbddd4ac9295f84b8d81bdf7e140a86, type: 2}
     - {fileID: 11400000, guid: 6ee765cb680333a4195a801fd2fd4995, type: 2}
   <DefaultCardsDeck>k__BackingField:
-  - {fileID: 11400000, guid: 5cbddd4ac9295f84b8d81bdf7e140a86, type: 2}
-  - {fileID: 11400000, guid: 5cbddd4ac9295f84b8d81bdf7e140a86, type: 2}
-  - {fileID: 11400000, guid: 5cbddd4ac9295f84b8d81bdf7e140a86, type: 2}
-  - {fileID: 11400000, guid: 5cbddd4ac9295f84b8d81bdf7e140a86, type: 2}
-  - {fileID: 11400000, guid: 6ee765cb680333a4195a801fd2fd4995, type: 2}
+  - 0
+  - 0
+  - 1
+  - 1
+  - 1

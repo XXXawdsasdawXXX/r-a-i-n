@@ -32,7 +32,9 @@ namespace CoreGame.Card.Logic
         {
             _machine.StartBattle(attacker, defender, mode);
             _machine.Model.Phase.SubscribeProperty(_onPhaseChanged);
+            
             BattleStarted?.Invoke(_machine.Model);
+       
             Log.Info(this, "Start battle");            
         }
 

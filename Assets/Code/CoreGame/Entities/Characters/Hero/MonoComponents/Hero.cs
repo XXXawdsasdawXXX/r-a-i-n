@@ -1,7 +1,9 @@
-﻿using Core.GameLoop;
+﻿using System.Linq;
+using Core.GameLoop;
 using Core.Input;
 using Core.Save;
 using Core.ServiceLocator;
+using CoreGame.Card;
 using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Params;
@@ -27,44 +29,32 @@ namespace CoreGame.Entities.Characters.Hero
         [field: SerializeField] public HeroItemController ItemController { get; private set; }
         
         
-        public override void OnStartClient()
-        {
-            /*Log.Info(this, $"on start client {IsOwner}", UnityEngine.Color.black);
-            if (IsOwner)
-            {
-                UserProvider userProvider = Container.Instance.GetService<UserProvider>();
-                userProvider.SetConnection(InstanceFinder.ClientManager.Connection);
-                userProvider.SetHero(GetComponent<NetworkObject>());
-
-                Debug.Log($"[HeroClientTracker] Set local hero: {gameObject.name}");
-            }*/
-        }
-        
         public override void InitializeComponents()
         {
-            Log.Info(this, $"Initialize components {IsOwner}", UnityEngine.Color.black);
+            Log.Info(this, $"Initialize hero.\nis owner = {IsOwner}.\n owner id = {OwnerId}", UnityEngine.Color.black);
      
             if (IsOwner)
             {
                 InputManager input = Container.Instance.GetService<InputManager>();
-                HeroSettings heroSettings = Container.Instance.GetConfig<HeroSettings>();
+                HeroSettings heroSettings = Container.Instance.GetSO<HeroSettings>();
+                CardLibrary cardLibrary = Container.Instance.GetSO<CardLibrary>();
+                GameModel gameModel = Container.Instance.GetService<GameModel>();
                 
-                Model = Container.Instance.GetService<GameModel>().Hero;
-                Model.HeroId = OwnerId.ToString();
-       
+                Model = _getHeroModel(gameModel.Hero, cardLibrary); 
+                
                 Movement movement = new(Rigidbody, input.Direction, heroSettings.MoveSpeed);
                 Components.Add(typeof(Movement), movement);
                 
-                Miner miner = new Miner(Animation, Health);
-                Components.Add(typeof(Miner), miner);
+                Mainer mainer = new(Animation, Health);
+                Components.Add(typeof(Mainer), mainer);
                 
                 movement.Condition.Add(() => Health.Current > 0);
                 movement.Condition.Add(() => Animation.CurrentState is not 
                     AnimatorKey.ECharacterAnimationState.EAT and not 
                     AnimatorKey.ECharacterAnimationState.HARVEST);
                 
-                miner.Condition.Add(() => input.Direction.Value == Vector2.zero);
-                miner.Condition.Add(() => Health.Current > 0);
+                mainer.Condition.Add(() => input.Direction.Value == Vector2.zero);
+                mainer.Condition.Add(() => Health.Current > 0);
                 
                 Health.Set(Model.Health);
                 Name.SetName(Model.Name);
@@ -81,6 +71,18 @@ namespace CoreGame.Entities.Characters.Hero
         public void Unsubscribe()
         {   
             Health.Changed -= _onHealthChanged;
+        }
+
+        private HeroModel _getHeroModel(HeroModel hero, CardLibrary library)
+        {
+            hero.HeroId = OwnerId.ToString();
+         
+            if (hero.Deck == null || hero.Deck.Count == 0)
+            {
+                hero.Deck = library.DefaultCardsDeck.ToList();
+            }
+
+            return hero;
         }
 
         private void _onHealthChanged()

@@ -7,7 +7,7 @@ namespace CoreGame.Card.Logic.CardProcessors
     {
         public void Process(CardEffectConfiguration effect, BattleUnit actor, BattleUnit target, BattleModel battle)
         {
-            CardLibrary cardLibrary = Container.Instance.GetConfig<CardLibrary>();
+            CardLibrary cardLibrary = Container.Instance.GetSO<CardLibrary>();
             
             BattleUnit companion = BattleUnit.FromCompanion(
                 effect.CompanionConfiguration, 

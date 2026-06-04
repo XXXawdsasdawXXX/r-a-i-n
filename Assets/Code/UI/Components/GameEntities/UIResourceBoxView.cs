@@ -21,7 +21,7 @@ namespace UI.Components
         
         public UniTask Initialize()
         {
-            _resourceCollection = Container.Instance.GetConfig<ResourceCollection>();   
+            _resourceCollection = Container.Instance.GetSO<ResourceCollection>();   
                 
             return UniTask.CompletedTask;
         }

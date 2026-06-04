@@ -27,9 +27,6 @@ namespace CoreGame
                 typeof(CameraController),
                 //storages
                 typeof(ResourceStorage),
-                //hero
-                typeof(Movement),
-                typeof(Miner),
                 //cards
                 typeof(BattleService),
                 typeof(BattleStateMachine)

@@ -18,7 +18,7 @@ namespace Core.Audio
  
         public UniTask Initialize()
         {
-            _audioLibrary = Container.Instance.GetConfig<AudioLibrary>();
+            _audioLibrary = Container.Instance.GetSO<AudioLibrary>();
 
             return UniTask.CompletedTask;
         }

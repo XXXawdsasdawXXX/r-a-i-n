@@ -23,7 +23,7 @@ namespace CoreGame.Entities.Characters.Hero
 
             enabled = IsOwner;
 
-            _damageTween = Container.Instance.GetConfig<HeroSettings>().DamageTween;
+            _damageTween = Container.Instance.GetSO<HeroSettings>().DamageTween;
         }
 
         public void Subscribe()

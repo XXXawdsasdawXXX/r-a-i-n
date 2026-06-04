@@ -24,7 +24,7 @@ namespace CoreGame.Time
         
         public UniTask Initialize()
         {
-            _worldMaterial = Container.Instance.GetConfig<AssetLibrary>().Material.Get(MaterialLibrary.WORLD);
+            _worldMaterial = Container.Instance.GetSO<AssetLibrary>().Material.Get(MaterialLibrary.WORLD);
             _gameTime = Container.Instance.GetService<GameTime>();
           
             _lastUpdatedMinute = new Cache<int>();

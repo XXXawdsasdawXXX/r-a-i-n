@@ -1,5 +1,4 @@
-﻿using CoreGame.Card.Data;
-using Plugins.Demigiant.DOTween.Modules;
+﻿using Plugins.Demigiant.DOTween.Modules;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
