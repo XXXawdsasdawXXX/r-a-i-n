@@ -2,7 +2,7 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.Game.Card.CardStep
+namespace UI.Windows.Game.Card.Turn
 {
     public class CardStepView : UIWindowView
     {

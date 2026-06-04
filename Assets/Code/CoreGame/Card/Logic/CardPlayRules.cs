@@ -7,11 +7,61 @@ namespace CoreGame.Card.Logic
 {
     public static class CardPlayRules
     {
+        public static bool TryPlay(
+            BattleUnit actor,
+            string cardId,
+            string targetUnitId,
+            BattleModel battle,
+            BattleProcessor processor,
+            Func<string, BattleUnit> findUnit,
+            Action<BattleUnit, CardBattleState> spendCard)
+        {
+            CardBattleState card = _findCardInHand(actor.Hand, cardId);
+
+            if (card == null || !CanPlayCard(actor, card))
+            {
+                return false;
+            }
+
+            BattleUnit target = findUnit(targetUnitId);
+            processor.ApplyCard(actor, card, target, battle);
+            spendCard(actor, card);
+
+            return true;
+        }
+
+        public static bool CanPlayCard(BattleUnit actor, CardBattleState card)
+        {
+            if (actor == null || card?.Config == null)
+            {
+                return false;
+            }
+
+            int cost = card.GetEnergyCost(actor.Stats);
+
+            if (actor.Energy < cost)
+            {
+                return false;
+            }
+
+            if (actor.Statuses.Any(s => s.Type == EStatusType.Stun))
+            {
+                return false;
+            }
+
+            if (actor.IsInArmorStance && card.Config.Type.HasFlag(ECardType.Attack))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Ищет карту в руке по <see cref="CardBattleState.InstanceId"/> или <see cref="CardConfiguration.Id"/>.
         /// При нескольких картах с одним Config.Id без InstanceId — null (неоднозначно).
         /// </summary>
-        public static CardBattleState FindCardInHand(IReadOnlyList<CardBattleState> hand, string cardId)
+        private static CardBattleState _findCardInHand(IReadOnlyList<CardBattleState> hand, string cardId)
         {
             if (string.IsNullOrEmpty(cardId) || hand == null)
             {
@@ -44,56 +94,6 @@ namespace CoreGame.Card.Logic
             }
 
             return byConfigId;
-        }
-
-        public static bool CanPlayCard(BattleUnit actor, CardBattleState card)
-        {
-            if (actor == null || card?.Config == null)
-            {
-                return false;
-            }
-
-            int cost = card.GetEnergyCost(actor.Stats);
-
-            if (actor.Energy < cost)
-            {
-                return false;
-            }
-
-            if (actor.Statuses.Any(s => s.Type == EStatusType.Stun))
-            {
-                return false;
-            }
-
-            if (actor.IsInArmorStance && card.Config.Type.HasFlag(ECardType.Attack))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public static bool TryPlay(
-            BattleUnit actor,
-            string cardId,
-            string targetUnitId,
-            BattleModel battle,
-            BattleProcessor processor,
-            Func<string, BattleUnit> findUnit,
-            Action<BattleUnit, CardBattleState> spendCard)
-        {
-            CardBattleState card = FindCardInHand(actor.Hand, cardId);
-
-            if (card == null || !CanPlayCard(actor, card))
-            {
-                return false;
-            }
-
-            BattleUnit target = findUnit(targetUnitId);
-            processor.ApplyCard(actor, card, target, battle);
-            spendCard(actor, card);
-
-            return true;
         }
     }
 }

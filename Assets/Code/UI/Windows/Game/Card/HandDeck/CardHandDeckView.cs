@@ -6,7 +6,7 @@ using UI.Components;
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.Game.Card.CardHandDeck
+namespace UI.Windows.Game.Card.HandDeck
 {
     public class CardHandDeckView : UIWindowView
     {

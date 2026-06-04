@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using Essential;
 using UI.Windows.Base;
 
-namespace UI.Windows.Game.Card.CardStep
+namespace UI.Windows.Game.Card.Turn
 {
     public class CardStepController : UIWindowController<CardStepView>
     {

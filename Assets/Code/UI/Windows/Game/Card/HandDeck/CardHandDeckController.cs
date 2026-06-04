@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using Essential;
 using UI.Windows.Base;
 
-namespace UI.Windows.Game.Card.CardHandDeck
+namespace UI.Windows.Game.Card.HandDeck
 {
     public class CardHandDeckController : UIWindowController<CardHandDeckView>
     {

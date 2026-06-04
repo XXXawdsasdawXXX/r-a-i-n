@@ -4,7 +4,7 @@ using CoreGame.Card.Logic;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 
-namespace UI.Windows.Game.Card.CardStepEnergy
+namespace UI.Windows.Game.Card.TurnEnergy
 {
     public class CardStepEnergyController : UIWindowController<CardStepEnergyView>
     {
