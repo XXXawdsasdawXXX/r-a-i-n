@@ -2,7 +2,7 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.Card.CardDeck.CardStepEnergy
+namespace UI.Windows.Game.Card.CardStepEnergy
 {
     public class CardStepEnergyView : UIWindowView
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.GameLoop;
 using Core.Network;
 using Core.ServiceLocator;
 using Core.StateMachine;
@@ -11,10 +10,9 @@ using CoreGame.Harvest;
 using Cysharp.Threading.Tasks;
 using Essential;
 using FishNet;
-using TMPro;
 using UI.Windows.Base;
 
-namespace UI.Windows.HUD.QA
+namespace UI.Windows.Game.QA
 {
     public class HUDQAController : UIWindowController<HUDQAView>
     {

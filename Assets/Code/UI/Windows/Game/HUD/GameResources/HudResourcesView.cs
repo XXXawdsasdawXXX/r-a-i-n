@@ -3,7 +3,7 @@ using UI.Components;
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.HUD.GameResources
+namespace UI.Windows.Game.HUD.GameResources
 {
     public class HudResourcesView : UIWindowView
     {

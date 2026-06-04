@@ -2,7 +2,7 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.HUD.Pause
+namespace UI.Windows.Game.Pause
 {
     public class PauseWindowView : UIWindowView
     {

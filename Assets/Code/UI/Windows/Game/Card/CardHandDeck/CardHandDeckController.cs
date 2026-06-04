@@ -7,7 +7,7 @@ using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 
-namespace UI.Windows.Card.CardDeck
+namespace UI.Windows.Game.Card.CardHandDeck
 {
     public class CardHandDeckController : UIWindowController<CardHandDeckView>
     {

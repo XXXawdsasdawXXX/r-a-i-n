@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Core.GameLoop;
 using Core.ServiceLocator;
 using CoreGame.Harvest;
 using Cysharp.Threading.Tasks;
 using UI.Components;
 using UI.Windows.Base;
 
-namespace UI.Windows.HUD.GameResources
+namespace UI.Windows.Game.HUD.GameResources
 {
     public class HudResourcesController : UIWindowController<HudResourcesView>
     {

@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using Essential;
 using UnityEngine.Networking;
 
-namespace Core.TIme
+namespace Core.Time
 {
     public class UtcTime : IService, IInitializeListener, ILoadListener, IUpdateListener, IExitListener
     {

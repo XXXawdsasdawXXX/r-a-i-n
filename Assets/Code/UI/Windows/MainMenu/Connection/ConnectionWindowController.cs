@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.MainMenu.Connection.Legacy
+namespace UI.Windows.MainMenu.Connection
 {
     public class ConnectionWindowController : UIWindowController<ConnectionWindowView>
     {

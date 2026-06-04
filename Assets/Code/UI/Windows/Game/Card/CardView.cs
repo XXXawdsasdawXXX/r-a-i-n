@@ -1,11 +1,10 @@
 ﻿using System;
-using CoreGame.Card;
 using CoreGame.Card.Data;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Card.CardDeck
+namespace UI.Windows.Game.Card
 {
     public class CardView : UIButton
     {

@@ -1,6 +1,6 @@
 ﻿using UI.Windows.Base;
 
-namespace UI.Windows.Card.CardDeck
+namespace UI.Windows.Game.Card
 {
     public class CardWindowView : UIWindowView
     {

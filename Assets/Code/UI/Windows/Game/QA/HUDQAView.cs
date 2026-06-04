@@ -2,7 +2,7 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.HUD.QA
+namespace UI.Windows.Game.QA
 {
     public class HUDQAView : UIWindowView
     {

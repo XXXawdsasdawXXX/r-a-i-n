@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Save;
 using Core.ServiceLocator;
-using Core.TIme;
+using Core.Time;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 

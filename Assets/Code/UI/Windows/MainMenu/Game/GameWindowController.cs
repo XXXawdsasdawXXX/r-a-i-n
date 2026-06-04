@@ -6,7 +6,7 @@ using Core.StateMachine;
 using Cysharp.Threading.Tasks;
 using UI.Components;
 using UI.Windows.Base;
-using UI.Windows.MainMenu.Connection.Legacy;
+using UI.Windows.MainMenu.Connection;
 using UI.Windows.MainMenu.Delete;
 using UI.Windows.MainMenu.Hero;
 using UI.Windows.MainMenu.NewGame;

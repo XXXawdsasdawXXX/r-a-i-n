@@ -5,7 +5,7 @@ using CoreGame.Time;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 
-namespace UI.Windows.HUD
+namespace UI.Windows.Game.HUD
 {
     public class HUDGameTimeController : UIWindowController<HUDGameTimeView>, IUpdateListener
     {

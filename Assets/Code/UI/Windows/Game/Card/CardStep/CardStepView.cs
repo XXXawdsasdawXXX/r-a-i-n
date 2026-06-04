@@ -2,7 +2,7 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.Card.CardDeck.CardStep
+namespace UI.Windows.Game.Card.CardStep
 {
     public class CardStepView : UIWindowView
     {

@@ -6,7 +6,7 @@ using Core.Network;
 using Core.Save;
 using Core.Scenes;
 using Core.ServiceLocator;
-using Core.TIme;
+using Core.Time;
 using UnityEngine;
 
 namespace Core.Installers

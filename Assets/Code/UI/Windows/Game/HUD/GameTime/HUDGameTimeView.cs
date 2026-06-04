@@ -2,7 +2,7 @@
 using UI.Windows.Base;
 using UnityEngine;
 
-namespace UI.Windows.HUD
+namespace UI.Windows.Game.HUD
 {
     public class HUDGameTimeView : UIWindowView
     {

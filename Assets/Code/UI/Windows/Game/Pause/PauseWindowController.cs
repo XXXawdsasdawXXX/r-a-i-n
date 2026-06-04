@@ -5,7 +5,7 @@ using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
 
-namespace UI.Windows.HUD.Pause
+namespace UI.Windows.Game.Pause
 {
     public class PauseWindowController : UIWindowController<PauseWindowView>
     {

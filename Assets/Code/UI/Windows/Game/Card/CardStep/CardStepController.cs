@@ -5,7 +5,6 @@ using CoreGame.Card.Logic;
 using Cysharp.Threading.Tasks;
 using Essential;
 using UI.Windows.Base;
-using UI.Windows.Card.CardDeck.CardStep;
 
 namespace UI.Windows.Game.Card.CardStep
 {

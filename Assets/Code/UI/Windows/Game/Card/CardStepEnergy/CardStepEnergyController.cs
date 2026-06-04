@@ -3,7 +3,6 @@ using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Base;
-using UI.Windows.Card.CardDeck.CardStepEnergy;
 
 namespace UI.Windows.Game.Card.CardStepEnergy
 {
