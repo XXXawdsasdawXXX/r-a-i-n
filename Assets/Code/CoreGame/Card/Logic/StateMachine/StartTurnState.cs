@@ -1,4 +1,5 @@
 ﻿using CoreGame.Card.Data;
+using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
 using GameKit.Dependencies.Utilities;
 
@@ -26,6 +27,7 @@ namespace CoreGame.Card.Logic.StateMachine
         {
             _machine.Model.TurnNumber++;
 
+            _ensureMandatoryMovementCards();
             _startTurn(_machine.Model.SideA.Hero);
             _startTurn(_machine.Model.SideB.Hero);
 
@@ -36,6 +38,20 @@ namespace CoreGame.Card.Logic.StateMachine
         public UniTask Exit()
         {
             return UniTask.CompletedTask;
+        }
+
+        private void _ensureMandatoryMovementCards()
+        {
+            CardLibrary cardLibrary = Container.Instance.GetSO<CardLibrary>();
+            CardConfiguration moveCard = cardLibrary.AllCards.Get("energy_0");
+
+            if (moveCard == null)
+            {
+                return;
+            }
+
+            _machine.Model.SideA.EnsureMandatoryCard(moveCard, _machine.Model.SideA.Hero.UnitId);
+            _machine.Model.SideB.EnsureMandatoryCard(moveCard, _machine.Model.SideB.Hero.UnitId);
         }
 
         private static void _startTurn(BattleUnit unit)

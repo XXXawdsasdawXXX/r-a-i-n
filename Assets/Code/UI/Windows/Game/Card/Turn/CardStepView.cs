@@ -1,4 +1,5 @@
-﻿using UI.Components;
+﻿using System;
+using UI.Components;
 using UI.Windows.Base;
 using UnityEngine;
 
@@ -14,8 +15,8 @@ namespace UI.Windows.Game.Card.Turn
         
         public void SetTime(float time)
         {
-            //todo optimaze allocation 
-            _textTime.SetText(time.ToString(@"mm\:ss"));
+            TimeSpan timeSpan = TimeSpan.FromSeconds(Mathf.Max(0f, time));
+            _textTime.SetText($"{timeSpan.Minutes:00}:{timeSpan.Seconds:00}");
         }
 
         public void SetStep(string step)

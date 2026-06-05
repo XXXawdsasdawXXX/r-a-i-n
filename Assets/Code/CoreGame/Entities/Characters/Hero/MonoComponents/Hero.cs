@@ -47,6 +47,7 @@ namespace CoreGame.Entities.Characters.Hero
          
                 if (Model.Deck == null || Model.Deck.Count == 0)
                 {
+                    Debug.Log("Set new deck for hero");
                     Model.Deck = cardLibrary.DefaultCardsDeck.ToList();
                 }
                 

@@ -33,7 +33,7 @@ namespace CoreGame.Card.Logic.StateMachine
             _processStatuses(_machine.Model.SideA);
             _processStatuses(_machine.Model.SideB);
 
-            if (_checkBattleEnd())
+            if (_isBattleFinished())
             {
                 _machine.SwitchState(typeof(EndBattleState));
                 
@@ -131,17 +131,11 @@ namespace CoreGame.Card.Logic.StateMachine
             side.Companions.RemoveAll(c => c.HP <= 0);
         }
         
-        private bool _checkBattleEnd()
+        private bool _isBattleFinished()
         {
-            bool activeDead  = _machine.Model.SideA.Hero.HP <= 0;
-            bool waitingDead = _machine.Model.SideB.Hero.HP <= 0;
-
-            if (!activeDead && !waitingDead)
-            {
-                return false;
-            }
-            
-            return true;
+            bool sideADead = _machine.Model.SideA.Hero.HP <= 0;
+            bool sideBDead = _machine.Model.SideB.Hero.HP <= 0;
+            return sideADead || sideBDead;
         }
     }
 }

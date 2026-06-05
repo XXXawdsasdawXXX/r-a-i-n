@@ -51,5 +51,21 @@ namespace CoreGame.Card.Data
 
             return hand;
         }
+
+        public void EnsureMandatoryCard(CardConfiguration config, string ownerId)
+        {
+            if (config == null || _mandatoryCards.Any(card => card.Config == config))
+            {
+                return;
+            }
+
+            _mandatoryCards.Add(new CardBattleState
+            {
+                InstanceId = Guid.NewGuid().ToString(),
+                OwnerId = ownerId,
+                Config = config,
+                ChargesLeft = config.Charges
+            });
+        }
     }
 }

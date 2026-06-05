@@ -76,7 +76,12 @@ namespace CoreGame.Card.Logic
 
         private void _tryFinishBattleAfterAction()
         {
-            if (_machine.Model == null || _machine.Model.Phase.Value == EBattlePhase.Finished)
+            if (_machine.Model == null)
+            {
+                return;
+            }
+
+            if (_machine.Model.Phase.Value == EBattlePhase.Finished || _machine.CurrentState is EndBattleState)
             {
                 return;
             }

@@ -31,6 +31,7 @@ namespace CoreGame.Card.Logic.StateMachine
             Debug.Log("enter to first side step");
 
             _machine.Model.SideA.Hero.Energy = _machine.Model.SideA.Hero.MaxEnergy;
+            _machine.Model.TurnTimeRemaining.Value = BattleModel.MAX_TURN_TIME;
             
             _startTurnTimer().Forget();
 
@@ -111,7 +112,7 @@ namespace CoreGame.Card.Logic.StateMachine
             {
                 while (true)
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(1));
+                    await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: _cts.Token);
                     
                     float remaining = endTime - UnityEngine.Time.time;
 

@@ -29,6 +29,8 @@ namespace CoreGame.Card.Logic.StateMachine
 
         public UniTask Enter()
         {
+            _machine.Model.TurnTimeRemaining.Value = BattleModel.MAX_TURN_TIME;
+
             if (_machine.Model.SideB.Hero.AI != null)
             {
                 _processAI();
@@ -91,6 +93,10 @@ namespace CoreGame.Card.Logic.StateMachine
 
         public void EndTurn()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+
             _machine.SwitchState(typeof(TurnResolutionState));
         }
 
@@ -155,7 +161,7 @@ namespace CoreGame.Card.Logic.StateMachine
             {
                 while (true)
                 {
-                    UniTask.Delay(TimeSpan.FromSeconds(1));
+                    await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: _cts.Token);
                     
                     float remaining = endTime - UnityEngine.Time.time;
 
@@ -167,8 +173,6 @@ namespace CoreGame.Card.Logic.StateMachine
                     }
 
                     _machine.Model.TurnTimeRemaining.Value = remaining;
-
-                    await UniTask.Yield(_cts.Token);
                 }
             }
             catch (OperationCanceledException)

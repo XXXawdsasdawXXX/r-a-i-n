@@ -358,6 +358,7 @@ MonoBehaviour:
     Name: enemy
     Health: 100
     Armor: 0
+    InBattle: 0
     Stats:
       Agility: 0
       Strength: 0
@@ -365,9 +366,11 @@ MonoBehaviour:
       Intellect: 0
     CardCollection: []
     Deck:
-    - 1
-    - 1
-    - 0
+    - attack_0
+    - attack_0
+    - heal_0
+    - energy_0
+    - armor_0
 --- !u!1001 &347614925
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1195,6 +1198,8 @@ MonoBehaviour:
         StunChance: 0
         MoveLineCost: 0
         Line: 0
+        AutoActionType: 0
+        AutoActionValue: 0
         Hand: []
         Deck: []
         Discard: []
@@ -1224,6 +1229,8 @@ MonoBehaviour:
         StunChance: 0
         MoveLineCost: 0
         Line: 0
+        AutoActionType: 0
+        AutoActionValue: 0
         Hand: []
         Deck: []
         Discard: []
