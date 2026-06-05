@@ -230,20 +230,12 @@ namespace UI.Windows.Game.Card
                 return;
             }
 
-            bool cardApplied = _battleService.TryPlayCard(_pendingCardId, _pendingMoveUnitId);
-            if (!cardApplied)
-            {
-                Log.Info(this, $"[MoveUI] card apply failed card={_pendingCardId} unit={_pendingMoveUnitId}");
-                _clearMoveSelection();
-                return;
-            }
-
-            bool moved = _battleService.TryMoveToCell(_pendingMoveUnitId, line, cellIndex);
+            bool moved = _battleService.TryPlayMoveCardToCell(_pendingCardId, _pendingMoveUnitId, line, cellIndex);
             Log.Info(this, $"[MoveUI] move result card={_pendingCardId} unit={_pendingMoveUnitId} to={line}/{cellIndex} moved={moved}");
 
             if (!moved)
             {
-                Log.Info(this, "[MoveUI] move failed after card apply. Try another cell.");
+                Log.Info(this, "[MoveUI] move rejected. Card is not spent, try another cell.");
                 return;
             }
 

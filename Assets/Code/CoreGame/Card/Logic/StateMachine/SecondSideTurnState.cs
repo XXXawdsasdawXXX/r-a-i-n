@@ -73,6 +73,11 @@ namespace CoreGame.Card.Logic.StateMachine
             {
                 return false;
             }
+            
+            if (!ReferenceEquals(BattleGridRules.GetOwnerSide(_machine.Model, unit), _machine.Model.SideB))
+            {
+                return false;
+            }
 
             if (unit.Energy < unit.MoveLineCost)
             {

@@ -64,6 +64,7 @@ namespace CoreGame.Card.Logic.StateMachine
         {
             BattleUnit unit = _machine.FindUnit(unitId);
             if (unit == null) return false;
+            if (!ReferenceEquals(BattleGridRules.GetOwnerSide(_machine.Model, unit), _machine.Model.SideA)) return false;
             if (unit.Energy < unit.MoveLineCost) return false;
             if (unit.Statuses.Any(s => s.Type == EStatusType.Stun)) return false;
 
