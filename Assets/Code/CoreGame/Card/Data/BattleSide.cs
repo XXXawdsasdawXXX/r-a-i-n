@@ -52,6 +52,21 @@ namespace CoreGame.Card.Data
             return hand;
         }
 
+        public bool ContainsMandatoryCard(CardBattleState card)
+        {
+            return card != null && _mandatoryCards.Contains(card);
+        }
+
+        public void RemoveMandatoryCard(CardBattleState card)
+        {
+            if (card == null)
+            {
+                return;
+            }
+
+            _mandatoryCards.Remove(card);
+        }
+
         public void EnsureMandatoryCard(CardConfiguration config, string ownerId)
         {
             if (config == null || _mandatoryCards.Any(card => card.Config == config))

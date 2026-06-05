@@ -6,7 +6,9 @@ using CoreGame.Card.Logic;
 using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
 using Essential;
+using UI.Windows.Game.Card;
 using UI.Windows.Base;
+using UnityEngine;
 
 namespace UI.Windows.Game.Card.HandDeck
 {
@@ -15,6 +17,8 @@ namespace UI.Windows.Game.Card.HandDeck
         private UserProvider _userProvider;
         private BattleService _battleService;
         private BattleModel _battleModel;
+        
+        [SerializeField] private CardWindowController _cardWindowController;
 
 
         public override UniTask InitializeWindow(UIWindowManager manager)
@@ -33,23 +37,16 @@ namespace UI.Windows.Game.Card.HandDeck
 
             if (flag)
             {
-                _userProvider.HeroCreated += _onHeroCreated;
                 _battleService.BattleStarted += _onBattleUpdated;
                 _battleService.TurnStarted += _onBattleUpdated;
                 _battleService.CardPlayed += _onBattleUpdated;
             }
             else
             {
-                _userProvider.HeroCreated -= _onHeroCreated;
                 _battleService.BattleStarted -= _onBattleUpdated;
                 _battleService.TurnStarted -= _onBattleUpdated;
                 _battleService.CardPlayed -= _onBattleUpdated;
             }
-        }
-
-        private void _onHeroCreated()
-        {
-            view.SetHeroStats(_userProvider.GetHeroComponent<Hero>().Model.Stats);   
         }
 
         private void _onBattleUpdated(BattleModel battleModel)
@@ -79,7 +76,7 @@ namespace UI.Windows.Game.Card.HandDeck
             bool isMyTurn = _isMyTurn(_battleModel, myId);
 
             view.SetHeroStats(mySide.Hero.Stats);
-            view.DisplayHand(mySide.Hero.Hand, _onCardClicked);
+            view.DisplayHand(mySide.GetHand(), _onCardClicked);
             view.SetInteractable(isMyTurn);
         }
 
@@ -90,6 +87,15 @@ namespace UI.Windows.Game.Card.HandDeck
             if (_battleModel == null || !_isMyTurn(_battleModel, myId))
             {
                 return;
+            }
+
+            CardBattleState card = _findCard(_getMySide(_battleModel, myId), cardId);
+            if (_isMoveCard(card) && _cardWindowController != null)
+            {
+                if (_cardWindowController.TrySelectMoveTarget(cardId))
+                {
+                    return;
+                }
             }
 
             string targetId = _resolveTargetId(_battleModel, myId, cardId);
@@ -179,8 +185,7 @@ namespace UI.Windows.Game.Card.HandDeck
 
         private static CardBattleState _findCard(BattleSide mySide, string cardId)
         {
-            return mySide.Hero.Hand.FirstOrDefault(c => c.InstanceId == cardId)
-                   ?? mySide.Hero.Hand.FirstOrDefault(c => c.Config?.Id == cardId);
+            return CardPlayRules.FindCardInHand(mySide.GetHand(), cardId);
         }
 
         private static bool _isEnemyTarget(EEffectTarget target)
@@ -194,6 +199,12 @@ namespace UI.Windows.Game.Card.HandDeck
                 EEffectTarget.EnemyCompanions => true,
                 _ => false
             };
+        }
+
+        private static bool _isMoveCard(CardBattleState card)
+        {
+            return card?.Config?.Effects != null
+                   && card.Config.Effects.Any(effect => effect.Type == EEffectType.MoveLine);
         }
     }
 }

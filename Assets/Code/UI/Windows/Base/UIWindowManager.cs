@@ -26,6 +26,11 @@ namespace UI.Windows.Base
             
             foreach (IWindowController windowController in _windows)
             {
+                if (windowController.IsDetached)
+                {
+                    continue;
+                }
+                
                 Type type = windowController.GetType();
                 
                 _windowControllers.Add(type, windowController);

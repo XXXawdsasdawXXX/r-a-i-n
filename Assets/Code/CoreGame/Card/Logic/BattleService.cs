@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.GameLoop;
 using Core.Save;
 using Core.ServiceLocator;
@@ -61,7 +62,63 @@ namespace CoreGame.Card.Logic
 
         public bool TryMoveLine(string unitId)
         {
-            return (_machine.CurrentState as IAcceptPlayerInput)?.TryMoveLine(unitId) ?? false;
+            bool success = (_machine.CurrentState as IAcceptPlayerInput)?.TryMoveLine(unitId) ?? false;
+            Log.Info(this, $"[TryMoveLine] unit={unitId} success={success}");
+            if (success)
+            {
+                CardPlayed?.Invoke(_machine.Model);
+                _tryFinishBattleAfterAction();
+            }
+
+            return success;
+        }
+
+        public bool TryMoveToCell(string unitId, EBattleLine line, int cellIndex)
+        {
+            if (!(_machine.CurrentState is IAcceptPlayerInput acceptPlayerInput))
+            {
+                return false;
+            }
+
+            BattleUnit unit = _machine.FindUnit(unitId);
+            if (unit == null)
+            {
+                return false;
+            }
+
+            BattleSide side = BattleGridRules.GetOwnerSide(_machine.Model, unit);
+            if (side == null)
+            {
+                return false;
+            }
+
+            bool needLineSwitch = unit.Line != line;
+            if (needLineSwitch && !acceptPlayerInput.TryMoveLine(unitId))
+            {
+                Log.Info(this, $"[TryMoveToCell] move-line failed unit={unitId}");
+                return false;
+            }
+
+            bool occupied = side.GetAllUnits()
+                .Where(u => u != null && u.HP > 0)
+                .Where(u => u.UnitId != unit.UnitId)
+                .Any(u => u.Line == line && u.LineCellIndex == cellIndex);
+
+            if (occupied)
+            {
+                Log.Info(this, $"[TryMoveToCell] target occupied unit={unitId} target={line}/{cellIndex}");
+                return false;
+            }
+
+            bool moved = BattleGridRules.TryMoveUnitToCell(_machine.Model, unit, line, cellIndex);
+            Log.Info(this, $"[TryMoveToCell] unit={unitId} target={line}/{cellIndex} moved={moved}");
+
+            if (moved)
+            {
+                CardPlayed?.Invoke(_machine.Model);
+            }
+
+            return moved;
         }
 
         public void EndTurn()

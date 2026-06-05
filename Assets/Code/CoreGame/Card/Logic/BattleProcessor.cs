@@ -15,6 +15,7 @@ namespace CoreGame.Card.Logic
             { EEffectType.Heal, new CardHealEffectProcessor()},
             { EEffectType.AddEnergy, new CardEnergyProcessor()},
             { EEffectType.AddArmor, new CardArmorProcessor()},
+            { EEffectType.MoveLine, new CardMoveLineProcessor()},
             { EEffectType.ApplyStatus, new CardApplyStatusProcessor()},
             { EEffectType.SummonCompanion, new CardSummonCompanionProcessor()},
             { EEffectType.InjectParasite, new CardInjectParasiteProcessor()},

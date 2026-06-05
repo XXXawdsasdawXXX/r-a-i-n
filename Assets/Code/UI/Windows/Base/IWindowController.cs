@@ -5,6 +5,7 @@ namespace UI.Windows.Base
 {
     public interface IWindowController
     {
+        public bool IsDetached { get; }
         public UniTask InitializeWindow(UIWindowManager manager);
         
         public void LoadWindow(GameModel game);

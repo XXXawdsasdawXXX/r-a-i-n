@@ -36,6 +36,7 @@ namespace CoreGame.Card.Data
         
         public int MoveLineCost;
         public EBattleLine Line;
+        public int LineCellIndex;
         public EAutoActionType AutoActionType;
         public float AutoActionValue;
 
@@ -55,7 +56,9 @@ namespace CoreGame.Card.Data
                 MaxEnergy = 100 + hero.Stats.Endurance * 5,
                 Stats = hero.Stats,
                 AutoActionType = EAutoActionType.AttackEnemyHero,
-                AutoActionValue = 7
+                AutoActionValue = 7,
+                Line = EBattleLine.Frontline,
+                LineCellIndex = 1
             };
             
             unit.Energy = unit.MaxEnergy;
@@ -99,7 +102,9 @@ namespace CoreGame.Card.Data
                 MoveLineCost = 0,
                 Stats = null,
                 AutoActionType = EAutoActionType.GiveShieldToOwnerHero,
-                AutoActionValue = 4
+                AutoActionValue = 4,
+                Line = EBattleLine.Backline,
+                LineCellIndex = 1
             };
         }
 

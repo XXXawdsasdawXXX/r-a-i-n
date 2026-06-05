@@ -8,15 +8,16 @@ namespace CoreGame.Card.Logic
     public static class CardPlayRules
     {
         public static bool TryPlay(
+            BattleSide side,
             BattleUnit actor,
             string cardId,
             string targetUnitId,
             BattleModel battle,
             BattleProcessor processor,
             Func<string, BattleUnit> findUnit,
-            Action<BattleUnit, CardBattleState> spendCard)
+            Action<BattleSide, BattleUnit, CardBattleState> spendCard)
         {
-            CardBattleState card = _findCardInHand(actor.Hand, cardId);
+            CardBattleState card = FindCardInHand(side.GetHand(), cardId);
 
             if (card == null || !CanPlayCard(actor, card))
             {
@@ -25,7 +26,7 @@ namespace CoreGame.Card.Logic
 
             BattleUnit target = findUnit(targetUnitId);
             processor.ApplyCard(actor, card, target, battle);
-            spendCard(actor, card);
+            spendCard(side, actor, card);
 
             return true;
         }
@@ -61,7 +62,7 @@ namespace CoreGame.Card.Logic
         /// Ищет карту в руке по <see cref="CardBattleState.InstanceId"/> или <see cref="CardConfiguration.Id"/>.
         /// При нескольких картах с одним Config.Id без InstanceId — null (неоднозначно).
         /// </summary>
-        private static CardBattleState _findCardInHand(IReadOnlyList<CardBattleState> hand, string cardId)
+        public static CardBattleState FindCardInHand(IReadOnlyList<CardBattleState> hand, string cardId)
         {
             if (string.IsNullOrEmpty(cardId) || hand == null)
             {

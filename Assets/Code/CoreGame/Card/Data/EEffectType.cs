@@ -10,6 +10,7 @@
         SummonCompanion,
         InjectParasite, // в свою колоду
         InjectParasiteEnemy, // в колоду врага
-        DrawCards
+        DrawCards,
+        MoveLine
     }
 }

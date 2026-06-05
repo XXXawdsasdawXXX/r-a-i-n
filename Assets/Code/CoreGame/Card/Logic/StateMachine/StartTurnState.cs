@@ -43,15 +43,32 @@ namespace CoreGame.Card.Logic.StateMachine
         private void _ensureMandatoryMovementCards()
         {
             CardLibrary cardLibrary = Container.Instance.GetSO<CardLibrary>();
-            CardConfiguration moveCard = cardLibrary.AllCards.Get("energy_0");
 
-            if (moveCard == null)
+            if (cardLibrary.MandatoryCardsInHand == null || cardLibrary.MandatoryCardsInHand.Length == 0)
             {
+                // fallback для старых данных
+                CardConfiguration legacyMoveCard = cardLibrary.AllCards.Get("move_0") ?? cardLibrary.AllCards.Get("energy_0");
+                if (legacyMoveCard == null)
+                {
+                    return;
+                }
+
+                _machine.Model.SideA.EnsureMandatoryCard(legacyMoveCard, _machine.Model.SideA.Hero.UnitId);
+                _machine.Model.SideB.EnsureMandatoryCard(legacyMoveCard, _machine.Model.SideB.Hero.UnitId);
                 return;
             }
 
-            _machine.Model.SideA.EnsureMandatoryCard(moveCard, _machine.Model.SideA.Hero.UnitId);
-            _machine.Model.SideB.EnsureMandatoryCard(moveCard, _machine.Model.SideB.Hero.UnitId);
+            foreach (string cardId in cardLibrary.MandatoryCardsInHand)
+            {
+                CardConfiguration card = cardLibrary.AllCards.Get(cardId);
+                if (card == null)
+                {
+                    continue;
+                }
+
+                _machine.Model.SideA.EnsureMandatoryCard(card, _machine.Model.SideA.Hero.UnitId);
+                _machine.Model.SideB.EnsureMandatoryCard(card, _machine.Model.SideB.Hero.UnitId);
+            }
         }
 
         private static void _startTurn(BattleUnit unit)

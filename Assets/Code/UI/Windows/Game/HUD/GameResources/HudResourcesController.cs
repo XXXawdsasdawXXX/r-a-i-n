@@ -36,18 +36,23 @@ namespace UI.Windows.Game.HUD.GameResources
             _updateResourcesView(_resourceStorage.Collection);
         }
 
-        public void Subscribe()
-        {
-            _resourceStorage.ValueChanged += _updateResourceView;
-            _resourceStorage.CollectionChanged += _updateResourcesView;
-        }
 
-        public void Unsubscribe()
+        public override void SubscribeToEvents(bool flag)
         {
-            _resourceStorage.ValueChanged -= _updateResourceView;
-            _resourceStorage.CollectionChanged -= _updateResourcesView;
-        }
+            base.SubscribeToEvents(flag);
 
+            if (flag)
+            {
+                _resourceStorage.ValueChanged += _updateResourceView;
+                _resourceStorage.CollectionChanged += _updateResourcesView;
+            }
+            else
+            {
+                _resourceStorage.ValueChanged -= _updateResourceView;
+                _resourceStorage.CollectionChanged -= _updateResourcesView;
+            }
+        }
+        
         private void _updateResourcesView(Dictionary<EResource, int> collection)
         {
             foreach (KeyValuePair<EResource, int> resource in collection)

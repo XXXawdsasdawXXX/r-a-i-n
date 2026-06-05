@@ -11,6 +11,7 @@ namespace CoreGame.Card
         [field: SerializeField] public AllCardCollection AllCards { get; private set; }
 
         [field: SerializeField] public string[] DefaultCardsDeck { get; private set; }
+        [field: SerializeField] public string[] MandatoryCardsInHand { get; private set; } = Array.Empty<string>();
     }
 
     [Serializable]

@@ -50,6 +50,7 @@ namespace CoreGame.Card.Logic.StateMachine
         public bool TryPlayCard(string cardId, string targetId)
         {
             return CardPlayRules.TryPlay(
+                _machine.Model.SideA,
                 _machine.Model.SideA.Hero,
                 cardId,
                 targetId,
@@ -83,8 +84,21 @@ namespace CoreGame.Card.Logic.StateMachine
             _machine.SwitchState(typeof(SecondSideTurnState));
         }
         
-        private void _spendCard(BattleUnit actor, CardBattleState card)
+        private static void _spendCard(BattleSide side, BattleUnit actor, CardBattleState card)
         {
+            if (card == null)
+            {
+                return;
+            }
+
+            if (side.ContainsMandatoryCard(card))
+            {
+                // Mandatory-карты не должны попадать в deck/discard.
+                // На следующем ходу создается новая обязательная копия через EnsureMandatoryCard().
+                side.RemoveMandatoryCard(card);
+                return;
+            }
+
             if (card.Config.Charges > 0)
             {
                 card.ChargesLeft--;

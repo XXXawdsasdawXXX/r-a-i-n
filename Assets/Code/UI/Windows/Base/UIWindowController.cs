@@ -6,9 +6,12 @@ namespace UI.Windows.Base
 {
     public abstract class UIWindowController<UIView> : Essential.Mono, IWindowController where UIView : UIWindowView
     {
+        [field: SerializeField] public bool IsDetached { get; private set; }
+        
         [SerializeField] protected UIView view;
         protected UIWindowManager windowManager;
-        
+
+
         public virtual UniTask InitializeWindow(UIWindowManager manager)
         {
             windowManager = manager;
