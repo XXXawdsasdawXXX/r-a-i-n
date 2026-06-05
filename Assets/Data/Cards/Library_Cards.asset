@@ -16,9 +16,16 @@ MonoBehaviour:
     _assets:
     - {fileID: 11400000, guid: 5cbddd4ac9295f84b8d81bdf7e140a86, type: 2}
     - {fileID: 11400000, guid: 6ee765cb680333a4195a801fd2fd4995, type: 2}
+    - {fileID: 11400000, guid: bd0bfa2cca76bd2478138842e622255e, type: 2}
+    - {fileID: 11400000, guid: 2e2598c35fce4a24094ea803f07a6bef, type: 2}
   <DefaultCardsDeck>k__BackingField:
-  - 0
-  - 0
-  - 1
-  - 1
-  - 1
+  - attack_0
+  - attack_0
+  - attack_0
+  - attack_0
+  - heal_0
+  - armor_0
+  - armor_0
+  - energy_0
+  - energy_0
+  - energy_0

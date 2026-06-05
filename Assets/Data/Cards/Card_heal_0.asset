@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8dbb3f6a07b24384b074bfa537126271, type: 3}
-  m_Name: Card_1
+  m_Name: Card_heal_0
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 1
+  <Id>k__BackingField: heal_0
   <Name>k__BackingField: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435"
   <Icon>k__BackingField: {fileID: 0}
   <Type>k__BackingField: 2
@@ -23,11 +23,13 @@ MonoBehaviour:
     <Target>k__BackingField: 0
     <BaseValue>k__BackingField:
       MinValue: 0
-      MaxValue: 9.782608
+      MaxValue: 9
     <Scaling>k__BackingField: 3
     <ScalingFactor>k__BackingField: 1
     <ParasiteCard>k__BackingField: {fileID: 0}
     <ParasiteCount>k__BackingField: 0
-    <CompanionPrefab>k__BackingField: {fileID: 0}
+    <CompanionConfiguration>k__BackingField: {fileID: 0}
     <SummonDuration>k__BackingField: 0
     <StanceDuration>k__BackingField: 0
+    <StatusType>k__BackingField: 0
+    <StatusDuration>k__BackingField: 0
