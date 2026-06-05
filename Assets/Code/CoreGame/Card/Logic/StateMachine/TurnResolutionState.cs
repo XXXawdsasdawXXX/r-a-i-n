@@ -24,6 +24,9 @@ namespace CoreGame.Card.Logic.StateMachine
 
         public UniTask Enter()
         {
+            _processAutoActions(_machine.Model.SideA, _machine.Model.SideB);
+            _processAutoActions(_machine.Model.SideB, _machine.Model.SideA);
+
             _processCompanions(_machine.Model.SideA, _machine.Model.SideB);
             _processCompanions(_machine.Model.SideB, _machine.Model.SideA);
             
@@ -45,6 +48,51 @@ namespace CoreGame.Card.Logic.StateMachine
         public UniTask Exit()
         {
             return UniTask.CompletedTask;
+        }
+
+        private static void _processAutoActions(BattleSide side, BattleSide enemySide)
+        {
+            foreach (BattleUnit unit in side.GetAllUnits())
+            {
+                if (unit == null || unit.HP <= 0)
+                {
+                    continue;
+                }
+
+                float value = unit.AutoActionValue;
+                if (value <= 0f)
+                {
+                    continue;
+                }
+
+                switch (unit.AutoActionType)
+                {
+                    case EAutoActionType.AttackEnemyHero:
+                    {
+                        BattleUnit target = enemySide.Hero;
+                        if (target == null || target.HP <= 0)
+                        {
+                            break;
+                        }
+
+                        float absorbed = UnityEngine.Mathf.Min(target.Armor, value);
+                        target.Armor -= absorbed;
+                        target.HP -= (value - absorbed);
+                        break;
+                    }
+                    case EAutoActionType.GiveShieldToOwnerHero:
+                    {
+                        BattleUnit target = side.Hero;
+                        if (target == null || target.HP <= 0)
+                        {
+                            break;
+                        }
+
+                        target.Armor += value;
+                        break;
+                    }
+                }
+            }
         }
 
         private void _processCompanions(BattleSide side, BattleSide targetSide)

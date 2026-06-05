@@ -43,6 +43,10 @@ namespace CoreGame.Card.Logic.StateMachine
 
         public UniTask Exit()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+
             return UniTask.CompletedTask;
         }
 

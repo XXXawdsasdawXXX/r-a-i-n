@@ -36,6 +36,8 @@ namespace CoreGame.Card.Data
         
         public int MoveLineCost;
         public EBattleLine Line;
+        public EAutoActionType AutoActionType;
+        public float AutoActionValue;
 
 
         public List<CardBattleState> Hand = new();
@@ -51,7 +53,9 @@ namespace CoreGame.Card.Data
                 MaxHP = 100 + hero.Stats.Endurance * 10,
                 HP = hero.Health,
                 MaxEnergy = 100 + hero.Stats.Endurance * 5,
-                Stats = hero.Stats
+                Stats = hero.Stats,
+                AutoActionType = EAutoActionType.AttackEnemyHero,
+                AutoActionValue = 7
             };
             
             unit.Energy = unit.MaxEnergy;
@@ -93,7 +97,9 @@ namespace CoreGame.Card.Data
                 DodgeChance = 0,
                 StunChance = 0,
                 MoveLineCost = 0,
-                Stats = null
+                Stats = null,
+                AutoActionType = EAutoActionType.GiveShieldToOwnerHero,
+                AutoActionValue = 4
             };
         }
 

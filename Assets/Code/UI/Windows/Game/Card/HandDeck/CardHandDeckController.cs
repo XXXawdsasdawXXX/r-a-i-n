@@ -1,4 +1,5 @@
-﻿using Core.Network;
+﻿using System.Linq;
+using Core.Network;
 using Core.ServiceLocator;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
@@ -33,12 +34,14 @@ namespace UI.Windows.Game.Card.HandDeck
             if (flag)
             {
                 _userProvider.HeroCreated += _onHeroCreated;
+                _battleService.BattleStarted += _onBattleUpdated;
                 _battleService.TurnStarted += _onBattleUpdated;
                 _battleService.CardPlayed += _onBattleUpdated;
             }
             else
             {
                 _userProvider.HeroCreated -= _onHeroCreated;
+                _battleService.BattleStarted -= _onBattleUpdated;
                 _battleService.TurnStarted -= _onBattleUpdated;
                 _battleService.CardPlayed -= _onBattleUpdated;
             }
@@ -54,7 +57,7 @@ namespace UI.Windows.Game.Card.HandDeck
             _battleModel = battleModel;
             _refreshHand();
 
-            if (_isMyTurn(_battleModel, _userProvider.Id))
+            if (_isMyTurn(_battleModel, _getLocalHeroId()))
             {
                 view.Open();
             }
@@ -71,7 +74,7 @@ namespace UI.Windows.Game.Card.HandDeck
                 return;
             }
 
-            string myId = _userProvider.Id;
+            string myId = _getLocalHeroId();
             BattleSide mySide = _getMySide(_battleModel, myId);
             bool isMyTurn = _isMyTurn(_battleModel, myId);
 
@@ -82,49 +85,113 @@ namespace UI.Windows.Game.Card.HandDeck
 
         private void _onCardClicked(string cardId)
         {
-            Log.Info(this, $"try play card enter {cardId} {_battleModel == null} || {!_isMyTurn(_battleModel, _userProvider.Id)}");
-            if (_battleModel == null || !_isMyTurn(_battleModel, _userProvider.Id))
+            string myId = _getLocalHeroId();
+
+            if (_battleModel == null || !_isMyTurn(_battleModel, myId))
             {
                 return;
             }
 
-            // TODO: ICardTargetResolver — self / ally / enemy / multi / AoE после выбора карты
-            string targetId = _getDefaultTargetId(_battleModel, _userProvider.Id);
+            string targetId = _resolveTargetId(_battleModel, myId, cardId);
             if (!_battleService.TryPlayCard(cardId, targetId))
             {
                 Log.Info(this, $"Card play rejected. cardId={cardId}, target={targetId}");
                 return;
             }
 
-            Log.Info(this, $"try play card seccuses {cardId}");
+            Log.Info(this, $"Card play success. cardId={cardId}, target={targetId}");
             _refreshHand();
         }
 
         private static BattleSide _getMySide(BattleModel battle, string playerId)
         {
-            return battle.SideA.Hero.UnitId == playerId
-                ? battle.SideA
-                : battle.SideB;
-        }
+            if (!string.IsNullOrEmpty(playerId))
+            {
+                if (battle.SideA.Hero.UnitId == playerId)
+                {
+                    return battle.SideA;
+                }
 
-        /// <summary>Временно: только герой противника. Заменить на <see cref="CoreGame.Card.Logic.Targeting.ICardTargetResolver"/>.</summary>
-        private static string _getDefaultTargetId(BattleModel battle, string playerId)
-        {
-            BattleSide enemySide = battle.SideA.Hero.UnitId == playerId
-                ? battle.SideB
-                : battle.SideA;
+                if (battle.SideB.Hero.UnitId == playerId)
+                {
+                    return battle.SideB;
+                }
+            }
 
-            return enemySide.Hero.UnitId;
+            // Fallback для первого тика, когда id еще может быть не синхронизирован.
+            return battle.SideA;
         }
 
         private static bool _isMyTurn(BattleModel battle, string playerId)
         {
+            if (string.IsNullOrEmpty(playerId))
+            {
+                return false;
+            }
+
             bool isSideA = battle.SideA.Hero.UnitId == playerId;
 
             return battle.Phase.Value switch
             {
                 EBattlePhase.FirstSideTurn => isSideA,
                 EBattlePhase.SecondSideTurn => !isSideA,
+                _ => false
+            };
+        }
+
+        private string _getLocalHeroId()
+        {
+            if (!string.IsNullOrEmpty(_userProvider.Id))
+            {
+                return _userProvider.Id;
+            }
+
+            Hero hero = _userProvider.GetHeroComponent<Hero>();
+            return hero?.Model?.HeroId;
+        }
+
+        /// <summary>
+        /// UI-MVP резолвер цели: до реализации выбора юнита/клетки в поле.
+        /// Позже заменить на отдельный ICardTargetResolver + интерактивный выбор цели.
+        /// </summary>
+        private static string _resolveTargetId(BattleModel battle, string playerId, string cardId)
+        {
+            BattleSide mySide = _getMySide(battle, playerId);
+            BattleSide enemySide = ReferenceEquals(mySide, battle.SideA)
+                ? battle.SideB
+                : battle.SideA;
+
+            CardBattleState selectedCard = _findCard(mySide, cardId);
+            if (selectedCard?.Config?.Effects == null || selectedCard.Config.Effects.Count == 0)
+            {
+                return enemySide.Hero.UnitId;
+            }
+
+            // Если у карты есть любой enemy-target эффект, целимся во вражеского героя.
+            if (selectedCard.Config.Effects.Any(effect => _isEnemyTarget(effect.Target)))
+            {
+                return enemySide.Hero.UnitId;
+            }
+
+            // Иначе self/ally карта — кидаем на своего героя (удобно для теста бафов/хила).
+            return mySide.Hero.UnitId;
+        }
+
+        private static CardBattleState _findCard(BattleSide mySide, string cardId)
+        {
+            return mySide.Hero.Hand.FirstOrDefault(c => c.InstanceId == cardId)
+                   ?? mySide.Hero.Hand.FirstOrDefault(c => c.Config?.Id == cardId);
+        }
+
+        private static bool _isEnemyTarget(EEffectTarget target)
+        {
+            return target switch
+            {
+                EEffectTarget.SelectedEnemy => true,
+                EEffectTarget.AllEnemies => true,
+                EEffectTarget.EnemyFrontline => true,
+                EEffectTarget.EnemyBackline => true,
+                EEffectTarget.EnemyCompanions => true,
                 _ => false
             };
         }

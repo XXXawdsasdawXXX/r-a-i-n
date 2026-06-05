@@ -51,6 +51,7 @@ namespace CoreGame.Card.Logic
                 if (acceptPlayerInput.TryPlayCard(cardId, targetId))
                 {
                     CardPlayed?.Invoke(_machine.Model);
+                    _tryFinishBattleAfterAction();
                     return true;
                 }
             }
@@ -71,6 +72,24 @@ namespace CoreGame.Card.Logic
         public BattleUnit FindUnit(string unitId)
         {
             return _machine.FindUnit(unitId);
+        }
+
+        private void _tryFinishBattleAfterAction()
+        {
+            if (_machine.Model == null || _machine.Model.Phase.Value == EBattlePhase.Finished)
+            {
+                return;
+            }
+
+            bool isSideADead = _machine.Model.SideA?.Hero == null || _machine.Model.SideA.Hero.HP <= 0;
+            bool isSideBDead = _machine.Model.SideB?.Hero == null || _machine.Model.SideB.Hero.HP <= 0;
+
+            if (!isSideADead && !isSideBDead)
+            {
+                return;
+            }
+
+            _machine.SwitchState(typeof(EndBattleState));
         }
 
         private void _onPhaseChanged(EBattlePhase phase)
