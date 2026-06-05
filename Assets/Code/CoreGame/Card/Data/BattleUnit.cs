@@ -19,7 +19,7 @@ namespace CoreGame.Card.Data
         public float Armor;
         public int Energy;
         public int MaxEnergy;
-        public int HandLimit;       // базово 7
+        public int HandLimit;       // базово 5
         public HeroStats Stats;
 
         public IEnemyAI AI;
@@ -55,7 +55,7 @@ namespace CoreGame.Card.Data
             };
             
             unit.Energy = unit.MaxEnergy;
-            unit.HandLimit = 7; // TODO: + прокачка колоды
+            unit.HandLimit = 5; // TODO: + прокачка колоды
             unit.CritChance = hero.Stats.Agility * 0.02f;
             unit.DodgeChance = hero.Stats.Agility * 0.015f;
             unit.StunChance = hero.Stats.Strength * 0.02f;

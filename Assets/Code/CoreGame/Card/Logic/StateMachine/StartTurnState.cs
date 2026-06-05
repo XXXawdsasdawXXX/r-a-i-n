@@ -25,13 +25,9 @@ namespace CoreGame.Card.Logic.StateMachine
         public UniTask Enter()
         {
             _machine.Model.TurnNumber++;
-            
-            // количество карт пока оставляем так, можем потом переделать правила
-            // todo уже добавляем карты
-            // +1 карту перемещения каждый ход
-            // +1-2 карты спутников
-            _drawCards(_machine.Model.SideA.Hero, _machine.Model.SideA.Hero.HandLimit);
-            _drawCards(_machine.Model.SideB.Hero, _machine.Model.SideB.Hero.HandLimit);
+
+            _startTurn(_machine.Model.SideA.Hero);
+            _startTurn(_machine.Model.SideB.Hero);
 
             _machine.SwitchState(typeof(FirstSideTurnState));
             return UniTask.CompletedTask;
@@ -42,9 +38,22 @@ namespace CoreGame.Card.Logic.StateMachine
             return UniTask.CompletedTask;
         }
 
-        private void _drawCards(BattleUnit unit, int count)
+        private static void _startTurn(BattleUnit unit)
         {
-            for (int i = 0; i < count; i++)
+            unit.Energy = unit.MaxEnergy;
+            _drawCardsToHandLimit(unit);
+        }
+
+        private static void _drawCardsToHandLimit(BattleUnit unit)
+        {
+            int cardsToDraw = unit.HandLimit - unit.Hand.Count;
+
+            if (cardsToDraw <= 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < cardsToDraw; i++)
             {
                 if (unit.Deck.Count == 0)
                 {
@@ -62,8 +71,13 @@ namespace CoreGame.Card.Logic.StateMachine
             }
         }
 
-        private void _reshuffleDeck(BattleUnit unit)
+        private static void _reshuffleDeck(BattleUnit unit)
         {
+            if (unit.Discard.Count == 0)
+            {
+                return;
+            }
+
             unit.Deck.AddRange(unit.Discard);
             unit.Discard.Clear();
             unit.Deck.Shuffle();

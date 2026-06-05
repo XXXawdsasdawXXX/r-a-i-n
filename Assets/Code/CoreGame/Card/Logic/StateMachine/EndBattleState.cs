@@ -8,27 +8,25 @@ namespace CoreGame.Card.Logic.StateMachine
     {
         public EBattlePhase Phase => EBattlePhase.Finished;
 
-        private readonly BattleStateMachine _machine;
         public bool IsInitialized { get; set; }
 
         public EndBattleState(BattleStateMachine machine)
         {
-            _machine = machine;
         }
         
         public UniTask Initialize()
         {
-            throw new System.NotImplementedException();
+            return UniTask.CompletedTask;
         }
 
         public UniTask Enter()
         {
-            throw new System.NotImplementedException();
+            return UniTask.CompletedTask;
         }
 
         public UniTask Exit()
         {
-            throw new System.NotImplementedException();
+            return UniTask.CompletedTask;
         }
 
     }

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Core.StateMachine;
-using CoreGame.Card.Data;
+﻿using CoreGame.Card.Data;
 using CoreGame.Card.Logic.AI;
 using Cysharp.Threading.Tasks;
 
@@ -94,8 +92,6 @@ namespace CoreGame.Card.Logic.StateMachine
             {
                 return false;
             }
-
-            _machine.SwitchState(typeof(EndBattleState));// todo убираем в место где вызываем метод
             
             return true;
         }
