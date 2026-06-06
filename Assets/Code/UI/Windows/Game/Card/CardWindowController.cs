@@ -677,11 +677,20 @@ namespace UI.Windows.Game.Card
 
         private static void _setCellHighlightIfFree(BattleSide side, BattleSideView sideView, EBattleLine line, int cellIndex, EBattleHighlightColorType colorType)
         {
-            bool occupied = side.GetAllUnits()
-                .Where(u => u != null && u.HP > 0)
-                .Any(u => u.Line == line && u.LineCellIndex == cellIndex);
+            BattleGridCellView cellView = sideView.GetCell(line, cellIndex);
+            if (cellView == null)
+            {
+                return;
+            }
 
-            sideView.SetCellHighlighted(line, cellIndex, !occupied, colorType);
+            if (cellView.IsOccupied)
+            {
+                // Keep occupied cell style intact; do not overwrite with free-cell color.
+                sideView.SetCellHighlighted(line, cellIndex, false, colorType);
+                return;
+            }
+
+            sideView.SetCellHighlighted(line, cellIndex, true, colorType);
         }
 
         private void _trySummonToCell(BattleGridCellView cell)

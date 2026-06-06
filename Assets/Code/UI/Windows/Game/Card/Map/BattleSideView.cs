@@ -45,6 +45,12 @@ namespace UI.Windows.Game.Card.Map
             BattleGridCellView cell = GetCell(line, cellIndex);
             if (cell != null)
             {
+                if (cell.IsOccupied)
+                {
+                    cell.SetHighlighted(false);
+                    return;
+                }
+
                 cell.SetHighlightColor(BattleHighlightStyle.GetColor(colorType));
                 cell.SetHighlighted(highlighted);
             }

@@ -21,6 +21,7 @@ namespace UI.Windows.Game.Card.Map
         public Material OccupiedHighlightMaterialTemplate => BattleHighlightStyle.ResolveOccupiedHighlightMaterial(Render?.Image?.material);
 
         public bool HasOccupiedHighlightBinding => OccupiedHighlightMaterialTemplate != null;
+        public bool IsOccupied => _occupied;
 
      
         private UIHighlightMaterialController _uiHighlightController;
