@@ -4,6 +4,7 @@ using UI.Components;
 using UI.Windows.Base;
 using UnityEngine;
 using System.Linq;
+using Essential;
 
 namespace UI.Windows.Game.Card.Unit
 {
@@ -11,19 +12,28 @@ namespace UI.Windows.Game.Card.Unit
     {
         public event System.Action Clicked;
 
+        public UIHighlightMaterialController HighlightController { get; private set; }
+        public Material HighlightMaterialTemplate => BattleHighlightStyle.HighlightMaterial != null
+            ? BattleHighlightStyle.HighlightMaterial
+            : Render?.Image?.material;
         [field: SerializeField] public UIImage Render { get; private set; }
+        
         [field: Title("Params")]
         [field: SerializeField] public UIImage HealthFill { get; private set; }
         [field: SerializeField] public UIText HealthText { get; private set; }
         [field: SerializeField] public UIBattleStateIcon Armor { get; private set; }
         [field: SerializeField] public UIBattleStateIcon Attack { get; private set; }
+        
         [SerializeField] private UIText _companionInfo;
 
         [SerializeField] private UIButton _clickArea;
-        [SerializeField] private GameObject _highlight;
 
+
+        
         public void Set(BattleUnit unit)
         {
+            HighlightController?.Reset();
+            
             if (unit == null)
             {
                 Close();
@@ -45,6 +55,9 @@ namespace UI.Windows.Game.Card.Unit
 
         private void OnEnable()
         {
+            HighlightController = new UIHighlightMaterialController(Render.Image);
+            Log.Info(this, $"[HighlightUnit] enable renderImage={Render?.Image != null} template={HighlightMaterialTemplate?.name ?? "null"}");
+
             if (_clickArea != null)
             {
                 _clickArea.Clicked += _onClicked;
@@ -53,17 +66,12 @@ namespace UI.Windows.Game.Card.Unit
 
         private void OnDisable()
         {
+            Log.Info(this, "[HighlightUnit] disable reset");
+            HighlightController?.Reset();
+
             if (_clickArea != null)
             {
                 _clickArea.Clicked -= _onClicked;
-            }
-        }
-
-        public void SetHighlighted(bool value)
-        {
-            if (_highlight != null)
-            {
-                _highlight.SetActive(value);
             }
         }
 
@@ -109,6 +117,15 @@ namespace UI.Windows.Game.Card.Unit
             string lifeText = isTemporary ? $"Temporary: {turnsLeft} turn(s)" : "Lifetime: until death";
             _companionInfo.SetText($"{lifeText} | Cards/turn: {Mathf.Max(0, unit.CompanionCardsPerTurn)}");
             _companionInfo.gameObject.SetActive(true);
+        }
+        
+        protected override void OnDestroy()
+        {
+            Log.Info(this, "[HighlightUnit] destroy dispose");
+            HighlightController?.Dispose();
+            HighlightController = null;
+            
+            base.OnDestroy();
         }
     }
 }

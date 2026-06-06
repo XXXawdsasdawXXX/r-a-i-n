@@ -71,6 +71,7 @@ namespace UI.Windows.Game.Card
                 _battleService.BattleFinished += _closeView;
                 _battleService.TurnStarted += _updateUnitViews;
                 _battleService.CardPlayed += _updateUnitViews;
+                _battleService.TurnStarted += _onTurnStarted;
                 _leftHeroView.Clicked += _onLeftHeroClicked;
                 _rightHeroView.Clicked += _onRightHeroClicked;
                 _bindCells(_leftSideView, true);
@@ -82,11 +83,17 @@ namespace UI.Windows.Game.Card
                 _battleService.BattleFinished -= _closeView;
                 _battleService.TurnStarted -= _updateUnitViews;
                 _battleService.CardPlayed -= _updateUnitViews;
+                _battleService.TurnStarted -= _onTurnStarted;
                 _leftHeroView.Clicked -= _onLeftHeroClicked;
                 _rightHeroView.Clicked -= _onRightHeroClicked;
                 _bindCells(_leftSideView, false);
                 _bindCells(_rightSideView, false);
             }
+        }
+
+        private void _onTurnStarted(BattleModel _)
+        {
+            _clearSelections();
         }
 
         private void _closeView(BattleModel _)
@@ -127,19 +134,19 @@ namespace UI.Windows.Game.Card
             _pendingMoveUnitId = null;
             _isMoveTargetSelection = true;
             _isMoveCellSelection = false;
-            _leftHeroView.SetHighlighted(false);
-            _rightHeroView.SetHighlighted(false);
+            _setUnitHighlight(_leftHeroView, false, EBattleHighlightColorType.AllyTarget);
+            _setUnitHighlight(_rightHeroView, false, EBattleHighlightColorType.AllyTarget);
             
             BattleSide mySide = _getMySide();
             if (ReferenceEquals(mySide, _battleModel.SideA))
             {
-                _leftHeroView.SetHighlighted(true);
-                _setCompanionHighlights(_leftCompanionViews, true);
+                _setUnitHighlight(_leftHeroView, true, EBattleHighlightColorType.AllyTarget);
+                _setCompanionHighlights(_leftCompanionViews, true, EBattleHighlightColorType.AllyTarget);
             }
             else
             {
-                _rightHeroView.SetHighlighted(true);
-                _setCompanionHighlights(_rightCompanionViews, true);
+                _setUnitHighlight(_rightHeroView, true, EBattleHighlightColorType.AllyTarget);
+                _setCompanionHighlights(_rightCompanionViews, true, EBattleHighlightColorType.AllyTarget);
             }
 
             _leftSideView.SetCellsHighlighted(false);
@@ -188,8 +195,8 @@ namespace UI.Windows.Game.Card
 
             bool leftValid = _isValidTargetForPendingCard(_battleModel?.SideA?.Hero);
             bool rightValid = _isValidTargetForPendingCard(_battleModel?.SideB?.Hero);
-            _leftHeroView.SetHighlighted(leftValid);
-            _rightHeroView.SetHighlighted(rightValid);
+            _setUnitHighlight(_leftHeroView, leftValid, _isEnemyHero(_battleModel?.SideA?.Hero) ? EBattleHighlightColorType.EnemyTarget : EBattleHighlightColorType.AllyTarget);
+            _setUnitHighlight(_rightHeroView, rightValid, _isEnemyHero(_battleModel?.SideB?.Hero) ? EBattleHighlightColorType.EnemyTarget : EBattleHighlightColorType.AllyTarget);
             _setCompanionsHighlightByTargetRules();
             
             _leftSideView.SetCellsHighlighted(false);
@@ -246,8 +253,8 @@ namespace UI.Windows.Game.Card
             _pendingMoveSide = unitSide;
             _isMoveTargetSelection = false;
             _isMoveCellSelection = true;
-            _leftHeroView.SetHighlighted(false);
-            _rightHeroView.SetHighlighted(false);
+            _setUnitHighlight(_leftHeroView, false, EBattleHighlightColorType.AllyTarget);
+            _setUnitHighlight(_rightHeroView, false, EBattleHighlightColorType.AllyTarget);
             _highlightAvailableCellsForSide(unitSide);
             Log.Info(this, $"[MoveUI] unit selected unit={targetUnitId}. Now click free highlighted grid cell.");
         }
@@ -261,12 +268,12 @@ namespace UI.Windows.Game.Card
             _isMoveCellSelection = false;
             _pendingSummonCardId = null;
             _isSummonCellSelection = false;
-            _leftHeroView.SetHighlighted(false);
-            _rightHeroView.SetHighlighted(false);
+            _setUnitHighlight(_leftHeroView, false, EBattleHighlightColorType.AllyTarget);
+            _setUnitHighlight(_rightHeroView, false, EBattleHighlightColorType.AllyTarget);
             _leftSideView.SetCellsHighlighted(false);
             _rightSideView.SetCellsHighlighted(false);
-            _setCompanionHighlights(_leftCompanionViews, false);
-            _setCompanionHighlights(_rightCompanionViews, false);
+            _setCompanionHighlights(_leftCompanionViews, false, EBattleHighlightColorType.AllyTarget);
+            _setCompanionHighlights(_rightCompanionViews, false, EBattleHighlightColorType.AllyTarget);
         }
         
         private void _clearTargetSelection()
@@ -275,10 +282,10 @@ namespace UI.Windows.Game.Card
             _pendingTargetCardActorId = null;
             _pendingTargetCardActorSideHeroId = null;
             _isUnitTargetSelection = false;
-            _leftHeroView.SetHighlighted(false);
-            _rightHeroView.SetHighlighted(false);
-            _setCompanionHighlights(_leftCompanionViews, false);
-            _setCompanionHighlights(_rightCompanionViews, false);
+            _setUnitHighlight(_leftHeroView, false, EBattleHighlightColorType.AllyTarget);
+            _setUnitHighlight(_rightHeroView, false, EBattleHighlightColorType.AllyTarget);
+            _setCompanionHighlights(_leftCompanionViews, false, EBattleHighlightColorType.AllyTarget);
+            _setCompanionHighlights(_rightCompanionViews, false, EBattleHighlightColorType.AllyTarget);
         }
 
         private void _clearSelections()
@@ -570,8 +577,8 @@ namespace UI.Windows.Game.Card
                                                 || effect.Target == EEffectTarget.EnemyCompanions));
             if (hasEnemyManualTarget)
             {
-                _leftHeroView.SetHighlighted(_isEnemyHero(_battleModel?.SideA?.Hero));
-                _rightHeroView.SetHighlighted(_isEnemyHero(_battleModel?.SideB?.Hero));
+                _setUnitHighlight(_leftHeroView, _isEnemyHero(_battleModel?.SideA?.Hero), EBattleHighlightColorType.EnemyTarget);
+                _setUnitHighlight(_rightHeroView, _isEnemyHero(_battleModel?.SideB?.Hero), EBattleHighlightColorType.EnemyTarget);
             }
 
             _setCompanionTargetHighlight(_leftCompanionViews);
@@ -581,8 +588,8 @@ namespace UI.Windows.Game.Card
         private void _setCompanionsHighlightByMoveSide(BattleSide moveSide)
         {
             bool leftSide = ReferenceEquals(moveSide, _battleModel?.SideA);
-            _setCompanionHighlights(_leftCompanionViews, leftSide);
-            _setCompanionHighlights(_rightCompanionViews, !leftSide);
+            _setCompanionHighlights(_leftCompanionViews, leftSide, EBattleHighlightColorType.AllyTarget);
+            _setCompanionHighlights(_rightCompanionViews, !leftSide, EBattleHighlightColorType.AllyTarget);
         }
 
         private void _setCompanionTargetHighlight(List<BattleUnitView> views)
@@ -601,16 +608,18 @@ namespace UI.Windows.Game.Card
 
                 if (!_viewToUnitId.TryGetValue(view, out string unitId))
                 {
-                    view.SetHighlighted(false);
+                    _setUnitHighlight(view, false, EBattleHighlightColorType.AllyTarget);
                     continue;
                 }
 
                 BattleUnit unit = _battleService.FindUnit(unitId);
-                view.SetHighlighted(_isValidTargetForPendingCard(unit));
+                bool isValid = _isValidTargetForPendingCard(unit);
+                bool isEnemy = !_isAllyUnit(unit);
+                _setUnitHighlight(view, isValid, isEnemy ? EBattleHighlightColorType.EnemyTarget : EBattleHighlightColorType.AllyTarget);
             }
         }
 
-        private static void _setCompanionHighlights(List<BattleUnitView> views, bool value)
+        private static void _setCompanionHighlights(List<BattleUnitView> views, bool value, EBattleHighlightColorType colorType)
         {
             if (views == null)
             {
@@ -621,7 +630,7 @@ namespace UI.Windows.Game.Card
             {
                 if (view != null)
                 {
-                    view.SetHighlighted(value);
+                    _setUnitHighlight(view, value, colorType);
                 }
             }
         }
@@ -655,20 +664,24 @@ namespace UI.Windows.Game.Card
                 return;
             }
 
+            EBattleHighlightColorType colorType = ReferenceEquals(side, _battleModel.SideA)
+                ? EBattleHighlightColorType.AllyCell
+                : EBattleHighlightColorType.EnemyCell;
+
             for (int cell = 0; cell < BattleGridRules.CELLS_PER_LINE; cell++)
             {
-                _setCellHighlightIfFree(side, sideView, EBattleLine.Frontline, cell);
-                _setCellHighlightIfFree(side, sideView, EBattleLine.Backline, cell);
+                _setCellHighlightIfFree(side, sideView, EBattleLine.Frontline, cell, colorType);
+                _setCellHighlightIfFree(side, sideView, EBattleLine.Backline, cell, colorType);
             }
         }
 
-        private static void _setCellHighlightIfFree(BattleSide side, BattleSideView sideView, EBattleLine line, int cellIndex)
+        private static void _setCellHighlightIfFree(BattleSide side, BattleSideView sideView, EBattleLine line, int cellIndex, EBattleHighlightColorType colorType)
         {
             bool occupied = side.GetAllUnits()
                 .Where(u => u != null && u.HP > 0)
                 .Any(u => u.Line == line && u.LineCellIndex == cellIndex);
 
-            sideView.SetCellHighlighted(line, cellIndex, !occupied);
+            sideView.SetCellHighlighted(line, cellIndex, !occupied, colorType);
         }
 
         private void _trySummonToCell(BattleGridCellView cell)
@@ -784,6 +797,11 @@ namespace UI.Windows.Game.Card
                 Log.Info(this, "[CompanionUI] Missing inspector binding. Check LeftCompanionRoot/RightCompanionRoot/CompanionViewPrefab.");
             }
 
+            if (BattleHighlightStyle.HighlightMaterial == null)
+            {
+                Log.Info(this, "[HighlightUI] Highlight material not found at Resources/Graphics/Materials/UI/material-ui-hightline.");
+            }
+
             _validateOccupiedHighlight(_leftSideView, EBattleSideUi.Left);
             _validateOccupiedHighlight(_rightSideView, EBattleSideUi.Right);
         }
@@ -880,6 +898,46 @@ namespace UI.Windows.Game.Card
             BattleSide mySide = _findSideByHeroUnitId(_pendingTargetCardActorSideHeroId);
             BattleSide targetSide = BattleGridRules.GetOwnerSide(_battleModel, unit);
             return mySide != null && targetSide != null && !ReferenceEquals(mySide, targetSide);
+        }
+
+        private bool _isAllyUnit(BattleUnit unit)
+        {
+            if (unit == null || _battleModel == null)
+            {
+                return false;
+            }
+
+            BattleSide mySide = _getMySide();
+            BattleSide targetSide = BattleGridRules.GetOwnerSide(_battleModel, unit);
+            return mySide != null && targetSide != null && ReferenceEquals(mySide, targetSide);
+        }
+
+        private static void _setUnitHighlight(BattleUnitView view, bool enabled, EBattleHighlightColorType colorType)
+        {
+            if (view == null)
+            {
+                return;
+            }
+
+            UIHighlightMaterialController highlightController = view.HighlightController;
+            if (highlightController == null)
+            {
+                Log.Info(view, $"[HighlightUnit] controller is null enabled={enabled} colorType={colorType}");
+                return;
+            }
+
+            if (!enabled)
+            {
+                Log.Info(view, $"[HighlightUnit] reset colorType={colorType}");
+                highlightController.Reset();
+                return;
+            }
+
+            Color color = BattleHighlightStyle.GetColor(colorType);
+            Material template = view.HighlightMaterialTemplate;
+            Log.Info(view, $"[HighlightUnit] apply colorType={colorType} color={color} mat={template?.name ?? "null"}");
+            highlightController.SetColor(color);
+            highlightController.Apply(template);
         }
     }
 }

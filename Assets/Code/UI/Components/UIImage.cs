@@ -7,6 +7,8 @@ namespace UI.Components
 {
     public class UIImage : Essential.Mono
     {
+        public Image Image => _image;
+        
         [SerializeField] private Image _image;
 
         private Tween _tween;

@@ -1201,6 +1201,7 @@ MonoBehaviour:
         LineCellIndex: 0
         AutoActionType: 0
         AutoActionValue: 0
+        CompanionCardsPerTurn: 1
         Hand: []
         Deck: []
         Discard: []
@@ -1233,6 +1234,7 @@ MonoBehaviour:
         LineCellIndex: 0
         AutoActionType: 0
         AutoActionValue: 0
+        CompanionCardsPerTurn: 1
         Hand: []
         Deck: []
         Discard: []

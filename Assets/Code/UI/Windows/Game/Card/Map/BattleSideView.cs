@@ -1,6 +1,7 @@
 ﻿using UI.Windows.Base;
 using UnityEngine;
 using CoreGame.Card.Data;
+using UI.Windows.Game.Card;
 
 namespace UI.Windows.Game.Card.Map
 {
@@ -35,14 +36,16 @@ namespace UI.Windows.Game.Card.Map
             if (cell != null)
             {
                 cell.SetOccupied(occupied);
+                cell.SetHighlightColor(BattleHighlightStyle.GetColor(EBattleHighlightColorType.OccupiedCell));
             }
         }
         
-        public void SetCellHighlighted(EBattleLine line, int cellIndex, bool highlighted)
+        public void SetCellHighlighted(EBattleLine line, int cellIndex, bool highlighted, EBattleHighlightColorType colorType = EBattleHighlightColorType.AllyCell)
         {
             BattleGridCellView cell = GetCell(line, cellIndex);
             if (cell != null)
             {
+                cell.SetHighlightColor(BattleHighlightStyle.GetColor(colorType));
                 cell.SetHighlighted(highlighted);
             }
         }

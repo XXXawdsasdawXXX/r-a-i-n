@@ -2,6 +2,9 @@ using System;
 using CoreGame.Card.Data;
 using UI.Components;
 using UnityEngine;
+using UnityEngine.UI;
+using UI.Windows.Game.Card;
+using Essential;
 
 namespace UI.Windows.Game.Card.Map
 {
@@ -9,34 +12,82 @@ namespace UI.Windows.Game.Card.Map
     {
         public event Action<BattleGridCellView> Clicked;
 
+        [field: SerializeField] public UIImage Render { get; private set; }
         [field: SerializeField] public EBattleLine Line { get; private set; }
         [field: SerializeField] public int CellIndex { get; private set; }
         [field: SerializeField] public EBattleSideUi Side { get; private set; }
 
-        [SerializeField] private GameObject _highlight;
-        [SerializeField] private GameObject _occupiedHighlight;
-        public bool HasOccupiedHighlightBinding => _occupiedHighlight != null;
+        public Material HighlightMaterialTemplate => BattleHighlightStyle.HighlightMaterial != null
+            ? BattleHighlightStyle.HighlightMaterial
+            : Render?.Image?.material;
+        public Material OccupiedHighlightMaterialTemplate => BattleHighlightStyle.OccupiedHighlightMaterial != null
+            ? BattleHighlightStyle.OccupiedHighlightMaterial
+            : HighlightMaterialTemplate;
+
+        public bool HasOccupiedHighlightBinding => OccupiedHighlightMaterialTemplate != null;
+
+     
+        private UIHighlightMaterialController _uiHighlightController;
+        private bool _occupied;
+
+        private void Awake()
+        {
+            _uiHighlightController = new UIHighlightMaterialController(Render.Image);
+            Log.Info(this, $"[HighlightCell] awake renderImage={Render?.Image != null} side={Side} line={Line} cell={CellIndex} template={HighlightMaterialTemplate?.name ?? "null"}");
+        }
 
         public void SetHighlighted(bool value)
         {
-            if (_highlight != null)
+            Log.Info(this, $"[HighlightCell] set highlighted value={value} occupied={_occupied} side={Side} line={Line} cell={CellIndex}");
+            if (_occupied)
             {
-                _highlight.SetActive(value);
+                return;
             }
+            
+            if (!value)
+            {
+                _uiHighlightController?.Reset();
+                return;
+            }
+
+            _uiHighlightController?.Apply(HighlightMaterialTemplate);
         }
         
         public void SetOccupied(bool value)
         {
-            if (_occupiedHighlight != null)
+            _occupied = value;
+            Log.Info(this, $"[HighlightCell] set occupied value={value} side={Side} line={Line} cell={CellIndex}");
+
+            if (_occupied)
             {
-                _occupiedHighlight.SetActive(value);
+                if (OccupiedHighlightMaterialTemplate != null)
+                {
+                    _uiHighlightController?.Apply(OccupiedHighlightMaterialTemplate);
+                }
+
+                return;
             }
+
+            _uiHighlightController?.Reset();
+        }
+
+        public void SetHighlightColor(Color color)
+        {
+            Log.Info(this, $"[HighlightCell] set color={color} side={Side} line={Line} cell={CellIndex}");
+            _uiHighlightController?.SetColor(color);
         }
 
         protected override void onClick()
         {
             base.onClick();
             Clicked?.Invoke(this);
+        }
+
+        private void OnDestroy()
+        {
+            Log.Info(this, $"[HighlightCell] destroy side={Side} line={Line} cell={CellIndex}");
+            _uiHighlightController?.Dispose();
+            _uiHighlightController = null;
         }
     }
 
