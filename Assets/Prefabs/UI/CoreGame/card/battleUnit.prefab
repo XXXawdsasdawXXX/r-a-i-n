@@ -221,67 +221,86 @@ MonoBehaviour:
   _companionInfo: {fileID: 3134347525115389507}
   _clickArea: {fileID: 6817598098829027426}
   _fxRoot: {fileID: 1946657469870259831}
-  _fxOverlay: {fileID: 1001540701744689885}
-  _defaultFxPreset:
-    _color: {r: 0.35, g: 0.65, b: 1, a: 0.6}
-    _punchScale: 1.08
-    _duration: 0.45
-    _animationMode: 0
+  _defaultCardImpactType: 0
+  _defaultCardFxSettings:
+    _color: {r: 1, g: 1, b: 1, a: 0.5}
+    _duration: 0.35
+    _scale: 1.08
+    _intensity: 0.18
+    _steps: 6
   _cardFxBindings:
   - _matches: 1
-    _preset:
-      _color: {r: 1, g: 0.35, b: 0.35, a: 0.6}
-      _punchScale: 1.1
-      _duration: 0.4
-      _animationMode: -1
+    _impactType: 0
+    _settings:
+      _color: {r: 1, g: 1, b: 1, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
   - _matches: 8
-    _preset:
-      _color: {r: 0.55, g: 1, b: 0.45, a: 0.6}
-      _punchScale: 1.12
-      _duration: 0.5
-      _animationMode: -1
+    _impactType: 0
+    _settings:
+      _color: {r: 1, g: 1, b: 1, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
   - _matches: 2
-    _preset:
-      _color: {r: 0.35, g: 0.65, b: 1, a: 0.6}
-      _punchScale: 1.08
-      _duration: 0.45
-      _animationMode: 0
-  _defaultReactionPreset:
-    _color: {r: 1, g: 1, b: 1, a: 0.45}
-    _punchScale: 1.04
+    _impactType: 0
+    _settings:
+      _color: {r: 1, g: 1, b: 1, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
+  _defaultUnitImpactType: 1
+  _defaultReactionFxSettings:
+    _color: {r: 1, g: 1, b: 1, a: 0.5}
     _duration: 0.35
-    _animationMode: 1
+    _scale: 1.08
+    _intensity: 0.18
+    _steps: 6
   _effectReactionBindings:
   - _matches: 0
-    _preset:
-      _color: {r: 1, g: 0.25, b: 0.25, a: 0.7}
-      _punchScale: 1.03
-      _duration: 0.32
-      _animationMode: 1
+    _impactType: 0
+    _settings:
+      _color: {r: 0.9575472, g: 0.53297436, b: 0.53297436, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
   - _matches: 1
-    _preset:
-      _color: {r: 0.25, g: 1, b: 0.45, a: 0.6}
-      _punchScale: 1.06
-      _duration: 0.38
-      _animationMode: 0
+    _impactType: 0
+    _settings:
+      _color: {r: 0.45695505, g: 0.8679245, b: 0.45443216, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
   - _matches: 3
-    _preset:
-      _color: {r: 0.55, g: 0.8, b: 1, a: 0.6}
-      _punchScale: 1.05
-      _duration: 0.36
-      _animationMode: 0
+    _impactType: 0
+    _settings:
+      _color: {r: 0.5128382, g: 0.723787, b: 0.9292453, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
   - _matches: 4
-    _preset:
-      _color: {r: 0.85, g: 0.45, b: 1, a: 0.6}
-      _punchScale: 1.05
-      _duration: 0.36
-      _animationMode: 1
+    _impactType: 0
+    _settings:
+      _color: {r: 1, g: 1, b: 1, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
   - _matches: 5
-    _preset:
-      _color: {r: 0.55, g: 1, b: 0.45, a: 0.6}
-      _punchScale: 1.08
-      _duration: 0.42
-      _animationMode: 0
+    _impactType: 0
+    _settings:
+      _color: {r: 1, g: 1, b: 1, a: 0.5}
+      _duration: 0.35
+      _scale: 1.08
+      _intensity: 0.18
+      _steps: 6
 --- !u!1 &1628927202056961170
 GameObject:
   m_ObjectHideFlags: 0
