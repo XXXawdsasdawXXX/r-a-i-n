@@ -3,7 +3,6 @@ using Core.GameLoop;
 using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet;
 using FishNet.Broadcast;
 using UnityEngine.Scripting;
@@ -52,8 +51,6 @@ namespace CoreGame.Time
 
         public void GameUpdate(float deltaTime)
         {
-//            Log.Info(this,$"update: {_gameModel.World.Time}");
-            
             if (InstanceFinder.IsServerStarted)
             {
                 _updateServerTime(deltaTime);
@@ -92,8 +89,6 @@ namespace CoreGame.Time
 
         public UniTask GameLoad(GameModel model)
         {
-            Log.Info(this, $"load: {model.World.GameTime}");
-            
             return UniTask.CompletedTask;
         }
     }

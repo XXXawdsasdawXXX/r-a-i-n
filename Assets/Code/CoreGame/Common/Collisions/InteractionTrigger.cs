@@ -5,7 +5,6 @@ using Core.Input;
 using Core.ServiceLocator;
 using CoreGame.Common.Selectable;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace CoreGame.Common.Collisions
@@ -60,8 +59,6 @@ namespace CoreGame.Common.Collisions
         {
             if (action is EInputAction.Interaction)
             {
-                Log.Info(this, "press  interaction");
-                
                 InteractionPerformed?.Invoke();
             }
         }
@@ -79,7 +76,7 @@ namespace CoreGame.Common.Collisions
 
             if (_boxCollider2D != null)
             {
-                Color color = Log.Gray;
+                Color color = Color.gray;
                 color.a = 0.4f;
                 Gizmos.color = color;
                 

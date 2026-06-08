@@ -2,7 +2,6 @@ using System;
 using CoreGame.Card.Data;
 using UI.Components;
 using UnityEngine;
-using Essential;
 
 namespace UI.Windows.Game.Card.Map
 {
@@ -30,12 +29,10 @@ namespace UI.Windows.Game.Card.Map
         private void Awake()
         {
             _uiHighlightController = new UIHighlightMaterialController(Render.Image, _highlightType);
-            Log.Info(this, $"[HighlightCell] awake renderImage={Render?.Image != null} side={Side} line={Line} cell={CellIndex} template={HighlightMaterialTemplate?.name ?? "null"}");
         }
 
         public void SetHighlighted(bool value)
         {
-            Log.Info(this, $"[HighlightCell] set highlighted value={value} occupied={_occupied} side={Side} line={Line} cell={CellIndex}");
             if (_occupied)
             {
                 return;
@@ -53,7 +50,6 @@ namespace UI.Windows.Game.Card.Map
         public void SetOccupied(bool value)
         {
             _occupied = value;
-            Log.Info(this, $"[HighlightCell] set occupied value={value} side={Side} line={Line} cell={CellIndex}");
 
             if (_occupied)
             {
@@ -70,7 +66,6 @@ namespace UI.Windows.Game.Card.Map
 
         public void SetHighlightColor(Color color)
         {
-            Log.Info(this, $"[HighlightCell] set color={color} side={Side} line={Line} cell={CellIndex}");
             _uiHighlightController?.SetColor(color);
         }
 
@@ -82,7 +77,6 @@ namespace UI.Windows.Game.Card.Map
 
         private void OnDestroy()
         {
-            Log.Info(this, $"[HighlightCell] destroy side={Side} line={Line} cell={CellIndex}");
             _uiHighlightController?.Dispose();
             _uiHighlightController = null;
         }

@@ -2,7 +2,6 @@
 using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine.Scripting;
@@ -36,14 +35,12 @@ namespace Core.Audio
         
         public void SetMusicVolume(float volume)
         {
-            Log.Info(this, $"music : {volume}");
             _musicVCA.setVolume(volume);
             _saveService.ModelsContainer.UserSettings.MusicVolume = volume;
         }
 
         public void SetSFXVolume(float volume)
         {
-            Log.Info(this, $"sfx : {volume}");
             _sfxVCA.setVolume(volume);
             _saveService.ModelsContainer.UserSettings.SFXVolume = volume;
         }

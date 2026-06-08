@@ -5,7 +5,6 @@ using FishNet.Object;
 using FishNet.Transporting;
 using GameKit.Dependencies.Utilities;
 using System.Collections.Generic;
-using Essential;
 using UnityEngine;
 
 namespace FishNet.Observing
@@ -282,7 +281,6 @@ namespace FishNet.Observing
 
             RegisterTimedConditions();
             
-            Log.Info($"Initialize {networkObject.gameObject.name}", Color.blue, this);
         }
 
         /// <summary>

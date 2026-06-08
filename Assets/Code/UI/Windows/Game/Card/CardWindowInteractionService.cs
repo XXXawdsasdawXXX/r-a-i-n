@@ -4,7 +4,6 @@ using Core.Network;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
 using CoreGame.Entities.Characters.Hero;
-using Essential;
 using UI.Windows.Game.Card.Map;
 
 namespace UI.Windows.Game.Card
@@ -78,7 +77,6 @@ namespace UI.Windows.Game.Card
             _visuals?.SetGridHighlighted(false);
             _visuals?.HighlightMoveTargetSide(_battleModel, mySide);
 
-            Log.Info(this, $"[MoveUI] select unit for move card={cardId}");
             return true;
         }
 
@@ -96,7 +94,6 @@ namespace UI.Windows.Game.Card
             BattleSide mySide = _getMySide();
             _visuals?.HighlightAvailableCellsForSide(_battleModel, mySide);
 
-            Log.Info(this, $"[SummonUI] select cell for summon card={cardId}");
             return true;
         }
 
@@ -128,7 +125,6 @@ namespace UI.Windows.Game.Card
             _setCompanionsHighlightByTargetRules();
             _visuals?.SetGridHighlighted(false);
 
-            Log.Info(this, $"[TargetUI] select unit target for card={card.InstanceId}");
             return true;
         }
 
@@ -161,7 +157,6 @@ namespace UI.Windows.Game.Card
             BattleUnit unit = _battleService.FindUnit(targetUnitId);
             if (unit == null)
             {
-                Log.Info(this, $"[MoveUI] unit not found {targetUnitId}");
                 return;
             }
 
@@ -169,7 +164,6 @@ namespace UI.Windows.Game.Card
             BattleSide mySide = _getMySide();
             if (!ReferenceEquals(unitSide, mySide))
             {
-                Log.Info(this, $"[MoveUI] reject unit from other side. unit={targetUnitId}");
                 return;
             }
 
@@ -179,7 +173,6 @@ namespace UI.Windows.Game.Card
             _selectionState.IsMoveCellSelection = true;
             _visuals?.SetHeroesHighlight(false, EBattleHighlightColorType.AllyTarget, false, EBattleHighlightColorType.AllyTarget);
             _visuals?.HighlightAvailableCellsForSide(_battleModel, unitSide);
-            Log.Info(this, $"[MoveUI] unit selected unit={targetUnitId}. Now click free highlighted grid cell.");
         }
 
         public void OnCellClicked(BattleGridCellView cell)
@@ -202,11 +195,9 @@ namespace UI.Windows.Game.Card
 
             if (!isOwnCell)
             {
-                Log.Info(this, $"[MoveUI] reject enemy cell side={cell.Side} for unit={_selectionState.PendingMoveUnitId}");
                 return;
             }
 
-            Log.Info(this, $"[MoveUI] cell clicked line={cell.Line} cell={cell.CellIndex}");
             _tryMoveToCell(cell.Line, cell.CellIndex);
         }
 
@@ -232,26 +223,21 @@ namespace UI.Windows.Game.Card
         {
             if (!_selectionState.IsMoveCellSelection || string.IsNullOrEmpty(_selectionState.PendingMoveUnitId))
             {
-                Log.Info(this, "[MoveUI] skip move: no selected unit/card");
                 return;
             }
 
             BattleUnit unit = _battleService.FindUnit(_selectionState.PendingMoveUnitId);
             if (unit == null)
             {
-                Log.Info(this, $"[MoveUI] skip move: unit not found {_selectionState.PendingMoveUnitId}");
                 _clearMoveSelection();
                 return;
             }
 
             CommandResult moveResult = _battleService.TryPlayMoveCardToCellWithResult(_selectionState.PendingCardId, _selectionState.PendingMoveUnitId, line, cellIndex);
             bool moved = moveResult == CommandResult.Success;
-            Log.Info(this, $"[MoveUI] move result card={_selectionState.PendingCardId} unit={_selectionState.PendingMoveUnitId} to={line}/{cellIndex} reason={CommandResultText.ToDebugText(moveResult)}");
-
             if (!moved)
             {
                 _showCommandError(moveResult);
-                Log.Info(this, $"[MoveUI] move rejected. Card is not spent. {CommandResultText.ToDebugText(moveResult)}");
                 return;
             }
 
@@ -270,7 +256,6 @@ namespace UI.Windows.Game.Card
             bool isOwnCell = isLeft ? cell.Side == EBattleSideUi.Left : cell.Side == EBattleSideUi.Right;
             if (!isOwnCell)
             {
-                Log.Info(this, "[SummonUI] reject enemy side cell");
                 return;
             }
 
@@ -283,13 +268,10 @@ namespace UI.Windows.Game.Card
             if (playResult != CommandResult.Success)
             {
                 _showCommandError(playResult);
-                Log.Info(this, $"[SummonUI] summon rejected. reason={CommandResultText.ToDebugText(playResult)}");
                 return;
             }
 
             SetBattleModel(_battleModel);
-            Log.Info(this, $"[SummonUI] companion placed to={cell.Line}/{cell.CellIndex}");
-
             _clearSelections();
         }
 
@@ -303,7 +285,6 @@ namespace UI.Windows.Game.Card
             BattleUnit target = _battleService.FindUnit(targetUnitId);
             if (!_isValidTargetForPendingCard(target))
             {
-                Log.Info(this, $"[TargetUI] invalid selected target. unit={targetUnitId}");
                 return;
             }
 
@@ -311,11 +292,9 @@ namespace UI.Windows.Game.Card
             if (playResult != CommandResult.Success)
             {
                 _showCommandError(playResult);
-                Log.Info(this, $"[TargetUI] card play rejected. reason={CommandResultText.ToDebugText(playResult)}");
                 return;
             }
 
-            Log.Info(this, $"[TargetUI] card played. card={_selectionState.PendingTargetCard.InstanceId}, target={targetUnitId}");
             _clearSelections();
         }
 

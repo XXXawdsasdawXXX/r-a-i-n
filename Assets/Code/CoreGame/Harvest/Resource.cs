@@ -2,7 +2,6 @@
 using Core.Extensions;
 using Core.GameLoop;
 using CoreGame.Common.Collisions;
-using Essential;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Unity.Mathematics;
@@ -79,7 +78,6 @@ namespace CoreGame.Harvest
 
         private void _onChange(int prev, int next, bool asserver)
         {
-            Log.Info(this, $"{gameObject.name}: _onChange {prev} => {_current.Value} ");
             Changed?.Invoke(this);
         }
 

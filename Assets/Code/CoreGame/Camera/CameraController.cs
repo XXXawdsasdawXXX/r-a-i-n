@@ -2,7 +2,6 @@
 using Core.Network;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace CoreGame.Camera
@@ -26,8 +25,6 @@ namespace CoreGame.Camera
         {
             _cameraView = Container.Instance.GetView<CameraView>();
          
-            Log.Info(this, $"start. camera view = {_cameraView == null}" , Log.Orange);
-            
             return UniTask.CompletedTask;
         }
 
@@ -43,8 +40,6 @@ namespace CoreGame.Camera
             }
             else
             {
-                /*Log.Info(this, $"camera is null {_cameraView.Camera == null}. " +
-                               $"user is null {_userProvider.Hero == null}.", Log.Orange);*/
             }
         }
     }

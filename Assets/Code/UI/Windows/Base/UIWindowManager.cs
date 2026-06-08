@@ -66,7 +66,6 @@ namespace UI.Windows.Base
         {
             foreach ((Type type, IWindowController windowController) in _windowControllers)
             {
-                 Log.Info(this, $"Subscribe {type.Name}");
                 windowController.SubscribeToEvents(true);
             }
         }
@@ -143,8 +142,6 @@ namespace UI.Windows.Base
                 }
             }
 
-            Log.Error(this, $"Has not window with type {type.Name}");
-            
             return null;
         }
     }

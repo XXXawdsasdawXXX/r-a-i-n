@@ -4,7 +4,6 @@ using Core.Libraries.Assets;
 using Core.Scenes;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 
 namespace Core.StateMachine
 {

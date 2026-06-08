@@ -7,7 +7,6 @@ using Core.ServiceLocator;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic.StateMachine;
 using Cysharp.Threading.Tasks;
-using Essential;
 
 namespace CoreGame.Card.Logic
 {
@@ -49,7 +48,6 @@ namespace CoreGame.Card.Logic
             
             BattleStarted?.Invoke(_machine.Model);
        
-            Log.Info(this, "Start battle");            
         }
 
         public CommandResult TryPlayCardWithResult(string cardId, string targetId)
@@ -119,13 +117,11 @@ namespace CoreGame.Card.Logic
             BattleSide unitSide = BattleGridRules.GetOwnerSide(_machine.Model, unit);
             if (!ReferenceEquals(unitSide, activeSide))
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] reject foreign side unit={unitId}");
                 return CommandResult.NotYourSide;
             }
 
             if (cellIndex < 0 || cellIndex >= BattleGridRules.CELLS_PER_LINE)
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] invalid cell index={cellIndex}");
                 return CommandResult.InvalidCell;
             }
 
@@ -135,21 +131,18 @@ namespace CoreGame.Card.Logic
                 .Any(u => u.Line == line && u.LineCellIndex == cellIndex);
             if (occupied)
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] target occupied unit={unitId} target={line}/{cellIndex}");
                 return CommandResult.TargetOccupied;
             }
 
             CardBattleState card = CardPlayRules.FindCardInHand(activeSide.GetHand(), cardId);
             if (card == null)
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] card not found card={cardId}");
                 return CommandResult.CardNotFound;
             }
 
             BattleUnit actor = activeSide.Hero;
             if (!CardPlayRules.CanPlayCard(actor, card))
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] card can't be played card={cardId}");
                 return CardPlayRules.GetPlayRejectionReason(actor, card);
             }
             
@@ -157,19 +150,15 @@ namespace CoreGame.Card.Logic
                               && card.Config.Effects.Any(effect => effect.Type == EEffectType.MoveLine);
             if (!isMoveCard)
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] card has no MoveLine effect card={cardId}");
                 return CommandResult.CardHasNoMoveEffect;
             }
 
             if (!acceptPlayerInput.TryPlayCard(cardId, unitId))
             {
-                Log.Info(this, $"[TryPlayMoveCardToCell] play failed card={cardId} unit={unitId}");
                 return CommandResult.CardApplyRejected;
             }
 
             bool moved = BattleGridRules.TryMoveUnitToCell(_machine.Model, unit, line, cellIndex);
-            Log.Info(this, $"[TryPlayMoveCardToCell] card={cardId} unit={unitId} target={line}/{cellIndex} moved={moved}");
-
             if (moved)
             {
                 CardPlayedDetailed?.Invoke(new BattleCardPlayedEvent

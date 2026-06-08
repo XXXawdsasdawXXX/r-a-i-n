@@ -1,5 +1,4 @@
 ﻿using System;
-using Essential;
 
 namespace Core.Conversion
 {
@@ -12,7 +11,7 @@ namespace Core.Conversion
         {
             if (min >= max)
             {
-                Log.Exception(new ArgumentException("Min must be less than max"));
+                throw new ArgumentException("Min must be less than max");
             }
 
             _offset = -min; 

@@ -5,7 +5,6 @@ using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
 using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UI.Windows.Game.Card;
 using UI.Windows.Base;
 using UnityEngine;
@@ -135,11 +134,9 @@ namespace UI.Windows.Game.Card.HandDeck
             if (playResult != CommandResult.Success)
             {
                 _showCommandError(playResult);
-                Log.Info(this, $"Card play rejected. cardId={cardId}, target={targetId}, reason={CommandResultText.ToDebugText(playResult)}");
                 return;
             }
 
-            Log.Info(this, $"Card play success. cardId={cardId}, target={targetId}");
             _refreshHand();
         }
 

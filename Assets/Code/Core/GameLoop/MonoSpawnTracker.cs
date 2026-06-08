@@ -2,7 +2,6 @@
 using Core.Scenes;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet;
 using Plugins.FishNet.Runtime.Managing.Object;
 using UnityEngine;
@@ -49,7 +48,6 @@ namespace Core.GameLoop
         {
             if (obj is IGameListener gameListener && _observeMono.Add(obj))
             {
-                Log.Info(this, $"Mono started {obj.GetType().Name} add to collection");
                 _gameEventDispatcher.InitializeListener(gameListener);
             }
         }

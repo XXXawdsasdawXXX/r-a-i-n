@@ -6,8 +6,8 @@ using Core.Libraries.Installers;
 using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Core.StateMachine
 {
@@ -43,7 +43,7 @@ namespace Core.StateMachine
 
             AssetProvider.Instantiate(assetLibrary.SceneComponents.Get(AssetKey.CAMERA));
 
-            if (Log.PROFILER_IS_ACTIVE)
+            if (Profiler.enabled)
             {
                 AssetProvider.Instantiate(assetLibrary.UICanvases.Get(AssetKey.CANVAS_PROFILER));
             }
@@ -70,8 +70,6 @@ namespace Core.StateMachine
             
             GameModel model = container.GetService<GameModel>();
 
-            Log.Info($"Bootstrap load game {saveService.LoadLastGameModel() != null}");
-            
             GameModel loadedModel = saveService.LoadLastGameModel();
 
             model.CopyFrom(loadedModel);

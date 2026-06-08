@@ -3,7 +3,6 @@ using Core.GameLoop;
 using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Interfaces;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet.Object;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -82,7 +81,6 @@ namespace CoreGame.Entities.Characters.Hero
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
                 
-                Log.Info(this, $"ENTER {CurrentState}");
             }
         }
 
@@ -92,7 +90,6 @@ namespace CoreGame.Entities.Characters.Hero
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
                 
-                Log.Info(this, $"EXIT {CurrentState}");
             }
         }
     }

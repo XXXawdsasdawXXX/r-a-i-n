@@ -6,7 +6,6 @@ using CoreGame.Card.Logic;
 using CoreGame.Card.Data;
 using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace CoreGame.InteractionObjects.Activators
@@ -34,7 +33,6 @@ namespace CoreGame.InteractionObjects.Activators
         {
             base.StartInteraction();
 
-            Log.Info(this, "start interaction");
             _battleService.StartBattle(
                 _userProvider.GetHeroComponent<Hero>().Model,
                 _model,

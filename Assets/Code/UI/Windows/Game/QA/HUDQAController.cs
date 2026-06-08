@@ -8,7 +8,6 @@ using CoreGame.Entities.Characters.Hero;
 using CoreGame.Entities.Params;
 using CoreGame.Harvest;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet;
 using UI.Windows.Base;
 
@@ -98,19 +97,12 @@ namespace UI.Windows.Game.QA
         {
             if (int.TryParse(view.InputFieldHP.Value.ToString(), out int healthValue))
             {
-                Log.Info(this, $"int parse {healthValue}");
                 _heroHealth.UpdateHealth(healthValue);
-            }
-            else
-            {
-                Log.Info(this, $"int parse lose {view.InputFieldHP.Value}");
             }
         }
 
         private void _addResource()
         {
-            Log.Info(this, $"{view.DropDownResourceType.DropDown.value}");
-
             if (Enum.TryParse(view.DropDownResourceType.DropDown.value.ToString(), out EResource resourceType))
             {
                 if (int.TryParse(view.InputFieldResource.Value, out int resourceCount))

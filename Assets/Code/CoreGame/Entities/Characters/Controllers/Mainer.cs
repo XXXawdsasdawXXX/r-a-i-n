@@ -5,7 +5,6 @@ using Core.ServiceLocator;
 using CoreGame.Entities.Characters.Interfaces;
 using CoreGame.Entities.Params;
 using CoreGame.Harvest;
-using Essential;
 
 namespace CoreGame.Entities.Characters.Controllers
 {
@@ -75,8 +74,6 @@ namespace CoreGame.Entities.Characters.Controllers
 
             _animator.StartMine(resource.Config.HarvestType);
             
-            Log.Info(this, $"{resource.Config.HarvestType}");
-
             IsMining = true;
 
             Started?.Invoke();

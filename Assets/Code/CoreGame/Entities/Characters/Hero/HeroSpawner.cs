@@ -4,7 +4,6 @@ using Core.GameLoop;
 using Core.Network;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Transporting;
@@ -99,8 +98,6 @@ namespace CoreGame.Entities.Characters.Hero
 
         private void _serverManagerOnRemoveConnection(NetworkConnection connection, RemoteConnectionStateArgs state)
         {
-            Log.Info($"on remove connection {_heroes?.ContainsKey(connection)} {state.ConnectionState}" +
-                     $"\n nc id {connection.ClientId} state {state.ConnectionId}", Log.Green, this);
         }
     }
 }

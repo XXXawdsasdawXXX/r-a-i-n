@@ -2,7 +2,6 @@
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UI.Windows.Base;
 
 namespace UI.Windows.Game.Card.Turn
@@ -51,12 +50,7 @@ namespace UI.Windows.Game.Card.Turn
 
         private void _endStep()
         {
-            Log.Info(this, "click");
             CommandResult result = _battleService.EndTurnWithResult();
-            if (result != CommandResult.Success)
-            {
-                Log.Info(this, $"End turn rejected. reason={CommandResultText.ToDebugText(result)}");
-            }
         }
 
         private void _updateTurn(BattleModel model)

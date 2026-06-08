@@ -4,7 +4,6 @@ using Core.ServiceLocator;
 using CoreGame.Camera;
 using CoreGame.Grid;
 using Cysharp.Threading.Tasks;
-using Essential;
 using LiteNetLib.Utils;
 using Unity.Mathematics;
 using UnityEngine;
@@ -51,7 +50,6 @@ namespace CoreGame._Test
 
                 ETileType tileType = _gridService.GetTileType(worldPoint);
                 
-                Log.Info($"{position} {tileType}", Color.magenta, this);
             }
         }
     }

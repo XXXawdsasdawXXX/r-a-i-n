@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Essential;
 using FishNet.Object;
 
 namespace CoreGame.Entities.Characters
@@ -21,8 +20,6 @@ namespace CoreGame.Entities.Characters
                 return Components[typeof(T)] as T;
             }
 
-            Log.Error(this, $"{gameObject.name} has not component with type {type.Name}");
-            
             return null;
         }
     }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using Essential;
 
 namespace UI.Windows.Game.Card
 {

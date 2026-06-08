@@ -2,7 +2,6 @@
 using Core.Network;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 using UnityEngine.Scripting;
 
@@ -22,7 +21,6 @@ namespace Core.Audio
             }
             else
             {
-                Log.Error("No find camera.main", this);
             }
 
             _heroPool = Container.Instance.GetService<HeroPool>();

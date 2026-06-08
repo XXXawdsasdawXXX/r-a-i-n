@@ -6,7 +6,6 @@ using Core.Libraries.Installers;
 using Core.Scenes;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace Core.StateMachine
@@ -42,8 +41,6 @@ namespace Core.StateMachine
             _coreEntities.Add(AssetProvider.Instantiate(_assetLibrary.UICanvases.Get(AssetKey.CANVAS_CORE_GAME)));
 
             Container.Instance.Context.BuildChildContext(_installerStorage.CoreGameInstaller.GetTypes());
-
-            Log.Info(this, "build child context");
 
             await _gameEventDispatcher.Register(Container.Instance.GetGameListeners());
 
@@ -82,8 +79,6 @@ namespace Core.StateMachine
 
         private async void OnSwitchScene(EScene obj)
         {
-            Log.Info(this, $"On switch scene {obj}", Color.magenta);
-
             _gameEventDispatcher.Dispose();
 
             Container.Instance.Context.Child.BuildChildContext(_installerStorage.GetSceneInstaller(obj)?.GetTypes());

@@ -9,7 +9,6 @@ using Core.StateMachine;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic.AI;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace CoreGame.Card.Logic.StateMachine
@@ -58,8 +57,6 @@ namespace CoreGame.Card.Logic.StateMachine
         protected override UniTask setState(Type type)
         {
             Model.Phase.Value = states[type].Phase;
-            
-            Log.Info(this, $"Set state {Model.Phase.Value}", Color.cyan);
             
             return base.setState(type);
         }

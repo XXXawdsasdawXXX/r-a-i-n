@@ -9,7 +9,6 @@ using CoreGame.Card;
 using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Params;
-using Essential;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
@@ -33,8 +32,6 @@ namespace CoreGame.Entities.Characters.Hero
         
         public override void InitializeComponents()
         {
-            Log.Info(this, $"Initialize hero.\nis owner = {IsOwner}.\n owner id = {OwnerId}", UnityEngine.Color.black);
-     
             if (IsOwner)
             {
                 InputManager input = Container.Instance.GetService<InputManager>();

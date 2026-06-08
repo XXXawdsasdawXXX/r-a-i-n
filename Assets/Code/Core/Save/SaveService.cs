@@ -8,7 +8,6 @@ using Core.Extensions;
 using Core.GameLoop;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace Core.Save
@@ -48,8 +47,6 @@ namespace Core.Save
                 
                 string json = ModelsContainer.AsJson();
 
-                Log.Info(this, $"Save: {json} ");
-
                 File.WriteAllText(SavePath, json);
             }
             catch (Exception e)
@@ -64,8 +61,6 @@ namespace Core.Save
             {
                 ModelsContainer.LastSlot = _lastSlot;
             }
-            
-            Log.Info(this, $"Load last game model. slot - {ModelsContainer.LastSlot}");
             
             return LoadGameModel(ModelsContainer.LastSlot);
         }
@@ -108,14 +103,10 @@ namespace Core.Save
                     
                     newGameModel.CopyFrom(_saveSettings.DefaultModel);
                     
-                    Log.Info(this, $"create new slot {slotId} {newGameModel.AsJson()}");
-                  
                     ModelsContainer.Slots.Add(slotId, newGameModel.AsJson());
                     
                     return newGameModel;
                 }
-
-                Log.Info(this, $"Load: {slotData}");
 
                 return slotData.AsData<GameModel>();
             }
@@ -128,23 +119,18 @@ namespace Core.Save
 
         private SaveContainer _loadContainer()
         {
-            Log.Info(this, $"_loadContainer: {SavePath}");
-
             if (!File.Exists(SavePath))
             {
-                Log.Info(this, $"_loadContainer: not exists path. return new save container");
                 return new SaveContainer();
             }
 
             try
             {
                 string json = File.ReadAllText(SavePath);
-                Log.Info(this, $"_loadContainer: try deserialize {json}");
                 return json.AsData<SaveContainer>();
             }
             catch
             {
-                Log.Info(this, $"_loadContainer: deserialization error. return new save container");
                 return new SaveContainer();
             }
         }

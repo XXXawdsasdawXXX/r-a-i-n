@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Core.GameLoop;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
-using Essential;
 using UI.Windows.Game.Card.Map;
 using UI.Windows.Game.Card.Unit;
 using UnityEngine;
@@ -195,12 +194,10 @@ namespace UI.Windows.Game.Card
         {
             if (_leftCompanionRoot == null || _rightCompanionRoot == null || _companionViewPrefab == null)
             {
-                Log.Info(owner, "[CompanionUI] Missing inspector binding. Check LeftCompanionRoot/RightCompanionRoot/CompanionViewPrefab.");
             }
 
             if (BattleHighlightStyle.HighlightMaterial == null)
             {
-                Log.Info(owner, "[HighlightUI] Highlight material not found at Resources/Graphics/Materials/UI/material-ui-hightline.");
             }
 
             _validateOccupiedHighlight(owner, _leftSideView, EBattleSideUi.Left);
@@ -431,7 +428,6 @@ namespace UI.Windows.Game.Card
             heroViewTransform.localPosition = Vector3.zero;
             heroViewTransform.localScale = Vector3.one;
 
-            Log.Info(heroView, $"[GridUI] anchor unit={hero.UnitId} line={hero.Line} cell={hero.LineCellIndex}");
         }
 
         private static void _markSideOccupiedCells(BattleSide side, BattleSideView sideView)
@@ -495,7 +491,6 @@ namespace UI.Windows.Game.Card
             UIHighlightMaterialController highlightController = view.HighlightController;
             if (highlightController == null)
             {
-                Log.Info(view, $"[HighlightUnit] controller is null enabled={enabled} colorType={colorType}");
                 return;
             }
 
@@ -561,7 +556,6 @@ namespace UI.Windows.Game.Card
                 return;
             }
 
-            Log.Info(owner, $"[CompanionUI] OccupiedHighlight is not assigned. side={side}, line={line}, cell={cellIndex}");
         }
 
         private static void _bindCells(BattleSideView sideView, Action<BattleGridCellView> onCellClicked, bool bind)

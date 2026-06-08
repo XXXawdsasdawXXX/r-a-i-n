@@ -4,7 +4,6 @@ using Core.GameLoop;
 using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine.Networking;
 
 namespace Core.Time
@@ -69,11 +68,9 @@ namespace Core.Time
                 await webRequest.SendWebRequest();
 
                 string netTime = webRequest.GetResponseHeader("date");
-                Log.Info(this, $"[_initCurrentTime] Init google time. Time = {netTime}");
                 if (!DateTime.TryParse(netTime, out DateTime current))
                 {
                     Current = DateTime.UtcNow;
-                    Log.Info(this, $"[_initCurrentTime] Lose google time parsing. Time = {Current}");
                 }
                 else
                 {
@@ -83,7 +80,6 @@ namespace Core.Time
             else
             {
                 Current = DateTime.UtcNow;
-                Log.Info(this, $"[_initCurrentTime] Init standalone time. Time = {Current}");
             }
 
             DateTime lastVisit = gameModel.GameEnterTime;
@@ -92,9 +88,6 @@ namespace Core.Time
 
             _checkTimeOfDay();
 
-            Log.Info(this, $"[_initCurrentTime] End init.\n" +
-                           $"Is first visit = {!lastVisit.IsEqualDay(Current)}\n" +
-                           $"Current time =  {Current}. Saving time = {lastVisit}");
         }
 
         private void _updateUtcTime(float deltaTime)
@@ -112,7 +105,6 @@ namespace Core.Time
 
                 OnNightStarted?.Invoke();
 
-                Log.Info(this, "[_checkTimeOfDay] Start night.");
             }
             else if (!isNightTime && _isNight)
             {
@@ -120,7 +112,6 @@ namespace Core.Time
 
                 OnDayStarted?.Invoke();
 
-                Log.Info(this, "[_checkTimeOfDay] Start day.");
             }
         }
     }

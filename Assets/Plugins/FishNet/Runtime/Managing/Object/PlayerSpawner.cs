@@ -1,5 +1,4 @@
 ﻿using System;
-using Essential;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Managing;
@@ -112,8 +111,6 @@ namespace Plugins.FishNet.Runtime.Managing.Object
             if (_addToDefaultScene)
                 _networkManager.SceneManager.AddOwnerToDefaultScene(nob);
             
-            Log.Info($"spawn hero {nob.gameObject.name} {nob.OwnerId}", Color.yellow, this);
-
             OnSpawned?.Invoke(nob);
         }
 

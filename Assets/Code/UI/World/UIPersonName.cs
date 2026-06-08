@@ -1,7 +1,6 @@
 ﻿using Core.GameLoop;
 using CoreGame.Entities.Params;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UI.Components;
 using UnityEngine;
 
@@ -15,8 +14,6 @@ namespace UI.World
         public UniTask GameStart()
         {
             _uiText.SetText(_personName.Name);
-            
-            Log.Info($"game start set name {_personName.Name}");
             
             return UniTask.CompletedTask;
         }
@@ -33,8 +30,6 @@ namespace UI.World
 
         private void _setName(string objectName)
         {
-            Log.Info($"{objectName}", this);
-            
             _uiText.SetText(objectName);
         }
     }

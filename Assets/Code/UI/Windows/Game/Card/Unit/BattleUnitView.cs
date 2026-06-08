@@ -4,7 +4,6 @@ using UI.Components;
 using UI.Windows.Base;
 using UnityEngine;
 using System.Linq;
-using Essential;
 using System;
 using System.Collections.Generic;
 using UI.Windows.Game.Card.Unit.Fx;
@@ -88,7 +87,6 @@ namespace UI.Windows.Game.Card.Unit
             _applyRenderMirror();
             _fxRunner = new UnitFxRunner(this);
             _initializeImpactDictionaries();
-            Log.Info(this, $"[HighlightUnit] enable renderImage={Render?.Image != null} template={HighlightMaterialTemplate?.name ?? "null"}");
 
             if (_clickArea != null)
             {
@@ -98,7 +96,6 @@ namespace UI.Windows.Game.Card.Unit
 
         private void OnDisable()
         {
-            Log.Info(this, "[HighlightUnit] disable reset");
             HighlightController?.Reset();
             _fxRunner?.Stop();
 
@@ -222,7 +219,6 @@ namespace UI.Windows.Game.Card.Unit
         
         protected override void OnDestroy()
         {
-            Log.Info(this, "[HighlightUnit] destroy dispose");
             HighlightController?.Dispose();
             HighlightController = null;
             _fxRunner?.Stop();

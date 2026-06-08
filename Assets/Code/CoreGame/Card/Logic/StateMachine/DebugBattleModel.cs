@@ -16,15 +16,12 @@ namespace CoreGame.Card.Logic.StateMachine
 
         public UniTask Initialize()
         {
-            Log.Info(this, "Initialize", Color.black);
             _battleService = Container.Instance.GetService<BattleService>();
             return UniTask.CompletedTask;
         }
 
         public void Subscribe()
         {
-            Log.Info(this, "Subscribe", Color.black);
-
             _battleService.BattleStarted  += _updateModel;
             _battleService.TurnStarted    += _updateModel;
             _battleService.CardPlayed     += _updateModel;
@@ -41,8 +38,6 @@ namespace CoreGame.Card.Logic.StateMachine
 
         private void _updateModel(BattleModel model)
         {
-            Log.Info(this, "Update model", Color.black);
-
             _model = model;
 
 #if UNITY_EDITOR

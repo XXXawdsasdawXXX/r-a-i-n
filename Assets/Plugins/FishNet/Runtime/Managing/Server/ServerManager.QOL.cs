@@ -7,7 +7,6 @@ using FishNet.Transporting;
 using FishNet.Transporting.Multipass;
 using System;
 using System.Runtime.CompilerServices;
-using Essential;
 using UnityEngine;
 
 namespace FishNet.Managing.Server
@@ -118,8 +117,6 @@ namespace FishNet.Managing.Server
                 return;
             }
             
-            Log.Info($"Spawn {gameObject.name}", Color.red, this);
-            
             OnSpawn?.Invoke(nob);
             
             Objects.Spawn(nob, ownerConnection, scene);
@@ -156,9 +153,6 @@ namespace FishNet.Managing.Server
             DespawnType resolvedDespawnType = (!despawnType.HasValue)
                 ? networkObject.GetDefaultDespawnType()
                 : despawnType.Value;
-            
-            Log.Info($"Despawn {networkObject.name}", Color.red, this);
-            
             
             Objects.Despawn(networkObject, resolvedDespawnType, asServer: true);
         }

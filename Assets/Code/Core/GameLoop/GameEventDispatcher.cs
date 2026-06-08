@@ -3,7 +3,6 @@ using System.Linq;
 using Core.Save;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet;
 using Unity.Profiling;
 using UnityEngine;
@@ -108,8 +107,6 @@ namespace Core.GameLoop
             {
                 return;
             }
-
-            Log.Info($"AddSListener {listener.GetType().Name}", Color.cyan, this);
 
             ProfilerMarker marker = new($"AddSpawnableListener: {listener.GetType().Name}");
             marker.Begin();
@@ -234,7 +231,6 @@ namespace Core.GameLoop
 
             marker.End();
 
-            Log.Info(this, $"_notifyGameInitialize", Color.red);
         }
 
         private async UniTask _notifyGameLoad()
@@ -249,7 +245,6 @@ namespace Core.GameLoop
 
             marker.End();
 
-            Log.Info(this, $"_notifyGameLoad", Color.red);
         }
 
         private UniTask _notifySubscribe()
@@ -263,8 +258,6 @@ namespace Core.GameLoop
             }
 
             marker.End();
-
-            Log.Info(this, $"_notifySubscribe", Color.red);
 
             return UniTask.CompletedTask;
         }
@@ -283,7 +276,6 @@ namespace Core.GameLoop
 
             marker.End();
 
-            Log.Info(this, $"_notifyGameStart", Color.red);
         }
 
         private void _notifyGameUpdate(float deltaTime)
@@ -333,7 +325,6 @@ namespace Core.GameLoop
 
             _saveService.Save();
 
-            Log.Info(this, $"_notifyGameExit", Color.red);
             marker.End();
         }
     }

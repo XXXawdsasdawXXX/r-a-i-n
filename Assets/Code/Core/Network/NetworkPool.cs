@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Core.GameLoop;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Managing;
@@ -54,7 +53,6 @@ namespace Core.Network
             }
             else
             {
-                Log.Error(this, $"Pool has not the object with name'{instance.name}'");
             }
         }
 

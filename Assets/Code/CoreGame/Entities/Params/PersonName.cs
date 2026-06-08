@@ -1,6 +1,5 @@
 ﻿using System;
 using Core.GameLoop;
-using Essential;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 
@@ -40,7 +39,6 @@ namespace CoreGame.Entities.Params
 
         private void OnNameChanged(string prev, string next, bool asserver)
         {
-            Log.Info(this,$"OnNameChanged {prev}  {next} ");
             Changed?.Invoke(next);
         }
     }

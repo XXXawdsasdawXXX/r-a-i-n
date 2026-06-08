@@ -3,7 +3,6 @@ using Core.GameLoop;
 using Core.Libraries;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
@@ -17,8 +16,6 @@ namespace CoreGame.Entities.Characters.Hero
         public UniTask Initialize()
         {
             _audio = Container.Instance.GetService<AudioService>();
-            
-            Log.Info(this, $"Initialize -> audio != null {_audio != null}", Color.cyan);
             
             return UniTask.CompletedTask;
         }

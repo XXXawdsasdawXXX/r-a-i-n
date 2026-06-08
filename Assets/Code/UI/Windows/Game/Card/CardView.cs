@@ -1,6 +1,5 @@
 ﻿using System;
 using CoreGame.Card.Data;
-using Essential;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,7 +58,6 @@ namespace UI.Windows.Game.Card
             
             CardClicked?.Invoke(CurrentModel.InstanceId);
             
-            Log.Info($"click to card with id {CurrentModel.Id}");
         }
 
         public override void Disable()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Core.ServiceLocator;
 using Cysharp.Threading.Tasks;
-using Essential;
 
 namespace Core.StateMachine
 {
@@ -25,8 +24,6 @@ namespace Core.StateMachine
             }
             catch (Exception e)
             {
-                Log.Exception($"State machine can not switch state to {type.Name}",e);
-              
                 throw;
             }
         }
@@ -48,7 +45,6 @@ namespace Core.StateMachine
             }
             catch (Exception e)
             {
-                Log.Exception($"State machine can not set state {type.Name}",e);
                 throw;
             }
         }
