@@ -61,6 +61,11 @@ namespace CoreGame.Card.Logic.StateMachine
                     continue;
                 }
 
+                if (unit.Statuses != null && unit.Statuses.Any(status => status.Type == EStatusType.Stun && status.Duration > 0))
+                {
+                    continue;
+                }
+
                 float value = unit.AutoActionValue;
                 if (value <= 0f)
                 {

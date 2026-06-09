@@ -12,6 +12,8 @@ namespace UI.Windows.Game.Card
     public class CardWindowVisuals
     {
         public event Action<string> CompanionClicked;
+        public event Action<string, RectTransform, bool> UnitHoverEntered;
+        public event Action UnitHoverExited;
 
         private readonly BattleUnitView _leftHeroView;
         private readonly BattleUnitView _rightHeroView;
@@ -25,6 +27,7 @@ namespace UI.Windows.Game.Card
         private readonly Dictionary<BattleUnitView, string> _viewToUnitId = new Dictionary<BattleUnitView, string>();
         private readonly List<BattleUnitView> _leftCompanionViews = new List<BattleUnitView>();
         private readonly List<BattleUnitView> _rightCompanionViews = new List<BattleUnitView>();
+        private BattleUnitView _hoveredUnitView;
 
         public CardWindowVisuals(
             BattleUnitView leftHeroView,
@@ -67,6 +70,7 @@ namespace UI.Windows.Game.Card
             _rightHeroView?.Set(battleModel?.SideB?.Hero);
             _bindHeroUnitIds(battleModel);
             _updateCompanionViews(battleModel);
+            _tryRefreshHoveredUnitTooltip();
         }
 
         public void PlayCardEffect(string unitId, ECardType cardType)
@@ -210,6 +214,20 @@ namespace UI.Windows.Game.Card
             _bindCells(_rightSideView, onCellClicked, bind);
         }
 
+        public void BindHoverEvents(bool bind)
+        {
+            _bindHover(_leftHeroView, bind);
+            _bindHover(_rightHeroView, bind);
+            _bindHover(_leftCompanionViews, bind);
+            _bindHover(_rightCompanionViews, bind);
+
+            if (!bind)
+            {
+                _hoveredUnitView = null;
+                UnitHoverExited?.Invoke();
+            }
+        }
+
         private void _updateCompanionViews(BattleModel battleModel)
         {
             _setCompanionViews(_leftCompanionViews, battleModel?.SideA, _leftCompanionRoot);
@@ -279,6 +297,7 @@ namespace UI.Windows.Game.Card
                 BattleUnitView view = UnityEngine.Object.Instantiate(_companionViewPrefab, root);
                 view.SetSide(ReferenceEquals(root, _rightCompanionRoot));
                 view.Clicked += () => _onCompanionClicked(view);
+                _bindHover(view, true);
                 IGameListener[] listeners = view.GetComponentsInChildren<IGameListener>(true);
                 if (listeners.Length > 0)
                 {
@@ -587,6 +606,77 @@ namespace UI.Windows.Game.Card
             {
                 cell.Clicked -= onCellClicked;
             }
+        }
+
+        private void _bindHover(BattleUnitView view, bool bind)
+        {
+            if (view == null)
+            {
+                return;
+            }
+
+            view.HoverEntered -= _onUnitHoverEntered;
+            view.HoverExited -= _onUnitHoverExited;
+
+            if (bind)
+            {
+                view.HoverEntered += _onUnitHoverEntered;
+                view.HoverExited += _onUnitHoverExited;
+            }
+        }
+
+        private void _bindHover(List<BattleUnitView> views, bool bind)
+        {
+            if (views == null)
+            {
+                return;
+            }
+
+            foreach (BattleUnitView view in views)
+            {
+                _bindHover(view, bind);
+            }
+        }
+
+        private void _onUnitHoverEntered(BattleUnitView view)
+        {
+            _hoveredUnitView = view;
+            if (view == null)
+            {
+                return;
+            }
+
+            if (_viewToUnitId.TryGetValue(view, out string unitId))
+            {
+                UnitHoverEntered?.Invoke(unitId, view.transform as RectTransform, view.IsRightSide);
+            }
+        }
+
+        private void _onUnitHoverExited(BattleUnitView view)
+        {
+            if (view != null && _hoveredUnitView != null && !ReferenceEquals(view, _hoveredUnitView))
+            {
+                return;
+            }
+
+            _hoveredUnitView = null;
+            UnitHoverExited?.Invoke();
+        }
+
+        private void _tryRefreshHoveredUnitTooltip()
+        {
+            if (_hoveredUnitView == null)
+            {
+                return;
+            }
+
+            if (!_viewToUnitId.TryGetValue(_hoveredUnitView, out string unitId))
+            {
+                UnitHoverExited?.Invoke();
+                return;
+            }
+
+            UnitHoverEntered?.Invoke(unitId, _hoveredUnitView.transform as RectTransform, _hoveredUnitView.IsRightSide);
         }
     }
 }

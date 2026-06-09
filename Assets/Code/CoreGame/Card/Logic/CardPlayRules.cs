@@ -25,8 +25,20 @@ namespace CoreGame.Card.Logic
             }
 
             BattleUnit target = findUnit(targetUnitId);
-            processor.ApplyCard(actor, card, target, battle);
-            spendCard(side, actor, card);
+            bool hasDrawCardsEffect = card.Config.Effects != null
+                                      && card.Config.Effects.Any(effect => effect != null && effect.Type == EEffectType.DrawCards);
+
+            // Для добора карта должна уже лежать в discard, иначе при пустой deck не из чего добирать.
+            if (hasDrawCardsEffect)
+            {
+                spendCard(side, actor, card);
+                processor.ApplyCard(actor, card, target, battle);
+            }
+            else
+            {
+                processor.ApplyCard(actor, card, target, battle);
+                spendCard(side, actor, card);
+            }
 
             return true;
         }

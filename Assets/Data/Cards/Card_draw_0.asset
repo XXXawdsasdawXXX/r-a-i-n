@@ -22,7 +22,7 @@ MonoBehaviour:
   <Charges>k__BackingField: 0
   <Effects>k__BackingField:
   - <Type>k__BackingField: 8
-    <Target>k__BackingField: 1
+    <Target>k__BackingField: 0
     <BaseValue>k__BackingField:
       MinValue: 1
       MaxValue: 2

@@ -15,6 +15,8 @@ namespace UI.Windows.Game.Card.Unit
     public class BattleUnitView : UIWindowView
     {
         public event Action Clicked;
+        public event Action<BattleUnitView> HoverEntered;
+        public event Action<BattleUnitView> HoverExited;
 
         public UIHighlightMaterialController HighlightController { get; private set; }
         public Material HighlightMaterialTemplate => BattleHighlightStyle.ResolveHighlightMaterial(Render?.Image?.material);
@@ -47,12 +49,16 @@ namespace UI.Windows.Game.Card.Unit
         private UnitFxRunner _fxRunner;
         private Color _defaultRenderColor = Color.white;
         private bool _isRightSide;
+        private BattleUnit _currentUnit;
+
+        public bool IsRightSide => _isRightSide;
 
 
         
         public void Set(BattleUnit unit)
         {
             HighlightController?.Reset();
+            _currentUnit = unit;
             
             if (unit == null)
             {
@@ -91,6 +97,8 @@ namespace UI.Windows.Game.Card.Unit
             if (_clickArea != null)
             {
                 _clickArea.Clicked += _onClicked;
+                _clickArea.Selected += _onHoverEntered;
+                _clickArea.Deselected += _onHoverExited;
             }
         }
 
@@ -102,12 +110,29 @@ namespace UI.Windows.Game.Card.Unit
             if (_clickArea != null)
             {
                 _clickArea.Clicked -= _onClicked;
+                _clickArea.Selected -= _onHoverEntered;
+                _clickArea.Deselected -= _onHoverExited;
             }
         }
 
         private void _onClicked()
         {
             Clicked?.Invoke();
+        }
+
+        private void _onHoverEntered()
+        {
+            if (_currentUnit == null)
+            {
+                return;
+            }
+
+            HoverEntered?.Invoke(this);
+        }
+
+        private void _onHoverExited()
+        {
+            HoverExited?.Invoke(this);
         }
 
         public void PlayCardFx(ECardType cardType)

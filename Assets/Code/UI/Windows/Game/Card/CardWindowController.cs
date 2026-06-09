@@ -1,8 +1,8 @@
-﻿using Core.Network;
-using Core.ServiceLocator;
+﻿using Core.ServiceLocator;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
 using Cysharp.Threading.Tasks;
+using UI.Windows.Game.Card.Hover;
 using UI.Windows.Game.Card.Map;
 using UI.Windows.Game.Card.Unit;
 using UI.Windows.Base;
@@ -19,10 +19,12 @@ namespace UI.Windows.Game.Card
         [SerializeField] private BattleUnitView _companionViewPrefab;
         [SerializeField] private BattleSideView _leftSideView;
         [SerializeField] private BattleSideView _rightSideView;
+        [SerializeField] private CardUnitHoverView _unitHoverView;
 
         private BattleService _battleService;
         private CardWindowVisuals _visuals;
         private CardWindowInteractionService _interactionService;
+        private CardUnitHoverController _unitHoverController;
 
         
         public override UniTask InitializeWindow(UIWindowManager manager)
@@ -44,6 +46,7 @@ namespace UI.Windows.Game.Card
                 Container.Instance.GetService<Core.Network.UserProvider>(),
                 _battleService,
                 ShowCommandMessage);
+            _unitHoverController = new CardUnitHoverController(_battleService, _unitHoverView);
 
             _visuals.ValidateInspectorBindings(this);
             _visuals.SetGridHighlighted(false);
@@ -66,9 +69,11 @@ namespace UI.Windows.Game.Card
                 _leftHeroView.Clicked += _onLeftHeroClicked;
                 _rightHeroView.Clicked += _onRightHeroClicked;
                 _visuals?.BindCells(_onCellClicked, true);
+                _visuals?.BindHoverEvents(true);
                 if (_visuals != null)
                 {
                     _visuals.CompanionClicked += _onCompanionClicked;
+                    _unitHoverController?.Bind(_visuals);
                 }
             }
             else
@@ -82,10 +87,13 @@ namespace UI.Windows.Game.Card
                 _leftHeroView.Clicked -= _onLeftHeroClicked;
                 _rightHeroView.Clicked -= _onRightHeroClicked;
                 _visuals?.BindCells(_onCellClicked, false);
+                _visuals?.BindHoverEvents(false);
                 if (_visuals != null)
                 {
                     _visuals.CompanionClicked -= _onCompanionClicked;
                 }
+                _unitHoverController?.Unbind();
+                _unitHoverController?.Hide();
             }
         }
 
@@ -125,6 +133,7 @@ namespace UI.Windows.Game.Card
         {
             view.Close();
             view.ClearCommandMessage();
+            _unitHoverController?.Hide();
             _interactionService?.ResetSelections();
         }
 
