@@ -33,8 +33,6 @@ namespace CoreGame.Entities.Characters.Hero
         
         public override void InitializeComponents()
         {
-            _configureNetworkPhysics();
-
             if (IsOwner)
             {
                 InputManager input = Container.Instance.GetService<InputManager>();
@@ -94,24 +92,6 @@ namespace CoreGame.Entities.Characters.Hero
             }
 
             IsConstructed = true;
-        }
-
-        private void _configureNetworkPhysics()
-        {
-            if (Rigidbody == null)
-            {
-                return;
-            }
-
-            if (IsOwner)
-            {
-                Rigidbody.bodyType = RigidbodyType2D.Dynamic;
-                return;
-            }
-
-            Rigidbody.bodyType = RigidbodyType2D.Kinematic;
-            Rigidbody.velocity = Vector2.zero;
-            Rigidbody.angularVelocity = 0f;
         }
 
         public void Subscribe()
