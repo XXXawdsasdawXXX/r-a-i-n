@@ -39,22 +39,13 @@ namespace Core.Network
             }
         }
 
-        public void ConnectAsClient(string serverAddress)
-        {
-            ConnectAsClientAsync(serverAddress).Forget();
-        }
+        public UniTask<bool> TryConnectAsClientAsync(string serverAddress) => ConnectAsClientAsync(serverAddress);
 
-        public void StartHost()
-        {
-            StartHostAsync().Forget();
-        }
+        public UniTask<bool> TryStartHostAsync() => StartHostAsync();
 
-        public void StartServer()
-        {
-            StartServerAsync().Forget();
-        }
+        public UniTask<bool> TryStartServerAsync() => StartServerAsync();
 
-        private async UniTaskVoid ConnectAsClientAsync(string serverAddress)
+        private async UniTask<bool> ConnectAsClientAsync(string serverAddress)
         {
             ParseServerAddress(serverAddress, out string serverIP, out ushort? port);
             _serverIP = serverIP;
@@ -67,7 +58,7 @@ namespace Core.Network
             if (string.IsNullOrWhiteSpace(serverIP))
             {
                 Debug.LogError("[Client] IP сервера не указан.");
-                return;
+                return false;
             }
 
             await EnsureStoppedAsync();
@@ -76,13 +67,22 @@ namespace Core.Network
             if (!InstanceFinder.ClientManager.StartConnection())
             {
                 Debug.LogError("[Client] Не удалось начать подключение.");
-                return;
+                return false;
             }
 
             Debug.Log($"[Client] Подключение к серверу {serverIP}:{_port}");
+
+            if (!await WaitForClientStartedAsync())
+            {
+                Debug.LogError($"[Client] Не удалось подключиться к {serverIP}:{_port}. Проверьте IP, firewall на хосте и что хост уже в игре.");
+                return false;
+            }
+
+            Debug.Log("[Client] Подключение установлено.");
+            return true;
         }
 
-        private async UniTaskVoid StartHostAsync()
+        private async UniTask<bool> StartHostAsync()
         {
             await EnsureStoppedAsync();
             ConfigureTransport(clientAddress: "127.0.0.1", bindAllInterfaces: true);
@@ -90,25 +90,32 @@ namespace Core.Network
             if (!InstanceFinder.ServerManager.StartConnection())
             {
                 Debug.LogError("[Host] Не удалось начать сервер.");
-                return;
+                return false;
             }
 
             if (!await WaitForServerStartedAsync())
             {
                 Debug.LogError($"[Host] Сервер не запустился. Состояние: {GetTransportState(true)}. Проверьте, свободен ли UDP-порт {_port}.");
-                return;
+                return false;
             }
 
             if (!InstanceFinder.ClientManager.StartConnection())
             {
                 Debug.LogError("[Host] Не удалось запустить локальный клиент.");
-                return;
+                return false;
+            }
+
+            if (!await WaitForClientStartedAsync())
+            {
+                Debug.LogError("[Host] Локальный клиент не подключился к серверу.");
+                return false;
             }
 
             Debug.Log($"[Host] Сервер запущен на {GetLocalIPAddress()}:{_port}");
+            return true;
         }
 
-        private async UniTaskVoid StartServerAsync()
+        private async UniTask<bool> StartServerAsync()
         {
             await EnsureStoppedAsync();
             ConfigureTransport(bindAllInterfaces: true);
@@ -116,16 +123,17 @@ namespace Core.Network
             if (!InstanceFinder.ServerManager.StartConnection())
             {
                 Debug.LogError("[Server] Не удалось начать сервер.");
-                return;
+                return false;
             }
 
             if (!await WaitForServerStartedAsync())
             {
                 Debug.LogError($"[Server] Сервер не запустился. Состояние: {GetTransportState(true)}. Проверьте, свободен ли UDP-порт {_port}.");
-                return;
+                return false;
             }
 
             Debug.Log($"[Server] Сервер запущен на {GetLocalIPAddress()}:{_port}");
+            return true;
         }
 
         public static string GetLocalIPAddress()
@@ -260,6 +268,24 @@ namespace Core.Network
                 .TimeoutWithoutException(TimeSpan.FromSeconds(15));
 
             return reached || IsServerReady();
+        }
+
+        private bool IsClientReady()
+        {
+            return InstanceFinder.IsClientStarted;
+        }
+
+        private async UniTask<bool> WaitForClientStartedAsync()
+        {
+            if (IsClientReady())
+            {
+                return true;
+            }
+
+            bool reached = await UniTask.WaitUntil(IsClientReady)
+                .TimeoutWithoutException(TimeSpan.FromSeconds(15));
+
+            return reached || IsClientReady();
         }
 
         private LocalConnectionState GetTransportState(bool asServer)

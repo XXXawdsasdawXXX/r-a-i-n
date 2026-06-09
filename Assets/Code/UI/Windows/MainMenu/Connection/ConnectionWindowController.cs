@@ -20,15 +20,15 @@ namespace UI.Windows.MainMenu.Connection
             _connectionHandler = Container.Instance.GetService<ConnectionHandler>();
 
             view.TextUserIP.SetText("your ip: " + _connectionHandler.GetHostAddressForClients());
-          
+
             view.InputFieldHostIP.SetTextWithoutNotify(_connectionHandler.LastJoinedIP);
-            
+
             view.InputFieldHostIP.SetTextWithoutNotify(
                 PlayerPrefs.GetString(ConnectionHandler.SAVE_KEY, view.InputFieldHostIP.Value));
-            
+
             return base.InitializeWindow(manager);
         }
-        
+
         public override void SubscribeToEvents(bool flag)
         {
             if (flag)
@@ -47,30 +47,29 @@ namespace UI.Windows.MainMenu.Connection
 
         private void ButtonServerOnClicked()
         {
-            _connectionHandler.StartServer();
-            
-            _gameStateMachine.SwitchState(typeof(CoreGameState));
-            
-            view.Close();
+            EnterGameAfterConnection(_connectionHandler.TryStartServerAsync()).Forget();
         }
 
         private void ButtonClientOnClicked()
         {
             PlayerPrefs.SetString(ConnectionHandler.SAVE_KEY, view.InputFieldHostIP.Value);
-            
-            _connectionHandler.ConnectAsClient(view.InputFieldHostIP.Value);
-            
-            _gameStateMachine.SwitchState(typeof(CoreGameState));
-            
-            view.Close();
+
+            EnterGameAfterConnection(_connectionHandler.TryConnectAsClientAsync(view.InputFieldHostIP.Value)).Forget();
         }
 
         private void ButtonHostOnClicked()
         {
-            _connectionHandler.StartHost();
-            
+            EnterGameAfterConnection(_connectionHandler.TryStartHostAsync()).Forget();
+        }
+
+        private async UniTaskVoid EnterGameAfterConnection(UniTask<bool> connectionTask)
+        {
+            if (!await connectionTask)
+            {
+                return;
+            }
+
             _gameStateMachine.SwitchState(typeof(CoreGameState));
-            
             view.Close();
         }
     }

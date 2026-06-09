@@ -91,8 +91,16 @@ namespace UI.Windows.MainMenu.Game
 
         private void _continueGame()
         {
-            _connectionHandler.StartHost();
-            
+            _continueGameAsync().Forget();
+        }
+
+        private async UniTaskVoid _continueGameAsync()
+        {
+            if (!await _connectionHandler.TryStartHostAsync())
+            {
+                return;
+            }
+
             _gameStateMachine.SwitchState(typeof(CoreGameState));
         }
 
