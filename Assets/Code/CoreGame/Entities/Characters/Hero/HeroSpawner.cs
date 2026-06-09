@@ -28,6 +28,8 @@ namespace CoreGame.Entities.Characters.Hero
         {
             networkManager.SceneManager.OnClientLoadedStartScenes += _sceneManagerOnClientLoadedStartScenes;
             networkManager.ServerManager.OnRemoteConnectionState += _serverManagerOnRemoveConnection;
+
+            _spawnMissingHeroes();
         }
 
         public void Unsubscribe()
@@ -69,6 +71,39 @@ namespace CoreGame.Entities.Characters.Hero
         
         private void _sceneManagerOnClientLoadedStartScenes(NetworkConnection connection, bool isServer)
         {
+            if (!isServer)
+            {
+                return;
+            }
+
+            _trySpawnHero(connection);
+        }
+
+        private void _spawnMissingHeroes()
+        {
+            if (!networkManager.IsServerStarted)
+            {
+                return;
+            }
+
+            foreach (NetworkConnection connection in networkManager.ServerManager.Clients.Values)
+            {
+                _trySpawnHero(connection);
+            }
+        }
+
+        private void _trySpawnHero(NetworkConnection connection)
+        {
+            if (!connection.IsValid || !connection.IsAuthenticated)
+            {
+                return;
+            }
+
+            if (!connection.LoadedStartScenes(true))
+            {
+                return;
+            }
+
             if (_heroes.ContainsKey(connection))
             {
                 return;
