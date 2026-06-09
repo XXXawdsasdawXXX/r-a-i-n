@@ -93,7 +93,7 @@ namespace Core.Network
                 return;
             }
 
-            if (!await WaitForTransportStateAsync(asServer: true, LocalConnectionState.Started, 5f))
+            if (!await WaitForServerStartedAsync())
             {
                 Debug.LogError($"[Host] Сервер не запустился. Состояние: {GetTransportState(true)}. Проверьте, свободен ли UDP-порт {_port}.");
                 return;
@@ -119,7 +119,7 @@ namespace Core.Network
                 return;
             }
 
-            if (!await WaitForTransportStateAsync(asServer: true, LocalConnectionState.Started, 5f))
+            if (!await WaitForServerStartedAsync())
             {
                 Debug.LogError($"[Server] Сервер не запустился. Состояние: {GetTransportState(true)}. Проверьте, свободен ли UDP-порт {_port}.");
                 return;
@@ -243,12 +243,23 @@ namespace Core.Network
                 .TimeoutWithoutException(TimeSpan.FromSeconds(3));
         }
 
-        private async UniTask<bool> WaitForTransportStateAsync(bool asServer, LocalConnectionState targetState, float timeoutSeconds)
+        private bool IsServerReady()
         {
-            bool reached = await UniTask.WaitUntil(() => GetTransportState(asServer) == targetState)
-                .TimeoutWithoutException(TimeSpan.FromSeconds(timeoutSeconds));
+            return InstanceFinder.ServerManager.Started
+                   || GetTransportState(true) == LocalConnectionState.Started;
+        }
 
-            return reached;
+        private async UniTask<bool> WaitForServerStartedAsync()
+        {
+            if (IsServerReady())
+            {
+                return true;
+            }
+
+            bool reached = await UniTask.WaitUntil(IsServerReady)
+                .TimeoutWithoutException(TimeSpan.FromSeconds(15));
+
+            return reached || IsServerReady();
         }
 
         private LocalConnectionState GetTransportState(bool asServer)
