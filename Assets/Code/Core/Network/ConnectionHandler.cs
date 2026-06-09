@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Core.ServiceLocator;
+using Cysharp.Threading.Tasks;
 using FishNet;
 using FishNet.Transporting;
 using FishNet.Transporting.Tugboat;
@@ -39,6 +41,21 @@ namespace Core.Network
 
         public void ConnectAsClient(string serverAddress)
         {
+            ConnectAsClientAsync(serverAddress).Forget();
+        }
+
+        public void StartHost()
+        {
+            StartHostAsync().Forget();
+        }
+
+        public void StartServer()
+        {
+            StartServerAsync().Forget();
+        }
+
+        private async UniTaskVoid ConnectAsClientAsync(string serverAddress)
+        {
             ParseServerAddress(serverAddress, out string serverIP, out ushort? port);
             _serverIP = serverIP;
 
@@ -47,28 +64,66 @@ namespace Core.Network
                 _port = port.Value;
             }
 
+            if (string.IsNullOrWhiteSpace(serverIP))
+            {
+                Debug.LogError("[Client] IP сервера не указан.");
+                return;
+            }
+
+            await EnsureStoppedAsync();
             ConfigureTransport(clientAddress: serverIP);
 
-            InstanceFinder.ClientManager.StartConnection();
+            if (!InstanceFinder.ClientManager.StartConnection())
+            {
+                Debug.LogError("[Client] Не удалось начать подключение.");
+                return;
+            }
 
             Debug.Log($"[Client] Подключение к серверу {serverIP}:{_port}");
         }
 
-        public void StartHost()
+        private async UniTaskVoid StartHostAsync()
         {
+            await EnsureStoppedAsync();
             ConfigureTransport(clientAddress: "127.0.0.1", bindAllInterfaces: true);
 
-            InstanceFinder.ServerManager.StartConnection();
-            InstanceFinder.ClientManager.StartConnection();
+            if (!InstanceFinder.ServerManager.StartConnection())
+            {
+                Debug.LogError("[Host] Не удалось начать сервер.");
+                return;
+            }
+
+            if (!await WaitForTransportStateAsync(asServer: true, LocalConnectionState.Started, 5f))
+            {
+                Debug.LogError($"[Host] Сервер не запустился. Состояние: {GetTransportState(true)}. Проверьте, свободен ли UDP-порт {_port}.");
+                return;
+            }
+
+            if (!InstanceFinder.ClientManager.StartConnection())
+            {
+                Debug.LogError("[Host] Не удалось запустить локальный клиент.");
+                return;
+            }
 
             Debug.Log($"[Host] Сервер запущен на {GetLocalIPAddress()}:{_port}");
         }
 
-        public void StartServer()
+        private async UniTaskVoid StartServerAsync()
         {
+            await EnsureStoppedAsync();
             ConfigureTransport(bindAllInterfaces: true);
 
-            InstanceFinder.ServerManager.StartConnection();
+            if (!InstanceFinder.ServerManager.StartConnection())
+            {
+                Debug.LogError("[Server] Не удалось начать сервер.");
+                return;
+            }
+
+            if (!await WaitForTransportStateAsync(asServer: true, LocalConnectionState.Started, 5f))
+            {
+                Debug.LogError($"[Server] Сервер не запустился. Состояние: {GetTransportState(true)}. Проверьте, свободен ли UDP-порт {_port}.");
+                return;
+            }
 
             Debug.Log($"[Server] Сервер запущен на {GetLocalIPAddress()}:{_port}");
         }
@@ -162,14 +217,63 @@ namespace Core.Network
             }
         }
 
+        private async UniTask EnsureStoppedAsync()
+        {
+            LocalConnectionState serverState = GetTransportState(true);
+            LocalConnectionState clientState = GetTransportState(false);
+
+            if (serverState == LocalConnectionState.Stopped && clientState == LocalConnectionState.Stopped)
+            {
+                return;
+            }
+
+            if (serverState != LocalConnectionState.Stopped)
+            {
+                InstanceFinder.ServerManager.StopConnection(true);
+            }
+
+            if (clientState != LocalConnectionState.Stopped)
+            {
+                InstanceFinder.ClientManager.StopConnection();
+            }
+
+            await UniTask.WaitUntil(
+                () => GetTransportState(true) == LocalConnectionState.Stopped
+                      && GetTransportState(false) == LocalConnectionState.Stopped)
+                .TimeoutWithoutException(TimeSpan.FromSeconds(3));
+        }
+
+        private async UniTask<bool> WaitForTransportStateAsync(bool asServer, LocalConnectionState targetState, float timeoutSeconds)
+        {
+            bool reached = await UniTask.WaitUntil(() => GetTransportState(asServer) == targetState)
+                .TimeoutWithoutException(TimeSpan.FromSeconds(timeoutSeconds));
+
+            return reached;
+        }
+
+        private LocalConnectionState GetTransportState(bool asServer)
+        {
+            return InstanceFinder.NetworkManager.TransportManager.Transport.GetConnectionState(asServer);
+        }
+
         private void OnClientConnectionState(ClientConnectionStateArgs args)
         {
             Debug.Log($"[Client] Состояние подключения: {args.ConnectionState}");
+
+            if (args.ConnectionState == LocalConnectionState.Stopped)
+            {
+                Debug.LogWarning("[Client] Подключение остановлено. Проверьте IP, порт, firewall и что хост уже запущен.");
+            }
         }
 
         private void OnServerConnectionState(ServerConnectionStateArgs args)
         {
             Debug.Log($"[Server] Состояние сервера: {args.ConnectionState}");
+
+            if (args.ConnectionState == LocalConnectionState.Stopped)
+            {
+                Debug.LogError($"[Server] Сервер остановлен. Возможно UDP-порт {_port} занят или заблокирован firewall.");
+            }
         }
     }
 }
