@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -111,7 +112,7 @@ namespace Core.Network
                 return false;
             }
 
-            Debug.Log($"[Host] Сервер запущен на {GetLocalIPAddress()}:{_port}");
+            _logHostConnectionInfo();
             return true;
         }
 
@@ -132,12 +133,16 @@ namespace Core.Network
                 return false;
             }
 
-            Debug.Log($"[Server] Сервер запущен на {GetLocalIPAddress()}:{_port}");
+            _logHostConnectionInfo();
             return true;
         }
 
-        public static string GetLocalIPAddress()
+        public static string GetLocalIPAddress() => GetLanAddressCandidates().primaryIp;
+
+        public static (string primaryIp, List<string> allIps) GetLanAddressCandidates()
         {
+            List<(string ip, int score, string adapter)> candidates = new();
+
             foreach (NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())
             {
                 if (networkInterface.OperationalStatus != OperationalStatus.Up)
@@ -146,6 +151,11 @@ namespace Core.Network
                 }
 
                 if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback)
+                {
+                    continue;
+                }
+
+                if (_isVirtualInterface(networkInterface))
                 {
                     continue;
                 }
@@ -163,23 +173,98 @@ namespace Core.Network
                         continue;
                     }
 
-                    return ip;
+                    candidates.Add((ip, _scoreLanAddress(ip, networkInterface.NetworkInterfaceType), networkInterface.Name));
                 }
+            }
+
+            if (candidates.Count > 0)
+            {
+                candidates.Sort((a, b) => b.score.CompareTo(a.score));
+
+                List<string> allIps = new();
+                foreach ((string ip, int _, string adapter) in candidates)
+                {
+                    allIps.Add($"{ip} ({adapter})");
+                }
+
+                return (candidates[0].ip, allIps);
             }
 
             try
             {
                 using Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
                 socket.Connect("8.8.8.8", 65530);
-                return (socket.LocalEndPoint as IPEndPoint)?.Address.ToString() ?? "127.0.0.1";
+                string fallbackIp = (socket.LocalEndPoint as IPEndPoint)?.Address.ToString() ?? "127.0.0.1";
+                return (fallbackIp, new List<string> { fallbackIp });
             }
             catch
             {
-                return "127.0.0.1";
+                return ("127.0.0.1", new List<string> { "127.0.0.1" });
             }
         }
 
+        private static bool _isVirtualInterface(NetworkInterface networkInterface)
+        {
+            string name = networkInterface.Name.ToLowerInvariant();
+            string description = networkInterface.Description.ToLowerInvariant();
+
+            return name.Contains("virtual")
+                   || name.Contains("vethernet")
+                   || name.Contains("wsl")
+                   || name.Contains("hyper-v")
+                   || name.Contains("vmware")
+                   || name.Contains("virtualbox")
+                   || name.Contains("vpn")
+                   || name.Contains("tap")
+                   || name.Contains("tun")
+                   || description.Contains("virtual")
+                   || description.Contains("hyper-v")
+                   || description.Contains("vpn");
+        }
+
+        private static int _scoreLanAddress(string ip, NetworkInterfaceType interfaceType)
+        {
+            int score = 0;
+
+            if (ip.StartsWith("192.168."))
+            {
+                score += 100;
+            }
+            else if (ip.StartsWith("10."))
+            {
+                score += 80;
+            }
+            else if (ip.StartsWith("172."))
+            {
+                string[] parts = ip.Split('.');
+                if (parts.Length > 1 && int.TryParse(parts[1], out int secondOctet) && secondOctet >= 16 && secondOctet <= 31)
+                {
+                    score += 60;
+                }
+            }
+
+            if (interfaceType == NetworkInterfaceType.Wireless80211)
+            {
+                score += 20;
+            }
+            else if (interfaceType == NetworkInterfaceType.Ethernet)
+            {
+                score += 15;
+            }
+
+            return score;
+        }
+
         public string GetHostAddressForClients() => $"{GetLocalIPAddress()}:{_port}";
+
+        private void _logHostConnectionInfo()
+        {
+            (string primaryIp, List<string> allIps) = GetLanAddressCandidates();
+
+            Debug.Log($"[Host] Для подключения с другого устройства введите IP: {primaryIp}");
+            Debug.Log($"[Host] Порт: {_port}");
+            Debug.Log($"[Host] Все IP этого компьютера: {string.Join(", ", allIps)}");
+        }
 
         private static void ParseServerAddress(string serverAddress, out string serverIP, out ushort? port)
         {
