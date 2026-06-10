@@ -374,7 +374,7 @@ MonoBehaviour:
     Decks: []
     SelectedDeckId: 
   _activatorKey: 
-  _battleMode: 3
+  _battleMode: 2
   _requiredPlayers: 2
   _enemyDifficulty: 1
   _enemyDeckProfile: {fileID: 0}
