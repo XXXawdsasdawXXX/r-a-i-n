@@ -17,6 +17,8 @@ namespace CoreGame.InteractionObjects.Activators
         public bool IsInitialized { get; set; }
         
         [SerializeField] private HeroModel _model;
+        [Tooltip("Уникальный id активатора. Должен совпадать у всех клиентов. Не используйте GetInstanceID.")]
+        [SerializeField] private string _activatorKey;
         [SerializeField] private EBattleMode _battleMode = EBattleMode.PvE;
         [SerializeField] private int _requiredPlayers = 1;
         [SerializeField] private EEnemyAIDifficulty _enemyDifficulty = EEnemyAIDifficulty.Normal;
@@ -48,10 +50,16 @@ namespace CoreGame.InteractionObjects.Activators
 
             if (_networkBattleService != null && InstanceFinder.IsClientStarted)
             {
+                BattleHeroPayload heroPayload = BattleHeroPayload.FromHeroModel(hero.Model);
+                if (string.IsNullOrEmpty(heroPayload.HeroId) && !string.IsNullOrEmpty(_userProvider.Id))
+                {
+                    heroPayload.HeroId = _userProvider.Id;
+                }
+
                 _networkBattleService.RequestJoinBattle(
-                    gameObject.GetInstanceID().ToString(),
+                    _getActivatorId(),
                     _battleMode,
-                    BattleHeroPayload.FromHeroModel(hero.Model),
+                    heroPayload,
                     BattleHeroPayload.FromHeroModel(_model),
                     _enemyDifficulty,
                     _resolveRequiredPlayers());
@@ -75,6 +83,16 @@ namespace CoreGame.InteractionObjects.Activators
                 EBattleMode.Duel => 2,
                 _ => 1
             };
+        }
+
+        private string _getActivatorId()
+        {
+            if (!string.IsNullOrEmpty(_activatorKey))
+            {
+                return _activatorKey;
+            }
+
+            return $"{gameObject.scene.name}/{gameObject.name}";
         }
 
         private void _startLocalBattle(HeroModel playerHero)

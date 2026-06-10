@@ -5,7 +5,6 @@ using Core.GameLoop;
 using Core.Save;
 using Core.ServiceLocator;
 using CoreGame.Card;
-using CoreGame.Card;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic.Network;
 using CoreGame.Card.Logic.StateMachine;
@@ -161,6 +160,20 @@ namespace CoreGame.Card.Logic
                 return;
             }
 
+            if (_stateMachine.HasActiveBattle)
+            {
+                Debug.LogWarning("Battle join rejected: a battle is already in progress.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(request.Hero.HeroId))
+            {
+                Debug.LogWarning("Battle join rejected: hero id is missing in payload.");
+                return;
+            }
+
+            _removePlayerFromOtherLobbies(connection, request.ActivatorId);
+
             if (!_lobbies.TryGetValue(request.ActivatorId, out BattleLobby lobby))
             {
                 lobby = new BattleLobby
@@ -176,6 +189,7 @@ namespace CoreGame.Card.Logic
 
             if (lobby.Players.Any(player => player.Connection == connection))
             {
+                _broadcastLobbyUpdate(lobby);
                 return;
             }
 
@@ -185,6 +199,7 @@ namespace CoreGame.Card.Logic
                 Hero = request.Hero
             });
 
+            Debug.Log($"Battle lobby '{request.ActivatorId}': {lobby.Players.Count}/{lobby.RequiredPlayers} players.");
             _broadcastLobbyUpdate(lobby);
 
             if (lobby.Players.Count < lobby.RequiredPlayers)
@@ -194,6 +209,19 @@ namespace CoreGame.Card.Logic
 
             _startNetworkBattle(lobby);
             _lobbies.Remove(request.ActivatorId);
+        }
+
+        private void _removePlayerFromOtherLobbies(NetworkConnection connection, string exceptActivatorId)
+        {
+            foreach (KeyValuePair<string, BattleLobby> entry in _lobbies.ToList())
+            {
+                if (entry.Key == exceptActivatorId)
+                {
+                    continue;
+                }
+
+                entry.Value.Players.RemoveAll(player => player.Connection == connection);
+            }
         }
 
         private void _startNetworkBattle(BattleLobby lobby)
@@ -395,7 +423,13 @@ namespace CoreGame.Card.Logic
 
         private void _onLobbyUpdate(BattleLobbyUpdateBroadcast broadcast, Channel channel)
         {
-            Debug.Log($"Battle lobby {broadcast.ActivatorId}: {broadcast.PlayersWaiting}/{broadcast.PlayersRequired} players");
+            if (broadcast.PlayersWaiting >= broadcast.PlayersRequired)
+            {
+                Debug.Log($"Battle lobby '{broadcast.ActivatorId}': starting ({broadcast.PlayersWaiting}/{broadcast.PlayersRequired}).");
+                return;
+            }
+
+            Debug.Log($"Battle lobby '{broadcast.ActivatorId}': waiting {broadcast.PlayersWaiting}/{broadcast.PlayersRequired}. Both players must interact with the same activator.");
         }
 
         private sealed class BattleLobby

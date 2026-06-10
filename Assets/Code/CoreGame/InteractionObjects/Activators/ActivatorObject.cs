@@ -52,9 +52,18 @@ namespace CoreGame.InteractionObjects.Activators
 
         private void _onServerSendChanged(ActivatorBroadcast broadcast, Channel channel)
         {
-            _activatorBroadcast = broadcast;
+            if (!_isOwnBroadcast(broadcast))
+            {
+                return;
+            }
 
+            _activatorBroadcast = broadcast;
             StartInteraction();
+        }
+
+        private bool _isOwnBroadcast(ActivatorBroadcast broadcast)
+        {
+            return broadcast.ObjectID == gameObject.GetInstanceID().ToString();
         }
 
         private ActivatorBroadcast _getActivatorBroadcast()
