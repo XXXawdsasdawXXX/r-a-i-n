@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="Workspace" id="{eb1d2ff2-141e-4d70-9e04-f07f9452fecb}">
 		<property name="builtBanksOutputDirectory">
-			<value>../../tiny_thing/Assets/Plugins/FMOD/Banks</value>
+			<value>../../r.a.i.n/Assets/Plugins/FMOD/Banks</value>
 		</property>
 		<property name="builtBanksSeparateAssets">
 			<value>true</value>
