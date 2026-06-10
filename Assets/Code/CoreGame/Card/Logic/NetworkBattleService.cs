@@ -4,13 +4,11 @@ using System.Linq;
 using Core.GameLoop;
 using Core.Save;
 using Core.ServiceLocator;
-using CoreGame.Card;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic.Network;
 using CoreGame.Card.Logic.StateMachine;
 using Cysharp.Threading.Tasks;
 using FishNet;
-using FishNet.Broadcast;
 using FishNet.Connection;
 using UnityEngine;
 using Channel = FishNet.Transporting.Channel;
@@ -22,12 +20,15 @@ namespace CoreGame.Card.Logic
         public bool IsInitialized { get; set; }
         public bool IsRemoteClient => InstanceFinder.IsClientStarted && !InstanceFinder.IsServerStarted;
 
+        public event Action<BattleLobbyState> LobbyStateChanged;
+
         private BattleService _battleService;
         private BattleStateMachine _stateMachine;
         private CardLibrary _cardLibrary;
 
         private readonly Dictionary<string, BattleLobby> _lobbies = new();
         private readonly Dictionary<string, NetworkConnection> _participants = new();
+        private string _localLobbyActivatorId;
 
         public UniTask Initialize()
         {
@@ -42,7 +43,9 @@ namespace CoreGame.Card.Logic
             if (InstanceFinder.ServerManager != null)
             {
                 InstanceFinder.ServerManager.RegisterBroadcast<BattleJoinRequestBroadcast>(_onJoinRequest);
+                InstanceFinder.ServerManager.RegisterBroadcast<BattleLobbyActionRequestBroadcast>(_onLobbyActionRequest);
                 InstanceFinder.ServerManager.RegisterBroadcast<BattleActionRequestBroadcast>(_onActionRequest);
+                InstanceFinder.ServerManager.OnRemoteConnectionState += _onRemoteConnectionState;
             }
 
             if (InstanceFinder.ClientManager != null)
@@ -56,15 +59,22 @@ namespace CoreGame.Card.Logic
 
         public void Unsubscribe()
         {
-            InstanceFinder.ServerManager?.UnregisterBroadcast<BattleJoinRequestBroadcast>(_onJoinRequest);
-            InstanceFinder.ServerManager?.UnregisterBroadcast<BattleActionRequestBroadcast>(_onActionRequest);
-            InstanceFinder.ClientManager?.UnregisterBroadcast<BattleStateSyncBroadcast>(_onStateSync);
-            InstanceFinder.ClientManager?.UnregisterBroadcast<BattleHandSyncBroadcast>(_onHandSync);
-            InstanceFinder.ClientManager?.UnregisterBroadcast<BattleLobbyUpdateBroadcast>(_onLobbyUpdate);
-            InstanceFinder.ClientManager?.UnregisterBroadcast<BattleActionResultBroadcast>(_onActionResult);
-        }
+            if (InstanceFinder.ServerManager != null)
+            {
+                InstanceFinder.ServerManager.UnregisterBroadcast<BattleJoinRequestBroadcast>(_onJoinRequest);
+                InstanceFinder.ServerManager.UnregisterBroadcast<BattleLobbyActionRequestBroadcast>(_onLobbyActionRequest);
+                InstanceFinder.ServerManager.UnregisterBroadcast<BattleActionRequestBroadcast>(_onActionRequest);
+                InstanceFinder.ServerManager.OnRemoteConnectionState -= _onRemoteConnectionState;
+            }
 
-        public bool ShouldDelegateStart => InstanceFinder.IsClientStarted;
+            if (InstanceFinder.ClientManager != null)
+            {
+                InstanceFinder.ClientManager.UnregisterBroadcast<BattleStateSyncBroadcast>(_onStateSync);
+                InstanceFinder.ClientManager.UnregisterBroadcast<BattleHandSyncBroadcast>(_onHandSync);
+                InstanceFinder.ClientManager.UnregisterBroadcast<BattleLobbyUpdateBroadcast>(_onLobbyUpdate);
+                InstanceFinder.ClientManager.UnregisterBroadcast<BattleActionResultBroadcast>(_onActionResult);
+            }
+        }
 
         public void RequestJoinBattle(
             string activatorId,
@@ -72,12 +82,17 @@ namespace CoreGame.Card.Logic
             BattleHeroPayload heroPayload,
             BattleHeroPayload aiHeroPayload,
             EEnemyAIDifficulty enemyDifficulty,
-            int requiredPlayers)
+            int minPlayers,
+            int maxPlayers,
+            bool allowEarlyStart,
+            bool autoStartWhenFull)
         {
             if (!InstanceFinder.IsClientStarted)
             {
                 return;
             }
+
+            _localLobbyActivatorId = activatorId;
 
             InstanceFinder.ClientManager.Broadcast(new BattleJoinRequestBroadcast
             {
@@ -86,7 +101,38 @@ namespace CoreGame.Card.Logic
                 Hero = heroPayload,
                 AiHero = aiHeroPayload,
                 EnemyDifficulty = enemyDifficulty,
-                RequiredPlayers = requiredPlayers
+                MinPlayers = minPlayers,
+                MaxPlayers = maxPlayers,
+                AllowEarlyStart = allowEarlyStart,
+                AutoStartWhenFull = autoStartWhenFull
+            });
+        }
+
+        public void RequestLeaveLobby()
+        {
+            if (string.IsNullOrEmpty(_localLobbyActivatorId) || !InstanceFinder.IsClientStarted)
+            {
+                return;
+            }
+
+            InstanceFinder.ClientManager.Broadcast(new BattleLobbyActionRequestBroadcast
+            {
+                ActivatorId = _localLobbyActivatorId,
+                Action = EBattleLobbyAction.Leave
+            });
+        }
+
+        public void RequestStartLobby()
+        {
+            if (string.IsNullOrEmpty(_localLobbyActivatorId) || !InstanceFinder.IsClientStarted)
+            {
+                return;
+            }
+
+            InstanceFinder.ClientManager.Broadcast(new BattleLobbyActionRequestBroadcast
+            {
+                ActivatorId = _localLobbyActivatorId,
+                Action = EBattleLobbyAction.Start
             });
         }
 
@@ -182,9 +228,13 @@ namespace CoreGame.Card.Logic
                 {
                     ActivatorId = request.ActivatorId,
                     Mode = request.Mode,
-                    RequiredPlayers = Mathf.Max(1, request.RequiredPlayers),
+                    MinPlayers = Mathf.Max(1, request.MinPlayers),
+                    MaxPlayers = Mathf.Max(1, request.MaxPlayers),
+                    AllowEarlyStart = request.AllowEarlyStart,
+                    AutoStartWhenFull = request.AutoStartWhenFull,
                     EnemyDifficulty = request.EnemyDifficulty,
-                    AiHero = request.AiHero
+                    AiHero = request.AiHero,
+                    HostConnection = connection
                 };
                 _lobbies[request.ActivatorId] = lobby;
             }
@@ -195,22 +245,72 @@ namespace CoreGame.Card.Logic
                 return;
             }
 
+            if (lobby.Players.Count >= lobby.MaxPlayers)
+            {
+                Debug.LogWarning($"Battle lobby '{request.ActivatorId}' is full ({lobby.MaxPlayers}).");
+                return;
+            }
+
             lobby.Players.Add(new BattleLobbyPlayer
             {
                 Connection = connection,
                 Hero = request.Hero
             });
 
-            Debug.Log($"Battle lobby '{request.ActivatorId}': {lobby.Players.Count}/{lobby.RequiredPlayers} players.");
+            Debug.Log($"Battle lobby '{request.ActivatorId}': {lobby.Players.Count}/{lobby.MaxPlayers} players.");
             _broadcastLobbyUpdate(lobby);
 
-            if (lobby.Players.Count < lobby.RequiredPlayers)
+            if (lobby.AutoStartWhenFull && lobby.Players.Count >= lobby.MaxPlayers)
+            {
+                _tryStartLobby(lobby);
+            }
+        }
+
+        private void _onLobbyActionRequest(NetworkConnection connection, BattleLobbyActionRequestBroadcast request, Channel channel)
+        {
+            if (!InstanceFinder.IsServerStarted || string.IsNullOrEmpty(request.ActivatorId))
             {
                 return;
             }
 
-            _startNetworkBattle(lobby);
-            _lobbies.Remove(request.ActivatorId);
+            if (!_lobbies.TryGetValue(request.ActivatorId, out BattleLobby lobby))
+            {
+                return;
+            }
+
+            switch (request.Action)
+            {
+                case EBattleLobbyAction.Leave:
+                    _removePlayerFromLobby(lobby, connection);
+                    break;
+                case EBattleLobbyAction.Start:
+                    if (lobby.HostConnection != connection)
+                    {
+                        Debug.LogWarning("Only the lobby host can start the battle.");
+                        return;
+                    }
+
+                    _tryStartLobby(lobby);
+                    break;
+            }
+        }
+
+        private void _onRemoteConnectionState(NetworkConnection connection, FishNet.Transporting.RemoteConnectionStateArgs args)
+        {
+            if (!InstanceFinder.IsServerStarted || args.ConnectionState != FishNet.Transporting.RemoteConnectionState.Stopped)
+            {
+                return;
+            }
+
+            foreach (BattleLobby lobby in _lobbies.Values.ToList())
+            {
+                if (lobby.Players.All(player => player.Connection != connection))
+                {
+                    continue;
+                }
+
+                _removePlayerFromLobby(lobby, connection);
+            }
         }
 
         private void _removePlayerFromOtherLobbies(NetworkConnection connection, string exceptActivatorId)
@@ -222,8 +322,76 @@ namespace CoreGame.Card.Logic
                     continue;
                 }
 
-                entry.Value.Players.RemoveAll(player => player.Connection == connection);
+                if (entry.Value.Players.Any(player => player.Connection == connection))
+                {
+                    _removePlayerFromLobby(entry.Value, connection);
+                }
             }
+        }
+
+        private void _removePlayerFromLobby(BattleLobby lobby, NetworkConnection connection)
+        {
+            bool wasInLobby = lobby.Players.Any(player => player.Connection == connection);
+            lobby.Players.RemoveAll(player => player.Connection == connection);
+
+            if (wasInLobby)
+            {
+                _sendLobbyUpdate(
+                    connection,
+                    _createLobbyUpdate(lobby, connection, isOpen: false));
+            }
+
+            if (lobby.Players.Count == 0)
+            {
+                _lobbies.Remove(lobby.ActivatorId);
+                return;
+            }
+
+            if (lobby.HostConnection == connection)
+            {
+                lobby.HostConnection = lobby.Players[0].Connection;
+            }
+
+            _broadcastLobbyUpdate(lobby);
+        }
+
+        private void _tryStartLobby(BattleLobby lobby)
+        {
+            if (lobby.Players.Count < lobby.MinPlayers)
+            {
+                Debug.LogWarning($"Battle lobby '{lobby.ActivatorId}' needs at least {lobby.MinPlayers} players.");
+                return;
+            }
+
+            if (!lobby.AllowEarlyStart && lobby.Players.Count < lobby.MaxPlayers)
+            {
+                Debug.LogWarning($"Battle lobby '{lobby.ActivatorId}' is waiting for a full team ({lobby.MaxPlayers}).");
+                return;
+            }
+
+            if (!_canStartMode(lobby))
+            {
+                Debug.LogWarning($"Battle lobby '{lobby.ActivatorId}' cannot start with {lobby.Players.Count} players in mode {lobby.Mode}.");
+                return;
+            }
+
+            _startNetworkBattle(lobby);
+            _closeLobby(lobby);
+        }
+
+        private static bool _canStartMode(BattleLobby lobby)
+        {
+            return lobby.Mode switch
+            {
+                EBattleMode.PvP or EBattleMode.Duel => lobby.Players.Count >= 2,
+                _ => lobby.Players.Count >= 1
+            };
+        }
+
+        private void _closeLobby(BattleLobby lobby)
+        {
+            _broadcastLobbyClosed(lobby);
+            _lobbies.Remove(lobby.ActivatorId);
         }
 
         private void _startNetworkBattle(BattleLobby lobby)
@@ -277,6 +445,11 @@ namespace CoreGame.Card.Logic
                 {
                     HeroModel aiHero = lobby.AiHero.ToHeroModel();
                     _participants[playerOne.HeroId] = first.Connection;
+
+                    if (lobby.Mode == EBattleMode.CoOpPvE && lobby.Players.Count < 2)
+                    {
+                        Debug.Log($"Co-op lobby started solo — falling back to PvE ({lobby.Players.Count}/{lobby.MaxPlayers}).");
+                    }
 
                     _battleService.StartBattleInternal(
                         playerOne,
@@ -412,6 +585,11 @@ namespace CoreGame.Card.Logic
                 return;
             }
 
+            if (broadcast.IsBattleStarted)
+            {
+                _clearLocalLobby();
+            }
+
             _battleService.ApplyNetworkSnapshot(model, broadcast);
         }
 
@@ -435,32 +613,109 @@ namespace CoreGame.Card.Logic
 
         private void _broadcastLobbyUpdate(BattleLobby lobby)
         {
-            InstanceFinder.ServerManager.Broadcast(new BattleLobbyUpdateBroadcast
+            foreach (BattleLobbyPlayer player in lobby.Players)
+            {
+                _sendLobbyUpdate(
+                    player.Connection,
+                    _createLobbyUpdate(lobby, player.Connection, isOpen: true));
+            }
+        }
+
+        private void _broadcastLobbyClosed(BattleLobby lobby)
+        {
+            foreach (BattleLobbyPlayer player in lobby.Players)
+            {
+                _sendLobbyUpdate(
+                    player.Connection,
+                    _createLobbyUpdate(lobby, player.Connection, isOpen: false));
+            }
+        }
+
+        private void _sendLobbyUpdate(NetworkConnection connection, BattleLobbyUpdateBroadcast update)
+        {
+            if (connection != null && connection.IsLocalClient && InstanceFinder.IsClientStarted)
+            {
+                _applyLobbyUpdate(update);
+                return;
+            }
+
+            if (connection != null)
+            {
+                InstanceFinder.ServerManager.Broadcast(connection, update);
+            }
+        }
+
+        private static BattleLobbyUpdateBroadcast _createLobbyUpdate(BattleLobby lobby, NetworkConnection recipient, bool isOpen)
+        {
+            return new BattleLobbyUpdateBroadcast
             {
                 ActivatorId = lobby.ActivatorId,
+                IsOpen = isOpen,
                 PlayersWaiting = lobby.Players.Count,
-                PlayersRequired = lobby.RequiredPlayers
-            });
+                MaxPlayers = lobby.MaxPlayers,
+                MinPlayers = lobby.MinPlayers,
+                Mode = lobby.Mode,
+                IsHost = lobby.HostConnection == recipient,
+                AllowEarlyStart = lobby.AllowEarlyStart
+            };
         }
 
         private void _onLobbyUpdate(BattleLobbyUpdateBroadcast broadcast, Channel channel)
         {
-            if (broadcast.PlayersWaiting >= broadcast.PlayersRequired)
+            if (!InstanceFinder.IsClientStarted)
             {
-                Debug.Log($"Battle lobby '{broadcast.ActivatorId}': starting ({broadcast.PlayersWaiting}/{broadcast.PlayersRequired}).");
                 return;
             }
 
-            Debug.Log($"Battle lobby '{broadcast.ActivatorId}': waiting {broadcast.PlayersWaiting}/{broadcast.PlayersRequired}. Both players must interact with the same activator.");
+            _applyLobbyUpdate(broadcast);
+        }
+
+        private void _applyLobbyUpdate(BattleLobbyUpdateBroadcast broadcast)
+        {
+            if (!broadcast.IsOpen)
+            {
+                if (_localLobbyActivatorId == broadcast.ActivatorId)
+                {
+                    _clearLocalLobby();
+                }
+
+                LobbyStateChanged?.Invoke(_toLobbyState(broadcast));
+                return;
+            }
+
+            _localLobbyActivatorId = broadcast.ActivatorId;
+            LobbyStateChanged?.Invoke(_toLobbyState(broadcast));
+        }
+
+        private void _clearLocalLobby()
+        {
+            _localLobbyActivatorId = null;
+        }
+
+        private static BattleLobbyState _toLobbyState(BattleLobbyUpdateBroadcast broadcast)
+        {
+            return new BattleLobbyState(
+                broadcast.ActivatorId,
+                broadcast.IsOpen,
+                broadcast.PlayersWaiting,
+                broadcast.MaxPlayers,
+                broadcast.MinPlayers,
+                broadcast.Mode,
+                broadcast.IsHost,
+                broadcast.AllowEarlyStart);
         }
 
         private sealed class BattleLobby
         {
             public string ActivatorId;
             public EBattleMode Mode;
-            public int RequiredPlayers;
+            public int MinPlayers;
+            public int MaxPlayers;
+            public bool AllowEarlyStart;
+            public bool AutoStartWhenFull;
             public EEnemyAIDifficulty EnemyDifficulty;
             public BattleHeroPayload AiHero;
+            public NetworkConnection HostConnection;
             public List<BattleLobbyPlayer> Players = new();
         }
 

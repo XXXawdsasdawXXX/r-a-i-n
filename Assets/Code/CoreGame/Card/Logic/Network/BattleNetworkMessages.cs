@@ -12,6 +12,12 @@ namespace CoreGame.Card.Logic.Network
         SummonToCell,
     }
 
+    public enum EBattleLobbyAction
+    {
+        Leave,
+        Start,
+    }
+
     public struct BattleJoinRequestBroadcast : IBroadcast
     {
         public string ActivatorId;
@@ -19,7 +25,16 @@ namespace CoreGame.Card.Logic.Network
         public BattleHeroPayload Hero;
         public BattleHeroPayload AiHero;
         public EEnemyAIDifficulty EnemyDifficulty;
-        public int RequiredPlayers;
+        public int MinPlayers;
+        public int MaxPlayers;
+        public bool AllowEarlyStart;
+        public bool AutoStartWhenFull;
+    }
+
+    public struct BattleLobbyActionRequestBroadcast : IBroadcast
+    {
+        public string ActivatorId;
+        public EBattleLobbyAction Action;
     }
 
     public struct BattleActionRequestBroadcast : IBroadcast
@@ -53,8 +68,13 @@ namespace CoreGame.Card.Logic.Network
     public struct BattleLobbyUpdateBroadcast : IBroadcast
     {
         public string ActivatorId;
+        public bool IsOpen;
         public int PlayersWaiting;
-        public int PlayersRequired;
+        public int MaxPlayers;
+        public int MinPlayers;
+        public EBattleMode Mode;
+        public bool IsHost;
+        public bool AllowEarlyStart;
     }
 
     public struct BattleActionResultBroadcast : IBroadcast

@@ -20,7 +20,14 @@ namespace CoreGame.InteractionObjects.Activators
         [Tooltip("Уникальный id активатора. Должен совпадать у всех клиентов. Не используйте GetInstanceID.")]
         [SerializeField] private string _activatorKey;
         [SerializeField] private EBattleMode _battleMode = EBattleMode.PvE;
+        [Tooltip("Максимальный размер команды. 0 = авто по режиму (Co-op/PvP: 2, PvE: 1).")]
+        [SerializeField] private int _maxPlayers;
+        [Tooltip("Минимум игроков для старта. 0 = авто (Co-op/PvE: 1, PvP/Duel: 2).")]
+        [SerializeField] private int _minPlayers;
+        [Tooltip("Устаревшее поле — используется как MaxPlayers, если MaxPlayers = 0.")]
         [SerializeField] private int _requiredPlayers = 1;
+        [SerializeField] private bool _allowEarlyStart = true;
+        [SerializeField] private bool _autoStartWhenFull;
         [SerializeField] private EEnemyAIDifficulty _enemyDifficulty = EEnemyAIDifficulty.Normal;
         [SerializeField] private EnemyDeckProfile _enemyDeckProfile;
         
@@ -62,15 +69,23 @@ namespace CoreGame.InteractionObjects.Activators
                     heroPayload,
                     BattleHeroPayload.FromHeroModel(_model),
                     _enemyDifficulty,
-                    _resolveRequiredPlayers());
+                    _resolveMinPlayers(),
+                    _resolveMaxPlayers(),
+                    _allowEarlyStart,
+                    _autoStartWhenFull);
                 return;
             }
 
             _startLocalBattle(hero.Model);
         }
 
-        private int _resolveRequiredPlayers()
+        private int _resolveMaxPlayers()
         {
+            if (_maxPlayers > 0)
+            {
+                return _maxPlayers;
+            }
+
             if (_requiredPlayers > 0)
             {
                 return _requiredPlayers;
@@ -79,6 +94,22 @@ namespace CoreGame.InteractionObjects.Activators
             return _battleMode switch
             {
                 EBattleMode.CoOpPvE => 2,
+                EBattleMode.PvP => 2,
+                EBattleMode.Duel => 2,
+                _ => 1
+            };
+        }
+
+        private int _resolveMinPlayers()
+        {
+            if (_minPlayers > 0)
+            {
+                return _minPlayers;
+            }
+
+            return _battleMode switch
+            {
+                EBattleMode.CoOpPvE => 1,
                 EBattleMode.PvP => 2,
                 EBattleMode.Duel => 2,
                 _ => 1
