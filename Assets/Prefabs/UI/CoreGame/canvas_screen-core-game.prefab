@@ -682,7 +682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &646377668674114949
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1946,6 +1946,14 @@ PrefabInstance:
       propertyPath: m_text
       value: battle lobby
       objectReference: {fileID: 0}
+    - target: {fileID: 8042823179126906014, guid: 920774f47966b6c4bba2f42d656d1283, type: 3}
+      propertyPath: _key
+      value: ui.core_game.battle_lobby.title
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042823179126906014, guid: 920774f47966b6c4bba2f42d656d1283, type: 3}
+      propertyPath: _table
+      value: CoreGame
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2185,6 +2193,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3948271650349582716, guid: 7b934789a1b71b2469d4c5a28e7098fa, type: 3}
+      propertyPath: _key
+      value: ui.core_game.battle_lobby.status_label
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948271650349582716, guid: 7b934789a1b71b2469d4c5a28e7098fa, type: 3}
+      propertyPath: _table
+      value: CoreGame
+      objectReference: {fileID: 0}
     - target: {fileID: 4389451258780315301, guid: 7b934789a1b71b2469d4c5a28e7098fa, type: 3}
       propertyPath: m_text
       value: status
@@ -2305,6 +2321,14 @@ PrefabInstance:
     - target: {fileID: 3534018232801702523, guid: 04e773ece2268964084c711cb3c03112, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948271650349582716, guid: 04e773ece2268964084c711cb3c03112, type: 3}
+      propertyPath: _key
+      value: ui.core_game.battle_lobby.hint_label
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948271650349582716, guid: 04e773ece2268964084c711cb3c03112, type: 3}
+      propertyPath: _table
+      value: CoreGame
       objectReference: {fileID: 0}
     - target: {fileID: 4389451258780315301, guid: 04e773ece2268964084c711cb3c03112, type: 3}
       propertyPath: m_text
@@ -2580,6 +2604,14 @@ PrefabInstance:
       propertyPath: m_text
       value: qa
       objectReference: {fileID: 0}
+    - target: {fileID: 9015977072296828294, guid: faae8345cfa6aac448261b53293e415e, type: 3}
+      propertyPath: _key
+      value: ui.core_game.qa.title
+      objectReference: {fileID: 0}
+    - target: {fileID: 9015977072296828294, guid: faae8345cfa6aac448261b53293e415e, type: 3}
+      propertyPath: _table
+      value: CoreGame
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2697,6 +2729,14 @@ PrefabInstance:
       propertyPath: m_text
       value: cancel
       objectReference: {fileID: 0}
+    - target: {fileID: 9015977072296828294, guid: faae8345cfa6aac448261b53293e415e, type: 3}
+      propertyPath: _key
+      value: ui.core_game.battle_lobby.cancel
+      objectReference: {fileID: 0}
+    - target: {fileID: 9015977072296828294, guid: faae8345cfa6aac448261b53293e415e, type: 3}
+      propertyPath: _table
+      value: CoreGame
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2726,6 +2766,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 12879820826122701}
     m_Modifications:
+    - target: {fileID: 4389451258780315301, guid: 04e773ece2268964084c711cb3c03112, type: 3}
+      propertyPath: m_text
+      value: language
+      objectReference: {fileID: 0}
     - target: {fileID: 5092780353588648585, guid: 2c9a190403f98a045a8c1d00ce6a7250, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2809,10 +2853,6 @@ PrefabInstance:
     - target: {fileID: 8150049170986795392, guid: 2c9a190403f98a045a8c1d00ce6a7250, type: 3}
       propertyPath: m_Name
       value: dropdown-language
-      objectReference: {fileID: 0}
-    - target: {fileID: 4389451258780315301, guid: 04e773ece2268964084c711cb3c03112, type: 3}
-      propertyPath: m_text
-      value: language
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2923,6 +2963,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1519492473539563944, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519492473539563944, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519492473539563944, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 732.56775
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519492473539563944, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -244
+      objectReference: {fileID: 0}
     - target: {fileID: 1843605094033542572, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -2975,6 +3031,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -135
       objectReference: {fileID: 0}
+    - target: {fileID: 3501891942059357735, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_text
+      value: Assets/Prefabs/UI/CoreGame/card/window-card-battle.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683924209345471347, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683924209345471347, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683924209345471347, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 339.92773
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683924209345471347, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -244
+      objectReference: {fileID: 0}
     - target: {fileID: 4144157339608215650, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
       propertyPath: m_PixelPerfect
       value: 1
@@ -2986,6 +3062,86 @@ PrefabInstance:
     - target: {fileID: 4215631794129254550, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231231521440715262, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: _key
+      value: ui.cards.battle.end_step
+      objectReference: {fileID: 0}
+    - target: {fileID: 4231231521440715262, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: _table
+      value: Cards
+      objectReference: {fileID: 0}
+    - target: {fileID: 4249786149459368937, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4249786149459368937, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4249786149459368937, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 143.60773
+      objectReference: {fileID: 0}
+    - target: {fileID: 4249786149459368937, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -244
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627932212831504413, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: _key
+      value: ui.cards.battle.step
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627932212831504413, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: _table
+      value: Cards
+      objectReference: {fileID: 0}
+    - target: {fileID: 5339251964725178308, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_text
+      value: Assets/Prefabs/UI/CoreGame/card/window-card-battle.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7403557633302305583, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_text
+      value: Assets/Prefabs/UI/CoreGame/card/window-card-battle.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540811913460803272, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540811913460803272, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540811913460803272, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 536.24774
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540811913460803272, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -244
+      objectReference: {fileID: 0}
+    - target: {fileID: 7827215459210853622, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: _key
+      value: ui.cards.battle.time
+      objectReference: {fileID: 0}
+    - target: {fileID: 7827215459210853622, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: _table
+      value: Cards
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890256643309530839, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890256643309530839, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890256643309530839, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 928.88776
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890256643309530839, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -244
       objectReference: {fileID: 0}
     - target: {fileID: 7898948809326365861, guid: 41697e87128a27241af9bcb6e1bff27c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3565,6 +3721,14 @@ PrefabInstance:
       propertyPath: m_text
       value: start
       objectReference: {fileID: 0}
+    - target: {fileID: 9015977072296828294, guid: faae8345cfa6aac448261b53293e415e, type: 3}
+      propertyPath: _key
+      value: ui.core_game.battle_lobby.start
+      objectReference: {fileID: 0}
+    - target: {fileID: 9015977072296828294, guid: faae8345cfa6aac448261b53293e415e, type: 3}
+      propertyPath: _table
+      value: CoreGame
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3915,6 +4079,14 @@ PrefabInstance:
     - target: {fileID: 7330940580237409095, guid: 920774f47966b6c4bba2f42d656d1283, type: 3}
       propertyPath: m_text
       value: pause
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042823179126906014, guid: 920774f47966b6c4bba2f42d656d1283, type: 3}
+      propertyPath: _key
+      value: ui.core_game.pause.title
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042823179126906014, guid: 920774f47966b6c4bba2f42d656d1283, type: 3}
+      propertyPath: _table
+      value: CoreGame
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

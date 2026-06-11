@@ -36,6 +36,7 @@ namespace Core.Localization
             public const string DuelAccept = "ui.core_game.duel.accept";
             public const string DuelDecline = "ui.core_game.duel.decline";
             public const string DuelCancel = "ui.core_game.duel.cancel";
+            public const string HeroContextDuel = "ui.core_game.hero_context.duel";
             public const string CompanionTemporary = "ui.core_game.companion.temporary";
             public const string CompanionLifetime = "ui.core_game.companion.lifetime";
             public const string CompanionCardsPerTurn = "ui.core_game.companion.cards_per_turn";

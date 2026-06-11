@@ -13,6 +13,9 @@ namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroSpawner : NetworkPool, ISubscriber
     {
+        public event Action<HeroContextTarget> ContextTargetSpawned;
+        public event Action<HeroContextTarget> ContextTargetDespawned;
+
         private readonly Dictionary<NetworkConnection, NetworkObject> _heroes = new();
         private UserProvider _userProvider;
 
@@ -139,14 +142,45 @@ namespace CoreGame.Entities.Characters.Hero
             spawn(Vector3.zero, connection);
         }
 
+        protected override void onDespawned(in NetworkObject instance, NetworkConnection connection)
+        {
+            _broadcastContextTargetDespawned(instance);
+            base.onDespawned(instance, connection);
+        }
+
         [ObserversRpc]
         private void _initializeHeroComponents(NetworkObject instance)
         {
             Hero hero = instance.GetComponent<Hero>();
-         
+
             hero.InitializeComponents();
-            
+
             registerGameListener(getGameListeners(instance));
+            _notifyContextTargetSpawned(instance);
+        }
+
+        [ObserversRpc]
+        private void _broadcastContextTargetDespawned(NetworkObject instance)
+        {
+            _notifyContextTargetDespawned(instance);
+        }
+
+        private void _notifyContextTargetSpawned(NetworkObject instance)
+        {
+            HeroContextTarget target = instance.GetComponent<HeroContextTarget>();
+            if (target != null)
+            {
+                ContextTargetSpawned?.Invoke(target);
+            }
+        }
+
+        private void _notifyContextTargetDespawned(NetworkObject instance)
+        {
+            HeroContextTarget target = instance.GetComponent<HeroContextTarget>();
+            if (target != null)
+            {
+                ContextTargetDespawned?.Invoke(target);
+            }
         }
         
         

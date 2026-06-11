@@ -4,6 +4,7 @@ namespace Core.Input
     {
         None,
         LeftClick,
+        RightClick,
         Interaction,
         Esc
     }

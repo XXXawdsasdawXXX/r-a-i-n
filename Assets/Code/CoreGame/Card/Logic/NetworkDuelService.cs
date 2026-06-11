@@ -40,7 +40,7 @@ namespace CoreGame.Card.Logic
             _networkBattleService = Container.Instance.GetService<NetworkBattleService>();
             _battleService = Container.Instance.GetService<BattleService>();
             _stateMachine = Container.Instance.GetService<BattleStateMachine>();
-            _heroSpawner = UnityEngine.Object.FindObjectOfType<HeroSpawner>();
+            _heroSpawner = Container.Instance.GetService<HeroSpawner>();
             _userProvider = Container.Instance.GetService<UserProvider>();
             return UniTask.CompletedTask;
         }

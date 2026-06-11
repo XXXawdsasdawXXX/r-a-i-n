@@ -32,6 +32,11 @@ namespace Core.Input
             },
             new()
             {
+                Key = KeyCode.Mouse1,
+                Action = EInputAction.RightClick
+            },
+            new()
+            {
                 Key = KeyCode.Escape,
                 Action = EInputAction.Esc
             }
