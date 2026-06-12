@@ -898,6 +898,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8074581406936682630}
     m_Modifications:
+    - target: {fileID: 1034968447503748157, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
+      propertyPath: _localizedString.m_TableEntryReference.m_KeyId
+      value: 598214100058112
+      objectReference: {fileID: 0}
+    - target: {fileID: 1034968447503748157, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
+      propertyPath: _localizedString.m_TableReference.m_TableCollectionName
+      value: GUID:6279e5137471426408a5c7aa76bfbf87
+      objectReference: {fileID: 0}
     - target: {fileID: 4661503315116357022, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
       propertyPath: _key
       value: ui.core_game.hero_context_menu.duel
@@ -916,7 +924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5373249678718014023, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
       propertyPath: m_text
-      value: No translation found for 'ui.core_game.hero_context_menu.duel' in CoreGame
+      value: duel
       objectReference: {fileID: 0}
     - target: {fileID: 5591413041431016122, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
       propertyPath: m_Pivot.x
@@ -1042,6 +1050,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8074581406936682630}
     m_Modifications:
+    - target: {fileID: 1034968447503748157, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
+      propertyPath: _localizedString.m_TableEntryReference.m_KeyId
+      value: 598318022328320
+      objectReference: {fileID: 0}
+    - target: {fileID: 1034968447503748157, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
+      propertyPath: _localizedString.m_TableReference.m_TableCollectionName
+      value: GUID:6279e5137471426408a5c7aa76bfbf87
+      objectReference: {fileID: 0}
     - target: {fileID: 4661503315116357022, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
       propertyPath: _key
       value: ui.core_game.hero_context.duel

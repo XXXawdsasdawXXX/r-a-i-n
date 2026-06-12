@@ -103,6 +103,14 @@ MonoBehaviour:
     m_Key: ui.core_game.pause.language
     m_Metadata:
       m_Items: []
+  - m_Id: 598214100058112
+    m_Key: ui.core_game.hero_context.duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 598318022328320
+    m_Key: ui.core_game.hero_context.trade
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

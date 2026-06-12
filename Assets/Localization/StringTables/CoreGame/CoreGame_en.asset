@@ -106,6 +106,14 @@ MonoBehaviour:
     m_Localized: language
     m_Metadata:
       m_Items: []
+  - m_Id: 598214100058112
+    m_Localized: duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 598318022328320
+    m_Localized: trade
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
