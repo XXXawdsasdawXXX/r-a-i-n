@@ -65,10 +65,7 @@ namespace UI.Windows.Game.HUD
                 return;
             }
 
-            Hero hero = request.Target.Hero;
-            _activeContextMenu = hero != null
-                ? hero.GetComponentInChildren<HeroWorldContextMenu>(true)
-                : null;
+            _activeContextMenu = _resolveContextMenu(request.Target);
             if (_activeContextMenu == null)
             {
                 Debug.LogWarning(
@@ -95,6 +92,20 @@ namespace UI.Windows.Game.HUD
             }
 
             _contextMenuService.NotifyMenuClosed();
+        }
+
+        private static HeroWorldContextMenu _resolveContextMenu(HeroContextTarget target)
+        {
+            if (target?.ContextMenu != null
+                && target.ContextMenu.TryGetComponent(out HeroWorldContextMenu menuFromReference))
+            {
+                return menuFromReference;
+            }
+
+            Hero hero = target?.Hero;
+            return hero != null
+                ? hero.GetComponentInChildren<HeroWorldContextMenu>(true)
+                : null;
         }
 
         private void _closeActiveContextMenu(bool notifyService)

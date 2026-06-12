@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 
 namespace CoreGame.Entities.Characters.Hero
 {
-    public sealed class HeroContextMenuService : IService, IInitializeListener, ISubscriber
+    public sealed class HeroContextMenuService : IService, IInitializeListener, IStartListener, ISubscriber
     {
         public bool IsInitialized { get; set; }
         public bool HasActiveMenu => !string.IsNullOrEmpty(_activeHeroObjectId);
@@ -20,19 +20,22 @@ namespace CoreGame.Entities.Characters.Hero
         public event Action CloseRequested;
 
         private InputManager _input;
-        private CameraView _cameraView;
+        private UnityEngine.Camera _camera;
         private HeroSpawner _heroSpawner;
         private string _activeHeroObjectId;
-        private readonly List<HeroContextTarget> _targets = new();
-        private readonly List<Collider2D> _physicsHits = new();
-        private ContactFilter2D _hitFilter;
+        private readonly List<HeroPointerTarget> _pointerTargets = new();
 
         public UniTask Initialize()
         {
             _input = Container.Instance.GetService<InputManager>();
-            _cameraView = Container.Instance.GetView<CameraView>();
-            _hitFilter = new ContactFilter2D();
-            _hitFilter.NoFilter();
+            return UniTask.CompletedTask;
+        }
+
+        public UniTask GameStart()
+        {
+            _camera = null;
+            _resolveCamera();
+            _registerExistingHeroes();
             return UniTask.CompletedTask;
         }
 
@@ -40,8 +43,9 @@ namespace CoreGame.Entities.Characters.Hero
         {
             _input.ActionEnded += _onActionEnded;
             _heroSpawner = Container.Instance.GetService<HeroSpawner>();
-            _heroSpawner.HeroSpawned += RegisterTarget;
-            _heroSpawner.HeroDespawned += UnregisterTarget;
+            _heroSpawner.HeroSpawned += RegisterHero;
+            _heroSpawner.HeroDespawned += UnregisterHero;
+            _registerExistingHeroes();
         }
 
         public void Unsubscribe()
@@ -50,34 +54,68 @@ namespace CoreGame.Entities.Characters.Hero
 
             if (_heroSpawner != null)
             {
-                _heroSpawner.HeroSpawned -= RegisterTarget;
-                _heroSpawner.HeroDespawned -= UnregisterTarget;
+                _heroSpawner.HeroSpawned -= RegisterHero;
+                _heroSpawner.HeroDespawned -= UnregisterHero;
             }
 
-            _targets.Clear();
+            foreach (HeroPointerTarget pointerTarget in _pointerTargets)
+            {
+                if (pointerTarget != null)
+                {
+                    pointerTarget.RightClicked -= _onPointerRightClicked;
+                }
+            }
+
+            _pointerTargets.Clear();
             RequestClose();
         }
 
-        public void RegisterTarget(Hero target)
+        public void RegisterHero(Hero hero)
         {
-            if (target?.ContextTarget == null || _targets.Contains(target.ContextTarget))
+            if (hero?.ContextTarget == null)
             {
                 return;
             }
 
-            _targets.Add(target.ContextTarget);
+            HeroPointerTarget pointerTarget = hero.ContextTarget.GetComponent<HeroPointerTarget>();
+            if (pointerTarget == null)
+            {
+                pointerTarget = hero.ContextTarget.gameObject.AddComponent<HeroPointerTarget>();
+            }
+
+            RegisterPointerTarget(pointerTarget);
         }
 
-        public void UnregisterTarget(Hero target)
+        public void RegisterPointerTarget(HeroPointerTarget pointerTarget)
         {
-            if (target?.ContextTarget == null)
+            if (pointerTarget == null || _pointerTargets.Contains(pointerTarget))
             {
                 return;
             }
 
-            _targets.Remove(target.ContextTarget);
+            _resolveCamera();
+            pointerTarget.BindInput(_input, _camera);
+            pointerTarget.RightClicked += _onPointerRightClicked;
+            _pointerTargets.Add(pointerTarget);
+        }
 
-            if (_activeHeroObjectId == target.ObjectId.ToString())
+        public void UnregisterHero(Hero hero)
+        {
+            if (hero?.ContextTarget == null)
+            {
+                return;
+            }
+
+            HeroPointerTarget pointerTarget = hero.ContextTarget.GetComponent<HeroPointerTarget>();
+            if (pointerTarget == null)
+            {
+                return;
+            }
+
+            pointerTarget.RightClicked -= _onPointerRightClicked;
+            _pointerTargets.Remove(pointerTarget);
+
+            if (_activeHeroObjectId == hero.ObjectId.ToString())
             {
                 RequestClose();
             }
@@ -120,6 +158,11 @@ namespace CoreGame.Entities.Characters.Hero
             }
         }
 
+        private void _onPointerRightClicked(HeroPointerTarget pointerTarget)
+        {
+            _openContextMenu(pointerTarget?.ContextTarget);
+        }
+
         private void _handleRightClick()
         {
             if (_isPointerOverScreenSpaceUi())
@@ -127,7 +170,12 @@ namespace CoreGame.Entities.Characters.Hero
                 return;
             }
 
-            HeroContextTarget target = _findTargetUnderCursor();
+            HeroPointerTarget pointerTarget = _findPointerTargetUnderCursor();
+            _openContextMenu(pointerTarget?.ContextTarget);
+        }
+
+        private void _openContextMenu(HeroContextTarget target)
+        {
             if (target == null || !target.CanOpenContextMenu())
             {
                 RequestClose();
@@ -155,108 +203,94 @@ namespace CoreGame.Entities.Characters.Hero
             RequestClose();
         }
 
-        private HeroContextTarget _findTargetUnderCursor()
+        private void _registerExistingHeroes()
         {
-            if (_cameraView?.Camera == null)
+            Hero[] heroes = UnityEngine.Object.FindObjectsOfType<Hero>(true);
+            foreach (Hero hero in heroes)
+            {
+                RegisterHero(hero);
+            }
+        }
+
+        private HeroPointerTarget _findPointerTargetUnderCursor()
+        {
+            UnityEngine.Camera camera = _resolveCamera();
+            if (camera == null)
             {
                 return null;
             }
 
-            Vector2 worldPoint = _getMouseWorldPoint();
+            Ray ray = camera.ScreenPointToRay(_input.MousePosition);
+            RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(ray, Mathf.Infinity);
 
-            HeroContextTarget physicsHit = _findTargetViaPhysics(worldPoint);
-            if (physicsHit != null)
+            HeroPointerTarget bestTarget = null;
+            float bestDistance = float.PositiveInfinity;
+
+            foreach (RaycastHit2D hit in hits)
             {
-                return physicsHit;
-            }
-
-            return _findTargetViaRegisteredTargets(worldPoint);
-        }
-
-        private Vector2 _getMouseWorldPoint()
-        {
-            Vector3 screenPoint = _input.MousePosition;
-            screenPoint.z = -_cameraView.Camera.transform.position.z;
-            Vector3 worldPoint = _cameraView.ScreenToWorldPoint(screenPoint);
-            worldPoint.z = 0f;
-            return worldPoint;
-        }
-
-        private HeroContextTarget _findTargetViaPhysics(Vector2 worldPoint)
-        {
-            Physics2D.SyncTransforms();
-
-            _physicsHits.Clear();
-            Physics2D.OverlapPoint(worldPoint, _hitFilter, _physicsHits);
-
-            HeroContextTarget bestTarget = null;
-            float bestZ = float.NegativeInfinity;
-
-            foreach (Collider2D hit in _physicsHits)
-            {
-                if (!_tryResolveContextTarget(hit, out HeroContextTarget target))
+                if (hit.collider == null)
                 {
                     continue;
                 }
 
-                if (!target.CanOpenContextMenu())
+                HeroPointerTarget pointerTarget = hit.collider.GetComponent<HeroPointerTarget>()
+                    ?? hit.collider.GetComponentInParent<HeroPointerTarget>();
+                if (pointerTarget == null)
                 {
                     continue;
                 }
 
-                float z = target.transform.position.z;
-                if (z >= bestZ)
+                if (hit.distance < bestDistance)
                 {
-                    bestZ = z;
-                    bestTarget = target;
+                    bestDistance = hit.distance;
+                    bestTarget = pointerTarget;
                 }
             }
 
-            return bestTarget;
+            if (bestTarget != null)
+            {
+                return bestTarget;
+            }
+
+            foreach (HeroPointerTarget pointerTarget in _pointerTargets)
+            {
+                if (pointerTarget != null && pointerTarget.IsHovered)
+                {
+                    return pointerTarget;
+                }
+            }
+
+            return null;
         }
 
-        private HeroContextTarget _findTargetViaRegisteredTargets(Vector2 worldPoint)
+        private UnityEngine.Camera _resolveCamera()
         {
-            HeroContextTarget bestTarget = null;
-            float bestZ = float.NegativeInfinity;
-
-            for (int index = _targets.Count - 1; index >= 0; index--)
+            if (_camera != null)
             {
-                HeroContextTarget target = _targets[index];
-                if (target == null)
-                {
-                    _targets.RemoveAt(index);
-                    continue;
-                }
-
-                if (!target.CanOpenContextMenu() || !target.OverlapsPointer(worldPoint))
-                {
-                    continue;
-                }
-
-                float z = target.transform.position.z;
-                if (z >= bestZ)
-                {
-                    bestZ = z;
-                    bestTarget = target;
-                }
+                return _camera;
             }
 
-            return bestTarget;
-        }
-
-        private static bool _tryResolveContextTarget(Collider2D hit, out HeroContextTarget target)
-        {
-            target = hit.GetComponent<HeroContextTarget>()
-                     ?? hit.GetComponentInParent<HeroContextTarget>();
-            if (target != null)
+            try
             {
-                return true;
+                CameraView cameraView = Container.Instance.GetView<CameraView>();
+                _camera = cameraView?.Camera;
+            }
+            catch (Exception)
+            {
+                _camera = null;
             }
 
-            Hero hero = hit.GetComponentInParent<Hero>();
-            target = hero?.ContextTarget;
-            return target != null;
+            if (_camera == null)
+            {
+                _camera = UnityEngine.Camera.main;
+            }
+
+            foreach (HeroPointerTarget pointerTarget in _pointerTargets)
+            {
+                pointerTarget?.BindInput(_input, _camera);
+            }
+
+            return _camera;
         }
 
         private bool _isPointerOverScreenSpaceUi()
