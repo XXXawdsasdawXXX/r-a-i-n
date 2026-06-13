@@ -11,11 +11,9 @@ namespace CoreGame.Entities.Characters.Hero
 
         [SerializeField] private Hero _hero;
         [SerializeField] private Collider2D _clickCollider;
-        [SerializeField] private GameObject _contextMenu;
 
         public Hero Hero => _hero != null ? _hero : NetworkObject.GetComponent<Hero>();
         public Collider2D ClickCollider => _clickCollider != null ? _clickCollider : GetComponent<Collider2D>();
-        public GameObject ContextMenu => _contextMenu;
 
         public string DisplayName =>
             Hero?.Name != null && !string.IsNullOrEmpty(Hero.Name.Name)
@@ -26,7 +24,7 @@ namespace CoreGame.Entities.Characters.Hero
 
         public bool CanOpenContextMenu()
         {
-            if (Hero == null || !Hero.IsSpawned)
+            if (Hero == null || !Hero.IsClientInitialized)
             {
                 return false;
             }
@@ -44,12 +42,6 @@ namespace CoreGame.Entities.Characters.Hero
             if (Hero == null)
             {
                 return false;
-            }
-
-            Collider2D clickCollider = ClickCollider;
-            if (clickCollider != null && clickCollider.enabled && _colliderContainsPoint(clickCollider, worldPoint))
-            {
-                return true;
             }
 
             Collider2D[] colliders = Hero.GetComponentsInChildren<Collider2D>(true);
