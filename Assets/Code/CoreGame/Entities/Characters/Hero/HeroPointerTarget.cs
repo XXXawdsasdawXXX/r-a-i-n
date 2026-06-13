@@ -4,7 +4,6 @@ using Core.Input;
 using Core.ServiceLocator;
 using CoreGame.Camera;
 using FishNet;
-using FishNet.Object;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
