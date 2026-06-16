@@ -46,20 +46,13 @@ namespace UI.Components
             LocalizationSettings.SelectedLocaleChanged -= _onLocaleChanged;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             _clearHandler();
+            
+            base.OnDestroy();
         }
 
-        private void OnValidate()
-        {
-            if (_dynamicOverride)
-            {
-                return;
-            }
-
-            _localizedString?.RefreshString();
-        }
 
         public void SetText(string text)
         {
@@ -165,6 +158,18 @@ namespace UI.Components
             UnityEditor.SceneView.RepaintAll();
 #endif
         }
+
+#if UNITY_EDITOR        
+        private void OnValidate()
+        {
+            if (_dynamicOverride)
+            {
+                return;
+            }
+
+            _localizedString?.RefreshString();
+        }
+#endif
     }
 }
 
