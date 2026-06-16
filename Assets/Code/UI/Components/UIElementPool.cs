@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.GameLoop;
 using Core.ServiceLocator;
-using Sirenix.OdinInspector;
+using TriInspector;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

@@ -12,7 +12,7 @@ namespace GameKit.Dependencies.Utilities.Types.CanvasContainers
         /// Renderer to apply sprite on.
         /// </summary>
         [Tooltip("Renderer to apply sprite on.")]
-        [SerializeField, TabGroup("Components")]
+        [SerializeField, Header("Components")]
         protected Image Renderer;
 
         /// <summary>

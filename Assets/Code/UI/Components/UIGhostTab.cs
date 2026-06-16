@@ -1,8 +1,5 @@
-﻿using Core.GameLoop;
-using Core.ServiceLocator;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
-using Sirenix.OdinInspector;
+﻿using DG.Tweening;
+using TriInspector;
 using UI.Data;
 using UnityEngine;
 

@@ -4,7 +4,7 @@ using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Interfaces;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
-using Sirenix.OdinInspector;
+using TriInspector;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero

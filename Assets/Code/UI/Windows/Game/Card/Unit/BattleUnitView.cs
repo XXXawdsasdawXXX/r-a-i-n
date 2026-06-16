@@ -1,5 +1,4 @@
-﻿using Sirenix.OdinInspector;
-using Core.Localization;
+﻿using Core.Localization;
 using CoreGame.Card.Data;
 using UI.Components;
 using UI.Windows.Base;
@@ -7,9 +6,9 @@ using UnityEngine;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using TriInspector;
 using UI.Windows.Game.Card.Unit.Fx;
 using UI.Windows.Game.Card.Unit.Impacts;
-using UnityEngine.UI;
 
 namespace UI.Windows.Game.Card.Unit
 {

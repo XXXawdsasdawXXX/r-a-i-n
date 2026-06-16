@@ -6,8 +6,7 @@ using Core.ServiceLocator;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
-using Sirenix.OdinInspector;
-using Unity.Mathematics;
+using TriInspector;
 using UnityEditor;
 using UnityEngine;
 

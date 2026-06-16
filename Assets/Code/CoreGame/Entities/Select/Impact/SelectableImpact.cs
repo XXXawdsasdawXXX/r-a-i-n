@@ -1,5 +1,8 @@
-﻿namespace CoreGame.Entities.Select
+﻿using System;
+
+namespace CoreGame.Entities.Select
 {
+    [Serializable]
     public abstract class SelectableImpact
     {
          public abstract void Hovered(bool isHover);

@@ -1,7 +1,6 @@
 ﻿using System;
 using Core.Localization;
 using CoreGame.Card.Data;
-using Sirenix.OdinInspector;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,7 +100,7 @@ namespace UI.Windows.Game.Card
         }
 
 #if UNITY_EDITOR
-        [Button("Update View From Preview Config")]
+        [TriInspector.Button("Update View From Preview Config")]
         private void _updateViewFromPreviewConfig(CardConfiguration cardConfiguration)
         {
             UpdateViewFromConfig(cardConfiguration);

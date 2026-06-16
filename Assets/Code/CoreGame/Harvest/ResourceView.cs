@@ -1,8 +1,5 @@
-﻿using System;
-using Core.Data.RangeFloat;
-using Core.GameLoop;
+﻿using Core.GameLoop;
 using CoreGame.Entities.Animation;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CoreGame.Harvest

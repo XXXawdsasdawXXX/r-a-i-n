@@ -1,6 +1,5 @@
 ﻿using System;
 using JetBrains.Annotations;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,16 +12,16 @@ namespace UI.Components
         public event Action Deselected;
         public event Action Clicked;
 
-        [field: BoxGroup("Selectable")]
+        [field: Header("Selectable")]
         [field: SerializeField] public bool AutoSelect { get; private set; }
-        [field: BoxGroup("Selectable")]
+        [field: Header("Selectable")]
         [field: SerializeField] public int Index { get; private set; }
-        [field: BoxGroup("Selectable")]
+        [field: Header("Selectable")]
         [field: SerializeField] public bool IsSelected { get; private set; }
-        [field: BoxGroup("Selectable")]
+        [field: Header("Selectable")]
         [field: SerializeField] protected GameObject body { get; private set; }
 
-        [field: BoxGroup("Selectable")]
+        [field: Header("Selectable")]
         [Header("Can be null")]
         [SerializeField, CanBeNull] private UISelectableAnimation _selectableAnimation;
         

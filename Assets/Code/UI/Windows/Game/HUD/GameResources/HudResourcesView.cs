@@ -1,4 +1,4 @@
-﻿using Sirenix.OdinInspector;
+﻿using TriInspector;
 using UI.Components;
 using UI.Windows.Base;
 using UnityEngine;
