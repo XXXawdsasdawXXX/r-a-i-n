@@ -12,8 +12,6 @@ namespace CoreGame.Entities.Characters.Controllers
     {
         public event Action Started;
         public event Action Ended;
-        public string RuntimeListenerName => "Mainer";
-
         public Condition Condition { get; } = new();
         public MinerProcess Process { get; private set; }
         public bool IsMining { get; private set; }
@@ -23,6 +21,7 @@ namespace CoreGame.Entities.Characters.Controllers
         private readonly IHarvestAnimator _animator;
         private readonly Health _health;
 
+        
         public Mainer(IHarvestAnimator animator, Health health)
         {
             _resourceStorage = Container.Instance.GetService<ResourceStorage>();

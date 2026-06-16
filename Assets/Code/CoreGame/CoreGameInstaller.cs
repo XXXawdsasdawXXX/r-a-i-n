@@ -5,6 +5,7 @@ using CoreGame.Card.Logic;
 using CoreGame.Card.Logic.StateMachine;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Characters.Hero;
+using CoreGame.Entities.Select;
 using CoreGame.GameTime;
 using CoreGame.Grid;
 using CoreGame.Harvest;
@@ -35,7 +36,7 @@ namespace CoreGame
                 typeof(BattleStateMachine),
                 typeof(NetworkBattleService),
                 typeof(NetworkDuelService),
-                typeof(HeroContextMenuService)
+                typeof(SelectService)
             };
         }
     }

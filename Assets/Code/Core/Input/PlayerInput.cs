@@ -8,13 +8,12 @@ using UnityEngine.Scripting;
 namespace Core.Input
 {
     [Preserve]
-    public sealed class InputManager : IService, IUpdateListener, IExitListener
+    public sealed class PlayerInput : IService, IUpdateListener, IExitListener
     {
         public event Action<EInputAction> ActionStarted;
         public event Action<EInputAction> ActionEnded;
 
-        public string RuntimeListenerName => "InputManager";
-        public ReactiveProperty<Vector2> Direction { get; private set; } = new(Vector2.zero);
+        public ReactiveProperty<Vector2> Direction { get; } = new(Vector2.zero);
         public Vector3 MousePosition { get; private set; }
 
 

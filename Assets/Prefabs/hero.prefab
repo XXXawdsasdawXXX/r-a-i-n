@@ -259,8 +259,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1047437175584240034}
-  - {fileID: 1356570363391507603}
   - {fileID: 8727350893632354289}
+  - {fileID: 1356570363391507603}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9045540903597572497
@@ -284,6 +284,7 @@ MonoBehaviour:
   <Color>k__BackingField: {fileID: 3634067845205420892}
   <Animation>k__BackingField: {fileID: 323456471821699198}
   <ItemController>k__BackingField: {fileID: -227475778803773201}
+  <SelectTrigger>k__BackingField: {fileID: 6211463758466948449}
 --- !u!50 &7074728272879338317
 Rigidbody2D:
   serializedVersion: 4
@@ -691,10 +692,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8727350893632354289}
   - component: {fileID: 2832416800504898882}
-  - component: {fileID: 6215166456641444528}
+  - component: {fileID: 6211463758466948449}
   m_Layer: 0
-  m_Name: target-context
-  m_TagString: Untagged
+  m_Name: select
+  m_TagString: Selectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -759,7 +760,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6215166456641444528
+--- !u!114 &6211463758466948449
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -768,14 +769,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7103871862680835141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04b768800c82bd944b038e44550b2b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 567104c8c36245cbaba20e1c5f40b357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 8329376548906989968}
-  _networkObjectCache: {fileID: 0}
-  _hero: {fileID: 9045540903597572497}
-  _clickCollider: {fileID: 2832416800504898882}
+  <Type>k__BackingField: 1
+  _networkObject: {fileID: 8329376548906989968}
+  _impacts: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &1586195582607151685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -924,7 +926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5373249678718014023, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
       propertyPath: m_text
-      value: duel
+      value: "\u0434\u0443\u044D\u043B\u044C"
       objectReference: {fileID: 0}
     - target: {fileID: 5591413041431016122, guid: ca8761a0a231f17468f9a9749fb20a8b, type: 3}
       propertyPath: m_Pivot.x

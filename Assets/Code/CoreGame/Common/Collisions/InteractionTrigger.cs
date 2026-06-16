@@ -16,11 +16,11 @@ namespace CoreGame.Common.Collisions
 
         [SerializeField] private SelectableMaterial _selectableMaterial;
         
-        private InputManager _inputManager;
+        private PlayerInput _playerInput;
         
         public UniTask Initialize()
         {
-            _inputManager = Container.Instance.GetService<InputManager>();
+            _playerInput = Container.Instance.GetService<PlayerInput>();
             
             return UniTask.CompletedTask;
         }
@@ -47,11 +47,11 @@ namespace CoreGame.Common.Collisions
         {
             if (flag)
             {
-                _inputManager.ActionEnded += _tryInvokeInteraction;
+                _playerInput.ActionEnded += _tryInvokeInteraction;
             }
             else
             {
-                _inputManager.ActionEnded -= _tryInvokeInteraction;
+                _playerInput.ActionEnded -= _tryInvokeInteraction;
             }
         }
 

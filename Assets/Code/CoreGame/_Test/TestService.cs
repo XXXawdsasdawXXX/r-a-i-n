@@ -16,13 +16,13 @@ namespace CoreGame._Test
         public bool IsInitialized { get; set; }
         
         private GridService _gridService;
-        private InputManager _inputManager;
+        private PlayerInput _playerInput;
         private CameraView _cameraView;
         
         public UniTask Initialize()
         {
             _gridService = Container.Instance.GetService<GridService>();
-            _inputManager = Container.Instance.GetService<InputManager>();
+            _playerInput = Container.Instance.GetService<PlayerInput>();
             _cameraView = Container.Instance.GetView<CameraView>();
             
             return UniTask.CompletedTask;
@@ -30,19 +30,19 @@ namespace CoreGame._Test
 
         public void Subscribe()
         {
-            _inputManager.ActionEnded += _inputManagerOnActionEnded;
+            _playerInput.ActionEnded += PlayerInputOnActionEnded;
         }
 
         public void Unsubscribe()
         {
-            _inputManager.ActionEnded -= _inputManagerOnActionEnded;
+            _playerInput.ActionEnded -= PlayerInputOnActionEnded;
         }
 
-        private void _inputManagerOnActionEnded(EInputAction obj)
+        private void PlayerInputOnActionEnded(EInputAction obj)
         {
             if (obj is EInputAction.LeftClick)
             {
-                Vector3 worldPoint = _cameraView.ScreenToWorldPoint(_inputManager.MousePosition);
+                Vector3 worldPoint = _cameraView.ScreenToWorldPoint(_playerInput.MousePosition);
                 
                 worldPoint.z = 0;
                 

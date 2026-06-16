@@ -13,8 +13,6 @@ namespace CoreGame.Entities.Characters.Hero
     IInitializeListener, IUpdateListener
     {
         public bool IsInitialized { get; set; }
-        public string RuntimeListenerName => "HeroAnimation";
-
         public AnimatorKey.ECharacterAnimationState CurrentState { get; private set; }
         
         [SerializeField] private Animator _animator;

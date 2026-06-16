@@ -3,7 +3,6 @@ using Core.GameLoop;
 using Core.Localization;
 using Core.ServiceLocator;
 using CoreGame.Card.Logic;
-using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
 using FishNet;
 using UI.Components;
@@ -13,20 +12,23 @@ namespace UI.World
 {
     public sealed class HeroWorldContextMenu : Essential.Mono, IInitializeListener, ISubscriber
     {
-        public event Action Closed;
-
         public bool IsInitialized { get; set; }
+        public bool IsOpen => _isOpen;
+        public event Action Closed;
+        
+        [SerializeField] 
+        private RectTransform _body;
+        
+        [SerializeField] 
+        private UIButton _duelButton;
+        
+        [SerializeField] 
+        private UIText _duelButtonLabel;
 
-        [SerializeField] private RectTransform _body;
-        [SerializeField] private UIButton _duelButton;
-        [SerializeField] private UIText _duelButtonLabel;
-
-        private HeroContextTarget _target;
         private NetworkDuelService _duelService;
         private LocalizationService _localization;
         private bool _isOpen;
 
-        public bool IsOpen => _isOpen;
 
         public UniTask Initialize()
         {
@@ -52,12 +54,12 @@ namespace UI.World
             }
         }
 
-        public void Open(HeroContextTarget target)
+        /*public void Open(HeroContextTarget target)
         {
             _target = target;
             _refreshLabels();
             _setOpen(true);
-        }
+        }*/
 
         public void Close()
         {
@@ -72,7 +74,7 @@ namespace UI.World
 
         private void _onDuelClicked()
         {
-            if (_target == null || !InstanceFinder.IsClientStarted)
+            /*if (_target == null || !InstanceFinder.IsClientStarted)
             {
                 Close();
                 return;
@@ -86,7 +88,7 @@ namespace UI.World
             }
 
             _duelService.OpenChallengeSetup(_target.HeroObjectId, _target.DisplayName);
-            Close();
+            Close();*/
         }
 
         private void _refreshLabels()

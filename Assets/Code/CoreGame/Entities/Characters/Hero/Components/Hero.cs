@@ -6,10 +6,10 @@ using Core.Input;
 using Core.Save;
 using Core.ServiceLocator;
 using CoreGame.Card;
-using CoreGame.Card.Data;
 using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Params;
+using CoreGame.Entities.Select;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
@@ -29,13 +29,13 @@ namespace CoreGame.Entities.Characters.Hero
         [field: SerializeField] public HeroColor Color { get; private set; }
         [field: SerializeField] public HeroAnimation Animation { get; private set; }
         [field: SerializeField] public HeroItemController ItemController { get; private set; }
-        
+        [field: SerializeField] public SelectTrigger SelectTrigger { get; private set; }
         
         public override void InitializeComponents()
         {
             if (IsOwner)
             {
-                InputManager input = Container.Instance.GetService<InputManager>();
+                PlayerInput playerInput = Container.Instance.GetService<PlayerInput>();
                 HeroSettings heroSettings = Container.Instance.GetSO<HeroSettings>();
                 CardLibrary cardLibrary = Container.Instance.GetSO<CardLibrary>();
                 GameModel gameModel = Container.Instance.GetService<GameModel>();
@@ -69,17 +69,20 @@ namespace CoreGame.Entities.Characters.Hero
                     Model.SelectedDeckId = Model.Decks[0].Id;
                 }
                 
-                Movement movement = new(Rigidbody, input.Direction, heroSettings.MoveSpeed);
+                Movement movement = new(Rigidbody, playerInput.Direction, heroSettings.MoveSpeed);
                 Components.Add(typeof(Movement), movement);
                 
                 Mainer mainer = new(Animation, Health);
                 Components.Add(typeof(Mainer), mainer);
+
+                HeroSelectController selectController = new(this);
+                Components.Add(typeof(HeroSelectController), selectController);
                 
                 movement.Condition.Add(() => Animation.CurrentState is not 
                     AnimatorKey.ECharacterAnimationState.EAT and not 
                     AnimatorKey.ECharacterAnimationState.HARVEST);
                 
-                mainer.Condition.Add(() => input.Direction.Value == Vector2.zero);
+                mainer.Condition.Add(() => playerInput.Direction.Value == Vector2.zero);
 
                 foreach (KeyValuePair<Type, ICharacterComponent> characterComponent in Components)
                 {
