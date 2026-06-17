@@ -284,7 +284,7 @@ MonoBehaviour:
   <Color>k__BackingField: {fileID: 3634067845205420892}
   <Animation>k__BackingField: {fileID: 323456471821699198}
   <ItemController>k__BackingField: {fileID: -227475778803773201}
-  <SelectObject>k__BackingField: {fileID: 0}
+  <SelectObject>k__BackingField: {fileID: 6211463758466948449}
 --- !u!50 &7074728272879338317
 Rigidbody2D:
   serializedVersion: 4

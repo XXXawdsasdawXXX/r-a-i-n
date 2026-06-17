@@ -68,18 +68,28 @@ namespace CoreGame.Entities.Characters.Hero
         private bool _tryGetSelectedObject(out SelectObject selectObject)
         {
             selectObject = null;
-            
-            Ray ray = _camera.Camera.ScreenPointToRay(_input.MousePosition);
-            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, SelectableLayerMask);
-            
-            if (hit.collider != null)
+
+            Vector3 worldPoint = _camera.ScreenToWorldPoint(_input.MousePosition);
+            worldPoint.z = 0f;
+
+            Collider2D hit = Physics2D.OverlapPoint(worldPoint, SelectableLayerMask);
+            if (hit == null)
             {
-                if (hit.collider.TryGetComponent(out SelectObject selectable))
-                {
-                    selectObject = selectable;
-                }
+                return false;
             }
-            
+
+            if (!hit.CompareTag(SELECTABLE_TAG))
+            {
+                return false;
+            }
+
+            if (!hit.TryGetComponent(out SelectObject selectable))
+            {
+                selectable = hit.GetComponentInParent<SelectObject>();
+            }
+
+            selectObject = selectable;
+
             return selectObject != null;
         }
         
