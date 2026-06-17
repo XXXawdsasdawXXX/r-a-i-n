@@ -8,7 +8,7 @@ using UnityEngine.Scripting;
 namespace Core.Input
 {
     [Preserve]
-    public sealed class PlayerInput : IService, IUpdateListener, IExitListener
+    public sealed class InputService : IService, IUpdateListener, IExitListener
     {
         public event Action<EInputAction> ActionStarted;
         public event Action<EInputAction> ActionEnded;

@@ -27,7 +27,7 @@ namespace Core.Installers
                 typeof(UserProvider),
                 typeof(AudioService),
                 typeof(AudioGlobalVolume),
-                typeof(PlayerInput),
+                typeof(InputService),
                 typeof(LocalizationService),
             };
         }

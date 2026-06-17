@@ -29,13 +29,13 @@ namespace CoreGame.Entities.Characters.Hero
         [field: SerializeField] public HeroColor Color { get; private set; }
         [field: SerializeField] public HeroAnimation Animation { get; private set; }
         [field: SerializeField] public HeroItemController ItemController { get; private set; }
-        [field: SerializeField] public SelectTrigger SelectTrigger { get; private set; }
+        [field: SerializeField] public SelectObject SelectObject { get; private set; }
         
         public override void InitializeComponents()
         {
             if (IsOwner)
             {
-                PlayerInput playerInput = Container.Instance.GetService<PlayerInput>();
+                InputService inputService = Container.Instance.GetService<InputService>();
                 HeroSettings heroSettings = Container.Instance.GetSO<HeroSettings>();
                 CardLibrary cardLibrary = Container.Instance.GetSO<CardLibrary>();
                 GameModel gameModel = Container.Instance.GetService<GameModel>();
@@ -69,7 +69,7 @@ namespace CoreGame.Entities.Characters.Hero
                     Model.SelectedDeckId = Model.Decks[0].Id;
                 }
                 
-                Movement movement = new(Rigidbody, playerInput.Direction, heroSettings.MoveSpeed);
+                Movement movement = new(Rigidbody, inputService.Direction, heroSettings.MoveSpeed);
                 Components.Add(typeof(Movement), movement);
                 
                 Mainer mainer = new(Animation, Health);
@@ -82,7 +82,7 @@ namespace CoreGame.Entities.Characters.Hero
                     AnimatorKey.ECharacterAnimationState.EAT and not 
                     AnimatorKey.ECharacterAnimationState.HARVEST);
                 
-                mainer.Condition.Add(() => playerInput.Direction.Value == Vector2.zero);
+                mainer.Condition.Add(() => inputService.Direction.Value == Vector2.zero);
 
                 foreach (KeyValuePair<Type, ICharacterComponent> characterComponent in Components)
                 {

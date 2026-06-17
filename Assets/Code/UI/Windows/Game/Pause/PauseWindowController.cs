@@ -13,7 +13,7 @@ namespace UI.Windows.Game.Pause
     public class PauseWindowController : UIWindowController<PauseWindowView>
     {
         private AudioGlobalVolume _audioGlobalVolume;
-        private PlayerInput _playerInput;
+        private InputService _inputService;
         private LocalizationService _localization;
 
         private bool _isOpened;
@@ -21,7 +21,7 @@ namespace UI.Windows.Game.Pause
         public override UniTask InitializeWindow(UIWindowManager manager)
         {
             _audioGlobalVolume = Container.Instance.GetService<AudioGlobalVolume>();
-            _playerInput = Container.Instance.GetService<PlayerInput>();
+            _inputService = Container.Instance.GetService<InputService>();
             _localization = Container.Instance.GetService<LocalizationService>();
 
             return base.InitializeWindow(manager);
@@ -45,7 +45,7 @@ namespace UI.Windows.Game.Pause
         {
             if (flag)
             {
-                _playerInput.ActionEnded += PlayerInputOnActionEnded;
+                _inputService.ActionEnded += InputServiceOnActionEnded;
                 view.SliderMusic.Changed += _audioGlobalVolume.SetMusicVolume;
                 view.SliderSFX.Changed += _audioGlobalVolume.SetSFXVolume;
 
@@ -61,7 +61,7 @@ namespace UI.Windows.Game.Pause
             }
             else
             {
-                _playerInput.ActionEnded -= PlayerInputOnActionEnded;
+                _inputService.ActionEnded -= InputServiceOnActionEnded;
                 view.SliderMusic.Changed -= _audioGlobalVolume.SetMusicVolume;
                 view.SliderSFX.Changed -= _audioGlobalVolume.SetSFXVolume;
 
@@ -77,7 +77,7 @@ namespace UI.Windows.Game.Pause
             }
         }
 
-        private void PlayerInputOnActionEnded(EInputAction action)
+        private void InputServiceOnActionEnded(EInputAction action)
         {
             if (action is EInputAction.Esc)
             {
