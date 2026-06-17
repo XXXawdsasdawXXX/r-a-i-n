@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using TriInspector;
 using UnityEngine;
-
+    
 namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroAnimation : NetworkBehaviour, IHarvestAnimator, IAnimationStateReader,

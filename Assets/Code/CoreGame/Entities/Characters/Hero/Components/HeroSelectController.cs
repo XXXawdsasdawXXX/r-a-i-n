@@ -11,6 +11,8 @@ namespace CoreGame.Entities.Characters.Hero
     public class HeroSelectController : ICharacterComponent, ISubscriber, IUpdateListener
     {
         private const string SELECTABLE_TAG = "Selectable";
+        private static readonly int SelectableLayerMask = LayerMask.GetMask("Selectable");
+
         public Condition Condition { get; } = new();
         
         private readonly CameraView _camera;
@@ -68,9 +70,9 @@ namespace CoreGame.Entities.Characters.Hero
             selectObject = null;
             
             Ray ray = _camera.Camera.ScreenPointToRay(_input.MousePosition);
-            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity); //todo add layer mask
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, SelectableLayerMask);
             
-            if (hit.collider != null && hit.collider.CompareTag(SELECTABLE_TAG))
+            if (hit.collider != null)
             {
                 if (hit.collider.TryGetComponent(out SelectObject selectable))
                 {
