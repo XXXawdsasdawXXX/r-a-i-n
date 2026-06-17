@@ -61,18 +61,16 @@ namespace CoreGame.Entities.Characters.Hero
 
             _heroes[connection] = instance;
 
-            _initializeHeroComponents(instance);
             _setUserHero(connection, instance);
 
             return UniTask.CompletedTask;
         }
 
-        protected override IGameListener[] getGameListeners(in NetworkObject networkBehaviour)
+        public void RegisterHeroListeners(Hero hero)
         {
-            var hero = networkBehaviour.GetComponent<Hero>();
-            List<IGameListener> listeners = new();
+            List<IGameListener> listeners = new(hero.GetComponentsInChildren<IGameListener>(true));
 
-            foreach ((Type _, ICharacterComponent component) in hero.Components)
+            foreach (ICharacterComponent component in hero.Components.Values)
             {
                 if (component is IGameListener listener)
                 {
@@ -80,7 +78,21 @@ namespace CoreGame.Entities.Characters.Hero
                 }
             }
 
-            listeners.AddRange(hero.GetComponentsInChildren<IGameListener>(true));
+            registerGameListener(listeners.ToArray());
+        }
+
+        protected override IGameListener[] getGameListeners(in NetworkObject networkBehaviour)
+        {
+            Hero hero = networkBehaviour.GetComponent<Hero>();
+            List<IGameListener> listeners = new(hero.GetComponentsInChildren<IGameListener>(true));
+
+            foreach (ICharacterComponent component in hero.Components.Values)
+            {
+                if (component is IGameListener listener)
+                {
+                    listeners.Add(listener);
+                }
+            }
 
             return listeners.ToArray();
         }
@@ -140,17 +152,6 @@ namespace CoreGame.Entities.Characters.Hero
         }
         
 
-        [ObserversRpc]
-        private void _initializeHeroComponents(NetworkObject instance)
-        {
-            Hero hero = instance.GetComponent<Hero>();
-
-            hero.InitializeComponents();
-
-            registerGameListener(getGameListeners(instance));
-        }
-
-        
         [TargetRpc]
         private void _setUserHero(NetworkConnection connection, NetworkObject instance)
         {

@@ -10,6 +10,7 @@ using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Params;
 using CoreGame.Entities.Select;
+using FishNet.Object;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
@@ -30,6 +31,28 @@ namespace CoreGame.Entities.Characters.Hero
         [field: SerializeField] public HeroAnimation Animation { get; private set; }
         [field: SerializeField] public HeroItemController ItemController { get; private set; }
         [field: SerializeField] public SelectObject SelectObject { get; private set; }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            
+            if (!IsConstructed)
+            {
+                if (IsOwner)
+                {
+                    InitializeComponents();
+                }
+                else
+                {
+                    Destroy(Rigidbody);
+                }
+                
+                IsConstructed = true;
+            }
+
+            Container.Instance.GetService<HeroSpawner>().RegisterHeroListeners(this);
+        }
+        
         
         public override void InitializeComponents()
         {

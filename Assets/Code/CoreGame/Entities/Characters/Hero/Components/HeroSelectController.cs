@@ -71,18 +71,16 @@ namespace CoreGame.Entities.Characters.Hero
             return _camera.Camera.ScreenToWorldPoint(screenPoint);
         }
 
-        private readonly Collider2D[] _hits = new Collider2D[1];
         private bool _tryGetSelectedObject(out SelectObject selectObject)
         {
             selectObject = null;
 
             Vector2 worldPoint = _getMouseWorldPoint();
+            Collider2D[] hits = Physics2D.OverlapCircleAll(worldPoint, PICK_RADIUS);
 
-            Physics2D.OverlapCircleNonAlloc(worldPoint, PICK_RADIUS,  _hits);
-            
             float bestSqrDistance = float.MaxValue;
 
-            foreach (Collider2D hit in _hits)
+            foreach (Collider2D hit in hits)
             {
                 SelectObject candidate = _resolveSelectObject(hit);
                 if (candidate == null)
