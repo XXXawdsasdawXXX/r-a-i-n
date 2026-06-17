@@ -79,7 +79,7 @@ namespace CoreGame.Entities.Characters.Hero
             Vector2 worldPoint = _getMouseWorldPoint();
 
             Physics2D.OverlapCircleNonAlloc(worldPoint, PICK_RADIUS,  _hits);
-
+            
             float bestSqrDistance = float.MaxValue;
 
             foreach (Collider2D hit in _hits)
@@ -111,6 +111,11 @@ namespace CoreGame.Entities.Characters.Hero
 
         private static SelectObject _resolveSelectObject(Collider2D hit)
         {
+            if (hit == null)
+            {
+                return null;
+            }
+            
             if (hit.TryGetComponent(out SelectObject selectObject))
             {
                 return selectObject;
