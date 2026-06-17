@@ -51,16 +51,36 @@ namespace Core.Input
             
             foreach (InputActionKey inputActionKey in _inputActionKeys)
             {
-                if (UnityEngine.Input.GetKeyDown(inputActionKey.Key))
+                if (_wasActionPressed(inputActionKey))
                 {
                     ActionStarted?.Invoke(inputActionKey.Action);
                 }
                 
-                if (UnityEngine.Input.GetKeyUp(inputActionKey.Key))
+                if (_wasActionReleased(inputActionKey))
                 {
                     ActionEnded?.Invoke(inputActionKey.Action);
                 }
             }
+        }
+
+        private static bool _wasActionPressed(InputActionKey inputActionKey)
+        {
+            return inputActionKey.Key switch
+            {
+                KeyCode.Mouse0 => UnityEngine.Input.GetMouseButtonDown(0),
+                KeyCode.Mouse1 => UnityEngine.Input.GetMouseButtonDown(1),
+                _ => UnityEngine.Input.GetKeyDown(inputActionKey.Key)
+            };
+        }
+
+        private static bool _wasActionReleased(InputActionKey inputActionKey)
+        {
+            return inputActionKey.Key switch
+            {
+                KeyCode.Mouse0 => UnityEngine.Input.GetMouseButtonUp(0),
+                KeyCode.Mouse1 => UnityEngine.Input.GetMouseButtonUp(1),
+                _ => UnityEngine.Input.GetKeyUp(inputActionKey.Key)
+            };
         }
 
         public void GameExit()

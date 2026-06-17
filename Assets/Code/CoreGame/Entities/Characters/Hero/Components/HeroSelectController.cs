@@ -10,8 +10,7 @@ namespace CoreGame.Entities.Characters.Hero
 {
     public class HeroSelectController : ICharacterComponent, ISubscriber, IUpdateListener
     {
-        private const string SELECTABLE_TAG = "Selectable";
-        private static readonly int SelectableLayerMask = LayerMask.GetMask("Selectable");
+        private const float PICK_RADIUS = 0.5f;
 
         public Condition Condition { get; } = new();
         
@@ -43,17 +42,17 @@ namespace CoreGame.Entities.Characters.Hero
 
         public void GameUpdate(float deltaTime)
         {
+            if (!Condition.AreMet())
+            {
+                return;
+            }
+
             if (_tryGetSelectedObject(out SelectObject selectObject))
             {
                 if (_selectObject == selectObject)
                 {
                     return;
                 }
-
-                /*if (_selectObject.IsThis(_hero.Model.HeroId))
-                {
-                    // return;
-                }*/
 
                 _clearSelection();
                 
@@ -65,32 +64,60 @@ namespace CoreGame.Entities.Characters.Hero
             }
         }
 
+        private Vector2 _getMouseWorldPoint()
+        {
+            Vector3 screenPoint = _input.MousePosition;
+            screenPoint.z = _camera.Camera.WorldToScreenPoint(Vector3.zero).z;
+            return _camera.Camera.ScreenToWorldPoint(screenPoint);
+        }
+
+        private readonly Collider2D[] _hits = new Collider2D[1];
         private bool _tryGetSelectedObject(out SelectObject selectObject)
         {
             selectObject = null;
 
-            Vector3 worldPoint = _camera.ScreenToWorldPoint(_input.MousePosition);
-            worldPoint.z = 0f;
+            Vector2 worldPoint = _getMouseWorldPoint();
 
-            Collider2D hit = Physics2D.OverlapPoint(worldPoint, SelectableLayerMask);
-            if (hit == null)
+            Physics2D.OverlapCircleNonAlloc(worldPoint, PICK_RADIUS,  _hits);
+
+            float bestSqrDistance = float.MaxValue;
+
+            foreach (Collider2D hit in _hits)
             {
-                return false;
-            }
+                SelectObject candidate = _resolveSelectObject(hit);
+                if (candidate == null)
+                {
+                    continue;
+                }
 
-            if (!hit.CompareTag(SELECTABLE_TAG))
-            {
-                return false;
-            }
+                Hero hero = hit.GetComponentInParent<Hero>();
+                if (hero != null && hero.IsOwner)
+                {
+                    continue;
+                }
 
-            if (!hit.TryGetComponent(out SelectObject selectable))
-            {
-                selectable = hit.GetComponentInParent<SelectObject>();
-            }
+                float sqrDistance = ((Vector2)hit.ClosestPoint(worldPoint) - worldPoint).sqrMagnitude;
+                if (sqrDistance >= bestSqrDistance)
+                {
+                    continue;
+                }
 
-            selectObject = selectable;
+                bestSqrDistance = sqrDistance;
+                selectObject = candidate;
+            }
 
             return selectObject != null;
+        }
+
+        private static SelectObject _resolveSelectObject(Collider2D hit)
+        {
+            if (hit.TryGetComponent(out SelectObject selectObject))
+            {
+                return selectObject;
+            }
+
+            Hero hero = hit.GetComponentInParent<Hero>();
+            return hero != null ? hero.SelectObject : null;
         }
         
         private void _clearSelection()
