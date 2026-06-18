@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9062270c5530244bd1cf8ec090a65a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hero: {fileID: 9045540903597572497}
   _body: {fileID: 8074581406936682630}
   _duelButton: {fileID: 6448110956711244791}
   _duelButtonLabel: {fileID: 1767286410264383600}
