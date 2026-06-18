@@ -40,6 +40,8 @@ namespace UI.World
             _duelService = Container.Instance.GetService<NetworkDuelService>();
             _localization = Container.Instance.GetService<LocalizationService>();
             _setOpen(false);
+            
+            Debug.Log($"initialize context menu {_duelService != null}");
             return UniTask.CompletedTask;
         }
 
@@ -61,7 +63,7 @@ namespace UI.World
         
         private void _onDuelClicked()
         {
-            _duelService.OpenChallengeSetup(_hero.Model.HeroId, _hero.Model.Name);
+            _duelService.OpenChallengeSetup(_hero.NetworkObject.ObjectId.ToString(), _hero.Name.Name);
         }
 
         

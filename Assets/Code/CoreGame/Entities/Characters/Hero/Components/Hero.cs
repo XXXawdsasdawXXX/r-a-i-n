@@ -10,7 +10,6 @@ using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Params;
 using CoreGame.Entities.Select;
-using FishNet.Object;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
