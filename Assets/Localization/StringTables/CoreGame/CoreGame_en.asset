@@ -114,6 +114,50 @@ MonoBehaviour:
     m_Localized: trade
     m_Metadata:
       m_Items: []
+  - m_Id: 2800401150541824
+    m_Localized: 'Your gold: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2800506599538688
+    m_Localized: Challenge to duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2800565181382656
+    m_Localized: Challenge {0} to a duel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2800915963609088
+    m_Localized: Challenge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801037724254208
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801095681146880
+    m_Localized: Waiting for response
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801171224756224
+    m_Localized: 'Waiting for {0} to accept the duel. Stake: {1} gold.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801597282156544
+    m_Localized: Duel invitation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801658527383552
+    m_Localized: '{0} challenges you to a duel. Stake: {1} gold.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801869844807680
+    m_Localized: Accept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801912320524288
+    m_Localized: Decline
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

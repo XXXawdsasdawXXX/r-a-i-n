@@ -111,6 +111,50 @@ MonoBehaviour:
     m_Key: ui.core_game.hero_context.trade
     m_Metadata:
       m_Items: []
+  - m_Id: 2800401150541824
+    m_Key: ui.core_game.duel.gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2800506599538688
+    m_Key: ui.core_game.duel.setup_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2800565181382656
+    m_Key: ui.core_game.duel.setup_body
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2800915963609088
+    m_Key: ui.core_game.duel.challenge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801037724254208
+    m_Key: ui.core_game.duel.cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801095681146880
+    m_Key: ui.core_game.duel.waiting_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801171224756224
+    m_Key: ui.core_game.duel.waiting_body
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801597282156544
+    m_Key: ui.core_game.duel.invite_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801658527383552
+    m_Key: ui.core_game.duel.invite_body
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801869844807680
+    m_Key: ui.core_game.duel.accept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2801912320524288
+    m_Key: ui.core_game.duel.decline
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

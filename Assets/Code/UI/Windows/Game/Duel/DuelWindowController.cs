@@ -27,30 +27,19 @@ namespace UI.Windows.Game.Duel
 
         public override void SubscribeToEvents(bool flag)
         {
-            if (view == null)
-            {
-                return;
-            }
-
             if (flag)
             {
                 _duelService.DuelUiStateChanged += _onDuelUiStateChanged;
                 view.ButtonPrimary.Clicked += _onPrimaryClicked;
                 view.ButtonSecondary.Clicked += _onSecondaryClicked;
-                if (_localization != null)
-                {
-                    _localization.LocaleChanged += _onLocaleChanged;
-                }
+                _localization.LocaleChanged += _onLocaleChanged;
             }
             else
             {
                 _duelService.DuelUiStateChanged -= _onDuelUiStateChanged;
                 view.ButtonPrimary.Clicked -= _onPrimaryClicked;
                 view.ButtonSecondary.Clicked -= _onSecondaryClicked;
-                if (_localization != null)
-                {
-                    _localization.LocaleChanged -= _onLocaleChanged;
-                }
+                _localization.LocaleChanged -= _onLocaleChanged;
             }
         }
 
