@@ -3,7 +3,6 @@
     public enum EBattleMode
     {
         PvE,
-        PvP,
         Duel,
         CoOpPvE,
     }

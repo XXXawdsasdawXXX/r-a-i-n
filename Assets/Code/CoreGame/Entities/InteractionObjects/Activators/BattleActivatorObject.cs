@@ -94,7 +94,6 @@ namespace CoreGame.Entities.InteractionObjects.Activators
             return _battleMode switch
             {
                 EBattleMode.CoOpPvE => 2,
-                EBattleMode.PvP => 2,
                 EBattleMode.Duel => 2,
                 _ => 1
             };
@@ -110,7 +109,6 @@ namespace CoreGame.Entities.InteractionObjects.Activators
             return _battleMode switch
             {
                 EBattleMode.CoOpPvE => 1,
-                EBattleMode.PvP => 2,
                 EBattleMode.Duel => 2,
                 _ => 1
             };

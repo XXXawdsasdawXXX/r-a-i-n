@@ -14,7 +14,6 @@ namespace CoreGame.Harvest
     {
         public event Action<Resource> HarvestStarted;
         public event Action<Resource> Changed;
-        public event Action<Resource> HarvestEnded;
         [field: SerializeField] public EResource Type { get; private set; }
         [field: SerializeField] public float2 Position { get; private set; }
         [field: SerializeField] public ResourceConfig Config { get; private set; }

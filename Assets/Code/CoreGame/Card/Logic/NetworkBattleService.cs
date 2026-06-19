@@ -456,7 +456,7 @@ namespace CoreGame.Card.Logic
         {
             return lobby.Mode switch
             {
-                EBattleMode.PvP or EBattleMode.Duel => lobby.Players.Count >= 2,
+                EBattleMode.Duel => lobby.Players.Count >= 2,
                 _ => lobby.Players.Count >= 1
             };
         }
@@ -495,7 +495,6 @@ namespace CoreGame.Card.Logic
                         playerTwo.HeroId);
                     break;
                 }
-                case EBattleMode.PvP:
                 case EBattleMode.Duel when lobby.Players.Count >= 2:
                 {
                     BattleLobbyPlayer second = lobby.Players[1];
@@ -507,7 +506,7 @@ namespace CoreGame.Card.Logic
                     _battleService.StartBattleInternal(
                         playerOne,
                         playerTwo,
-                        lobby.Mode == EBattleMode.Duel ? EBattleMode.Duel : EBattleMode.PvP,
+                        EBattleMode.Duel,
                         EEnemyAIDifficulty.Normal,
                         null,
                         playerOne.HeroId,

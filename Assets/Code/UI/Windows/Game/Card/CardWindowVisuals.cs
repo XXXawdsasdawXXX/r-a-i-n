@@ -745,11 +745,11 @@ namespace UI.Windows.Game.Card
 
             if (bind)
             {
-                cell.Clicked += onCellClicked;
+                cell.CellClicked += onCellClicked;
             }
             else
             {
-                cell.Clicked -= onCellClicked;
+                cell.CellClicked -= onCellClicked;
             }
         }
 

@@ -7,7 +7,7 @@ namespace UI.Windows.Game.Card.Map
 {
     public class BattleGridCellView : UIButton
     {
-        public event Action<BattleGridCellView> Clicked;
+        public event Action<BattleGridCellView> CellClicked;
 
         [field: SerializeField] public UIImage Render { get; private set; }
         [field: SerializeField] public EBattleLine Line { get; private set; }
@@ -72,7 +72,7 @@ namespace UI.Windows.Game.Card.Map
         protected override void onClick()
         {
             base.onClick();
-            Clicked?.Invoke(this);
+            CellClicked?.Invoke(this);
         }
 
         protected override void OnDestroy()

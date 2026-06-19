@@ -100,8 +100,8 @@ namespace CoreGame.Card.Logic.Network
                 EBattleMode.CoOpPvE => localization.Get(
                     Table,
                     "ui.core_game.battle_lobby.solo_pve",
-                    "You can start solo — the battle will run as PvE."),
-                EBattleMode.PvP or EBattleMode.Duel => localization.Get(
+                    "You can start solo — the battle will run as PvE."), 
+                EBattleMode.Duel => localization.Get(
                     Table,
                     "ui.core_game.battle_lobby.not_enough_pvp",
                     "Not enough players for PvP."),
@@ -127,7 +127,7 @@ namespace CoreGame.Card.Logic.Network
             return Mode switch
             {
                 EBattleMode.CoOpPvE => "You can start solo — the battle will run as PvE.",
-                EBattleMode.PvP or EBattleMode.Duel => "Not enough players for PvP.",
+                EBattleMode.Duel => "Not enough players for PvP.",
                 _ => "You can start with the current lineup."
             };
         }
