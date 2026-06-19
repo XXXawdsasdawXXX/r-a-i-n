@@ -508,7 +508,6 @@ MonoBehaviour:
     Name: enemy
     Health: 100
     Armor: 0
-    Gold: 100
     InBattle: 0
     Stats:
       Agility: 0
@@ -1744,6 +1743,14 @@ PrefabInstance:
       value: 4261281151
       objectReference: {fileID: 0}
     - target: {fileID: 2554347414270922361, guid: 17514b0bf1a66534d866a5010c253ac3, type: 3}
+      propertyPath: <Type>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2554347414270922361, guid: 17514b0bf1a66534d866a5010c253ac3, type: 3}
+      propertyPath: <Config>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 061110e79754f5c468e18c61fc4ab612, type: 2}
+    - target: {fileID: 2554347414270922361, guid: 17514b0bf1a66534d866a5010c253ac3, type: 3}
       propertyPath: <Position>k__BackingField.x
       value: 4.48
       objectReference: {fileID: 0}
@@ -1816,6 +1823,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1868212183}
     m_Modifications:
+    - target: {fileID: 2292353642778145830, guid: 6ee34ec8ff89b1f4c926de3857e61dc3, type: 3}
+      propertyPath: <Type>k__BackingField
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2718550861471816202, guid: 6ee34ec8ff89b1f4c926de3857e61dc3, type: 3}
       propertyPath: <SceneId>k__BackingField
       value: 3154116415
@@ -1945,6 +1956,10 @@ PrefabInstance:
     - target: {fileID: 1808465267803512917, guid: 17514b0bf1a66534d866a5010c253ac3, type: 3}
       propertyPath: <SceneId>k__BackingField
       value: 3182820799
+      objectReference: {fileID: 0}
+    - target: {fileID: 2554347414270922361, guid: 17514b0bf1a66534d866a5010c253ac3, type: 3}
+      propertyPath: <Type>k__BackingField
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5939341835119669115, guid: 17514b0bf1a66534d866a5010c253ac3, type: 3}
       propertyPath: m_LocalPosition.x

@@ -1,10 +1,8 @@
-﻿using System;
-using Core.GameLoop;
+﻿using Core.GameLoop;
 using Core.ServiceLocator;
 using CoreGame.Harvest;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace UI.Components
 {
@@ -18,6 +16,7 @@ namespace UI.Components
         [SerializeField] private UIText _textValue;
        
         private ResourceCollection _resourceCollection;
+        
         
         public UniTask Initialize()
         {
@@ -36,12 +35,6 @@ namespace UI.Components
             _body.gameObject.SetActive(false);
         }
         
-        public void SetResource(EResource resourceType)
-        {
-            ResourceType = resourceType;
-            UpdateIcon();
-        }
-        
         public void SetValue(string value)
         {
             _textValue.SetText(value);
@@ -50,23 +43,6 @@ namespace UI.Components
         public void UpdateIcon()
         {
             _icon.SetSprite(_resourceCollection.Library.Get(ResourceType).Icon);
-        }
-
-        public Action Clicked { get; }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-       
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-       
         }
     }
 }

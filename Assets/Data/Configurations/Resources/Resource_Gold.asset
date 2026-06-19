@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0eb4478b744435296c6b2a0e3387cee, type: 3}
-  m_Name: Resource_Strawberry
+  m_Name: Resource_Gold
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 3
-  <HarvestType>k__BackingField: 1
-  <Icon>k__BackingField: {fileID: 5272401415994956661, guid: d362ffe8556496e499e0dd01611693fc, type: 3}
-  <WorldView>k__BackingField: {fileID: 1775669009216684005, guid: 057b442bd63761947883f0a186e1ac97, type: 3}
+  <Type>k__BackingField: 1
+  <HarvestType>k__BackingField: 2
+  <Icon>k__BackingField: {fileID: -589837483, guid: 19470176de1c3df408bb3af4d6927b69, type: 3}
+  <WorldView>k__BackingField: {fileID: -589837483, guid: 19470176de1c3df408bb3af4d6927b69, type: 3}
   <MaxValue>k__BackingField: 15
   <RemainingTime>k__BackingField: 2
   <GrowthUpdateFrequency>k__BackingField: 0

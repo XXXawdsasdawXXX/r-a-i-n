@@ -12,9 +12,6 @@ namespace Core.GameLoop
 {
     public sealed class GameEventDispatcher : Essential.Mono, IService
     {
-        private static readonly ProfilerMarker _fixedUpdateProfilerMarker = new("_notifyGameFixedUpdate:");
-        private static readonly ProfilerMarker _updateProfilerMarker = new("_notifyGameUpdate:");
-
         private readonly HashSet<IGameListener> _listeners = new();
         private readonly HashSet<IInitializeListener> _initListeners = new();
         private readonly HashSet<ILoadListener> _loadListeners = new();
@@ -29,6 +26,7 @@ namespace Core.GameLoop
 
         private bool _isStarted;
 
+        
         public void Initialize()
         {
             _saveService = Container.Instance.GetService<SaveService>();
@@ -85,10 +83,6 @@ namespace Core.GameLoop
             _fixedUpdateListeners.Clear();
             _exitListeners.Clear();
             _subscribers.Clear();
-            /*foreach (IGameListener listener in listeners)  
-      {
-          RemoveListener(listener);
-      }*/
 
             _isStarted = false;
         }
@@ -97,11 +91,11 @@ namespace Core.GameLoop
         {
             foreach (IGameListener listener in listeners)
             {
-                await InitializeListener(listener);
+                await _initializeListener(listener);
             }
         }
 
-        public async UniTask InitializeListener(IGameListener listener)
+        private async UniTask _initializeListener(IGameListener listener)
         {
             if (!_listeners.Add(listener))
             {
@@ -150,11 +144,11 @@ namespace Core.GameLoop
         {
             foreach (IGameListener listener in listeners)
             {
-                RemoveListener(listener);
+                _removeListener(listener);
             }
         }
 
-        public void RemoveListener(IGameListener listener)
+        private void _removeListener(IGameListener listener)
         {
             if (!_listeners.Remove(listener))
             {

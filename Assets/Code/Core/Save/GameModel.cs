@@ -16,7 +16,7 @@ namespace Core.Save
         public ReactiveProperty<int> LastHeroIndex;
         public ReactiveProperty<int> LastWorldIndex;
         
-        public List<HeroModel> Heroes;
+        public List<HeroModel> Heroes; //all players heroes 
         public List<WorldModel> Worlds;
         
 

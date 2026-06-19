@@ -63,7 +63,7 @@ namespace UI.Windows.MainMenu.NewGame
             {
                 Name = view.InputFieldGameName.Value,
                 CreateTime = _utcTime.Current,
-                ResourcesStorage = new Dictionary<int, int>(),
+                ExitTime =  _utcTime.Current,
                 SceneResources = new Dictionary<string, int>(),
             });
 

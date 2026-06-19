@@ -8,6 +8,7 @@ using CoreGame.Card.Data;
 using CoreGame.Card.Logic.Network;
 using CoreGame.Card.Logic.StateMachine;
 using CoreGame.Entities.Characters.Hero;
+using CoreGame.Harvest;
 using Cysharp.Threading.Tasks;
 using FishNet;
 using FishNet.Connection;
@@ -19,9 +20,8 @@ namespace CoreGame.Card.Logic
     public class NetworkDuelService : IService, IInitializeListener, ISubscriber
     {
         public bool IsInitialized { get; set; }
-
         public event Action<DuelUiState> DuelUiStateChanged;
-
+        
         private NetworkBattleService _networkBattleService;
         private BattleService _battleService;
         private BattleStateMachine _stateMachine;
@@ -35,6 +35,7 @@ namespace CoreGame.Card.Logic
         private string _localTargetHeroId;
         private string _localTargetName;
 
+        
         public UniTask Initialize()
         {
             _networkBattleService = Container.Instance.GetService<NetworkBattleService>();
@@ -42,6 +43,7 @@ namespace CoreGame.Card.Logic
             _stateMachine = Container.Instance.GetService<BattleStateMachine>();
             _heroSpawner = Container.Instance.GetService<HeroSpawner>();
             _userProvider = Container.Instance.GetService<UserProvider>();
+      
             return UniTask.CompletedTask;
         }
 
@@ -175,7 +177,7 @@ namespace CoreGame.Card.Logic
         private int _getLocalHeroGold()
         {
             Hero hero = _userProvider.GetHeroComponent<Hero>();
-            return hero?.Model?.Gold ?? 0;
+            return hero != null ? hero.Model?.ResourcesStorage[(int)EResource.Gold] ?? 0 : 0;
         }
 
         private void _onDuelActionRequest(NetworkConnection connection, DuelActionRequestBroadcast request, Channel channel)
@@ -473,7 +475,11 @@ namespace CoreGame.Card.Logic
                 return;
             }
 
-            HeroGoldSyncBroadcast update = new HeroGoldSyncBroadcast { Gold = gold };
+            HeroGoldSyncBroadcast update = new()
+            {
+                Gold = gold
+            };
+            
             if (connection.IsLocalClient && InstanceFinder.IsClientStarted)
             {
                 _applyGoldSync(update);
@@ -517,7 +523,7 @@ namespace CoreGame.Card.Logic
                 return;
             }
 
-            DuelUiState state = new DuelUiState(
+            DuelUiState state = new(
                 true,
                 broadcast.Role,
                 broadcast.OpponentName,
@@ -546,9 +552,9 @@ namespace CoreGame.Card.Logic
         private void _applyGoldSync(HeroGoldSyncBroadcast broadcast)
         {
             Hero hero = _userProvider.GetHeroComponent<Hero>();
-            if (hero?.Model != null)
+            if (hero != null && hero.Model != null)
             {
-                hero.Model.Gold = broadcast.Gold;
+                hero.Model.ResourcesStorage[(int)EResource.Gold] = broadcast.Gold;
             }
         }
 

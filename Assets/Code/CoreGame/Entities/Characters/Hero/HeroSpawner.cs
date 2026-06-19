@@ -11,26 +11,10 @@ using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
 {
-    public class HeroSpawner : NetworkPool, ISubscriber
+    public class HeroSpawner : NetworkPool
     {
         private readonly Dictionary<NetworkConnection, NetworkObject> _heroes = new();
-        private UserProvider _userProvider;
-
         
-        public override UniTask Initialize()
-        {
-            _userProvider = Container.Instance.GetService<UserProvider>();
-
-            return base.Initialize();
-        }
-
-        public void Subscribe()
-        {
-        }
-
-        public void Unsubscribe()
-        {
-        }
 
         public override void OnStartServer()
         {

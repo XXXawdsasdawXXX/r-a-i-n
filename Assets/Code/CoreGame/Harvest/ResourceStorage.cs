@@ -13,8 +13,6 @@ namespace CoreGame.Harvest
 {
     public class ResourceStorage : IService, ILoadListener, ISubscriber
     {
-        private GameModel _model;
-
         public struct ResourceBroadcast : IBroadcast
         {
             public Dictionary<EResource, int> Collection;
@@ -26,17 +24,17 @@ namespace CoreGame.Harvest
         }
 
         public event Action<KeyValuePair<EResource, int>> ValueChanged;
-        
         public event Action<Dictionary<EResource, int>> CollectionChanged;
-        
         public Dictionary<EResource, int> Collection { get; private set; }
-
+        
+        private GameModel _model;
+        
         
         public UniTask GameLoad(GameModel model)
         {
             _model = model;
             
-            Dictionary<int, int> savedCollection = model.World.ResourcesStorage;
+            Dictionary<int, int> savedCollection = model.Hero.ResourcesStorage;
 
             Collection = new Dictionary<EResource, int>();
 
@@ -82,7 +80,7 @@ namespace CoreGame.Harvest
             
             Collection[resource] += value;
 
-            _model.World.ResourcesStorage[(int)resource] = Collection[resource];   
+            _model.Hero.ResourcesStorage[(int)resource] = Collection[resource];   
             
             InstanceFinder.ServerManager.Broadcast(new ResourceBroadcast(Collection));
             
@@ -98,7 +96,7 @@ namespace CoreGame.Harvest
             
             Collection[resource] -= value;
             
-            _model.World.ResourcesStorage[(int)resource] = Collection[resource];
+            _model.Hero.ResourcesStorage[(int)resource] = Collection[resource];
             
             InstanceFinder.ServerManager.Broadcast(new ResourceBroadcast(Collection));
             

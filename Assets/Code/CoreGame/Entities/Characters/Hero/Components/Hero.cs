@@ -10,6 +10,7 @@ using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Controllers;
 using CoreGame.Entities.Params;
 using CoreGame.Entities.Select;
+using Essential;
 using UnityEngine;
 
 namespace CoreGame.Entities.Characters.Hero
@@ -112,6 +113,8 @@ namespace CoreGame.Entities.Characters.Hero
                     characterComponent.Value.Condition.Add(() => !Model.InBattle);
                 }
                 
+                Log.Info(this, "init");
+
                 Health.Set(Model.Health);
                 Name.SetName(Model.Name);
             }

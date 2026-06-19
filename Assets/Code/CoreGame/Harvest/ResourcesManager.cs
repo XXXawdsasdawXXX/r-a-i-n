@@ -15,7 +15,6 @@ namespace CoreGame.Harvest
     public class ResourcesManager : Essential.Mono, IService, IInitializeListener, ILoadListener, ISubscriber
     {
         public bool IsInitialized { get; set; }
-        public string RuntimeListenerName => "ResourceManager";
 
         [SerializeField] private ResourceCollection _resourceCollection;
         [SerializeField] private Resource[] _resources;
@@ -25,6 +24,7 @@ namespace CoreGame.Harvest
         private Mainer _mainer;
         private GameModel _gameModel;
 
+        
         public UniTask Initialize()
         {
             _userProvider = Container.Instance.GetService<UserProvider>();

@@ -28,7 +28,6 @@ namespace CoreGame.Card.Logic.Network
                 HeroId = hero.HeroId,
                 Name = hero.Name,
                 Health = hero.Health,
-                Gold = hero.Gold,
                 Stats = hero.Stats,
                 SelectedDeckId = hero.SelectedDeckId,
                 Deck = hero.Deck != null ? new List<string>(hero.Deck) : new List<string>(),
@@ -43,11 +42,10 @@ namespace CoreGame.Card.Logic.Network
                 HeroId = HeroId,
                 Name = Name,
                 Health = Health,
-                Gold = Gold,
                 Stats = Stats ?? new HeroStats(),
                 SelectedDeckId = SelectedDeckId,
                 Deck = Deck ?? new List<string>(),
-                Decks = Decks ?? new List<SavedDeckDefinition>()
+                Decks = Decks ?? new List<SavedDeckDefinition>(),
             };
         }
     }

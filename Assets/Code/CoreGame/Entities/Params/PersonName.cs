@@ -12,13 +12,7 @@ namespace CoreGame.Entities.Params
 
         private readonly SyncVar<string> _name = new();
 
-        public override void OnStartClient()
-        {
-            //enabled = IsOwner;
-            
-            SetName(GetHashCode().ToString());
-        }
-
+        
         public void Subscribe()
         {
             _name.OnChange += OnNameChanged;

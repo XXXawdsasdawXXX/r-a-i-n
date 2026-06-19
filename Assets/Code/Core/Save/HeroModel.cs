@@ -12,25 +12,33 @@ namespace Core.Save
         public string Name;
         public int Health;
         public int Armor;
-        public int Gold;
         public bool InBattle;
-        
-        public TimeSpan GameTime;
-        public TimeSpan ExitTime;
 
         public HeroStats Stats;
     
+        public Dictionary<int, int> ResourcesStorage = new();
+
         public List<string> CardCollection; // все карты которые есть у игрока (id)
         public List<string> Deck;           // собранная колода (id), макс 30
         public List<SavedDeckDefinition> Decks;
         public string SelectedDeckId;
+        
+        public TimeSpan CreateTime;
+        public TimeSpan GameTime;
+        public TimeSpan ExitTime;
         
         
         public HeroModel()
         {
             Name = "name";
             Health = 100;
-            Gold = 100;
+
+            ResourcesStorage = new Dictionary<int, int>()
+            {
+                { 1, 100 }, // gold
+                { 2, 0 }, // starwberry
+                { 3, 0 }, // cristal
+            };
 
             GameTime = new TimeSpan();
             ExitTime = new TimeSpan();

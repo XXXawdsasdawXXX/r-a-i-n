@@ -19,16 +19,8 @@ namespace UI.Windows.Game.HUD.GameResources
         {
             _resourceStorage = Container.Instance.GetService<ResourceStorage>();
             
-            return base.InitializeWindow(manager);
-        }
-
-        
-        public UniTask GameStart()
-        {
             foreach (UIResourceBoxView resourceBox in view.ResourceBoxViews)
             {
-                resourceBox.UpdateIcon();
-
                 if (_resourcesView.ContainsKey(resourceBox.ResourceType))
                 {
                     continue;
@@ -37,14 +29,18 @@ namespace UI.Windows.Game.HUD.GameResources
                 _resourcesView.Add(resourceBox.ResourceType, resourceBox);
             }
             
-            return UniTask.CompletedTask;
+            return base.InitializeWindow(manager);
         }
         
-        public override void StartWindow()
+        public UniTask GameStart()
         {
-            _updateResourcesView(_resourceStorage.Collection);
+            foreach (UIResourceBoxView resourceBox in view.ResourceBoxViews)
+            {
+                resourceBox.UpdateIcon();
+            }
+            
+            return UniTask.CompletedTask;
         }
-
 
         public override void SubscribeToEvents(bool flag)
         {
@@ -61,7 +57,12 @@ namespace UI.Windows.Game.HUD.GameResources
                 _resourceStorage.CollectionChanged -= _updateResourcesView;
             }
         }
-        
+
+        public override void StartWindow()
+        {
+            _updateResourcesView(_resourceStorage.Collection);
+        }
+
         private void _updateResourcesView(Dictionary<EResource, int> collection)
         {
             foreach (KeyValuePair<EResource, int> resource in collection)
@@ -74,9 +75,8 @@ namespace UI.Windows.Game.HUD.GameResources
         {
             if (_resourcesView.ContainsKey(resource.Key))
             {
-                _resourcesView[resource.Key].SetValue(resource.Value.ToString());
+                _resourcesView[resource.Key]?.SetValue(resource.Value.ToString());
             }
         }
-
     }
 }

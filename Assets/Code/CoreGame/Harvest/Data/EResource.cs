@@ -2,8 +2,9 @@
 {
     public enum EResource
     {
-        NONE,
-        CRISTAL,
-        STRAWBERRY
+        None,
+        Gold,
+        Cristal,
+        Strawberry,
     }
 }

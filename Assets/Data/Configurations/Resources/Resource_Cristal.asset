@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0eb4478b744435296c6b2a0e3387cee, type: 3}
   m_Name: Resource_Cristal
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
+  <Type>k__BackingField: 2
   <HarvestType>k__BackingField: 2
   <Icon>k__BackingField: {fileID: -1132588812051559309, guid: d362ffe8556496e499e0dd01611693fc, type: 3}
   <WorldView>k__BackingField: {fileID: -3078083934616155285, guid: c3158fa75c1b0ea4a966cec19c662f96, type: 3}
   <MaxValue>k__BackingField: 30
   <RemainingTime>k__BackingField: 24
+  <GrowthUpdateFrequency>k__BackingField: 0
   <HarvestTime>k__BackingField: 3
   <HealthPrice>k__BackingField: 5
   <ResourcePerTick>k__BackingField: 5

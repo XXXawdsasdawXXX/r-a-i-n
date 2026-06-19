@@ -65,7 +65,6 @@ namespace UI.World
         {
             _duelService.OpenChallengeSetup(_hero.NetworkObject.ObjectId.ToString(), _hero.Name.Name);
         }
-
         
         private void _setOpen(bool isOpen)
         {
