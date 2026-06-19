@@ -524,7 +524,7 @@ MonoBehaviour:
     Decks: []
     SelectedDeckId: 
   _activatorKey: 
-  _battleMode: 3
+  _battleMode: 2
   _maxPlayers: 2
   _minPlayers: 0
   _requiredPlayers: 2
