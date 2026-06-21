@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.ServiceLocator;
+using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 
@@ -46,6 +47,16 @@ namespace Core.Network
             _heroComponents.Add(type, component);
             
             return component;
+        }
+        
+        public static int GetOnlinePlayerCount()
+        {
+            if (!InstanceFinder.IsServerStarted)
+            {
+                return InstanceFinder.IsClientStarted ? 1 : 0;
+            }
+
+            return InstanceFinder.ServerManager.Clients.Count;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.GameLoop;
+using Core.Network;
 using Core.Save;
 using Core.ServiceLocator;
 using CoreGame.Card.Data;
@@ -253,19 +254,10 @@ namespace CoreGame.Card.Logic
             _syncBattleState(isBattleStarted: true);
         }
 
-        private static int _getOnlinePlayerCount()
-        {
-            if (!InstanceFinder.IsServerStarted)
-            {
-                return InstanceFinder.IsClientStarted ? 1 : 0;
-            }
-
-            return InstanceFinder.ServerManager.Clients.Count;
-        }
 
         private static bool _shouldShowLobby()
         {
-            return _getOnlinePlayerCount() >= 2;
+            return UserProvider.GetOnlinePlayerCount() >= 2;
         }
 
         private void _onJoinRequest(NetworkConnection connection, BattleJoinRequestBroadcast request, Channel channel)
@@ -287,7 +279,7 @@ namespace CoreGame.Card.Logic
                 return;
             }
 
-            if (_getOnlinePlayerCount() < 2)
+            if (UserProvider.GetOnlinePlayerCount() < 2)
             {
                 _startSoloActivatorBattle(connection, request);
                 return;
@@ -730,7 +722,7 @@ namespace CoreGame.Card.Logic
                 IsHost = lobby.HostConnection == recipient,
                 AllowEarlyStart = lobby.AllowEarlyStart,
                 ShouldShowLobby = _shouldShowLobby(),
-                OnlinePlayersCount = _getOnlinePlayerCount()
+                OnlinePlayersCount = UserProvider.GetOnlinePlayerCount()
             };
         }
 
