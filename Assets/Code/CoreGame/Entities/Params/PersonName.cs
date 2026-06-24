@@ -27,8 +27,6 @@ namespace CoreGame.Entities.Params
         public void SetName(string personName)
         {
             _name.Value = personName;
-         
-            Changed?.Invoke(personName);
         }
 
         private void OnNameChanged(string prev, string next, bool asserver)

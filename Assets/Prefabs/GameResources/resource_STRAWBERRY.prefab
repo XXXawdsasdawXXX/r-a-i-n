@@ -141,6 +141,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: eeb8221a4488ac745a3dbfe5d25c0001, type: 2}
+    - target: {fileID: 3324172832857016071, guid: 6ea06861bccb4994ba2d6370418e1693, type: 3}
+      propertyPath: <Type>k__BackingField
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3568667015911800187, guid: 6ea06861bccb4994ba2d6370418e1693, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0

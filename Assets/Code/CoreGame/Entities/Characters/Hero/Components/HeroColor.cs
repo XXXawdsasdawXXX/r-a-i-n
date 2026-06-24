@@ -11,12 +11,13 @@ namespace CoreGame.Entities.Characters.Hero
     public class HeroColor : NetworkBehaviour, ISubscriber, IExitListener
     {
         [SerializeField] private Health _health;
-        [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private SpriteRenderer[] _spriteRenderers;
 
         private ColorTweenData _damageTween;
 
-        private Tween _tween;
-
+        private Sequence _sequence;
+        
+        
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -38,7 +39,7 @@ namespace CoreGame.Entities.Characters.Hero
         
         public void GameExit()
         {
-            _tween?.Kill();
+            _sequence?.Kill();
         }
 
         [ServerRpc]
@@ -50,8 +51,15 @@ namespace CoreGame.Entities.Characters.Hero
         [ObserversRpc]
         private void _observer_PlayDamageTween()
         {
-            _tween?.Kill();
-            _tween = _spriteRenderer.DOColor(_damageTween.Color, _damageTween.Duration).SetLoops(2, LoopType.Yoyo);
+            _sequence?.Kill();
+            _sequence = DOTween.Sequence();
+            
+            foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
+            {
+                _sequence.Join(spriteRenderer
+                    .DOColor(_damageTween.Color, _damageTween.Duration)
+                    .SetLoops(2, LoopType.Yoyo));
+            }
         }
     }
 }

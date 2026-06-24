@@ -102,8 +102,8 @@ namespace CoreGame.Entities.Characters.Hero
                 Components.Add(typeof(HeroSelectController), selectController);
                 
                 movement.Condition.Add(() => Animation.CurrentState is not 
-                    AnimatorKey.ECharacterAnimationState.EAT and not 
-                    AnimatorKey.ECharacterAnimationState.HARVEST);
+                    AnimatorKey.ECharacterAnimationState.Eat and not 
+                    AnimatorKey.ECharacterAnimationState.Harvest);
                 
                 mainer.Condition.Add(() => inputService.Direction.Value == Vector2.zero);
 

@@ -1,46 +1,28 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace CoreGame.Entities.Animation
 {
-    [InitializeOnLoad]
     public static class AnimatorKey
     {
-
-        static AnimatorKey()
-        {
-#if UNITY_EDITOR
-            _initCharacterStates();
-#endif
-        }
-
-        public static readonly int PARAM_ANIMATION_SPEED = Animator.StringToHash("AnimationSpeed");
-        
-        #region resources
-
-        public static readonly int PARAM_RESOURCE_VALUE = Animator.StringToHash("ResourceValue");
-
-        #endregion
-    
-
-        #region characters
-        
         public enum ECharacterAnimationState  
         {
-            IDLE,
-            MOVE,
-            HARVEST,
-            EAT,
+            Idle,
+            Move,
+            Harvest,
+            Eat,
         }
 
         public enum EHarvestType
         {
-            NONE = 0,
-            PICK_UP = 1,
-            MINE = 2
+            None = 0,
+            Mine = 1,
+            PickUp = 2,
         }
         
+        public static readonly int PARAM_ANIMATION_SPEED = Animator.StringToHash("AnimationSpeed");
+        public static readonly int PARAM_RESOURCE_VALUE = Animator.StringToHash("ResourceValue");
+
         public static readonly int PARAM_HARVEST_TYPE = Animator.StringToHash("HarvestType");
         public static readonly int PARAM_SPEED = Animator.StringToHash("Speed");
         public static readonly int PARAM_EAT = Animator.StringToHash("IsEat");
@@ -52,21 +34,14 @@ namespace CoreGame.Entities.Animation
         private static readonly int STATE_MINE = Animator.StringToHash("Mine");
         private static readonly int STATE_PICK_UP = Animator.StringToHash("PickUp");
         
-        public static Dictionary<int, ECharacterAnimationState> CHARACTER_STATES;
-        
-        private static void _initCharacterStates()
+        public static readonly Dictionary<int, ECharacterAnimationState> CHARACTER_STATES = new()
         {
-            CHARACTER_STATES = new()
-            {
-                {STATE_IDLE, ECharacterAnimationState.IDLE},
-                {STATE_MOVE, ECharacterAnimationState.MOVE},
-                {STATE_HARVEST, ECharacterAnimationState.HARVEST},
-                {STATE_MINE, ECharacterAnimationState.HARVEST},
-                {STATE_PICK_UP, ECharacterAnimationState.HARVEST},
-                {STATE_EAT, ECharacterAnimationState.EAT},
-            };
-        }
-        
-        #endregion
+            {STATE_IDLE, ECharacterAnimationState.Idle},
+            {STATE_MOVE, ECharacterAnimationState.Move},
+            {STATE_HARVEST, ECharacterAnimationState.Harvest},
+            {STATE_MINE, ECharacterAnimationState.Harvest},
+            {STATE_PICK_UP, ECharacterAnimationState.Harvest},
+            {STATE_EAT, ECharacterAnimationState.Eat},
+        };
     }
 }

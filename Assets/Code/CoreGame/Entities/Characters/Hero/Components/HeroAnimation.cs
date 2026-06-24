@@ -1,4 +1,5 @@
-﻿using Core.Data;
+﻿using System.Linq;
+using Core.Data;
 using Core.GameLoop;
 using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Interfaces;
@@ -18,6 +19,7 @@ namespace CoreGame.Entities.Characters.Hero
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _viewBody;
         [SerializeField] private Rigidbody2D _rigidbody2D;
+        [SerializeField] private GameObject[] _tools;
 
         private Cache<Vector3> _velocityCache;
 
@@ -51,14 +53,33 @@ namespace CoreGame.Entities.Characters.Hero
             }
         }
         
-        [Button, ServerRpc] public void StartEat() => 
+        [Button, ServerRpc] public void StartEat()
+        {
             _animator.SetBool(AnimatorKey.PARAM_EAT, true);
-        [Button, ServerRpc] public void StopEat() => 
+        }
+
+        [Button, ServerRpc] public void StopEat()
+        {
             _animator.SetBool(AnimatorKey.PARAM_EAT, false);
-        [Button, ServerRpc] public void StartMine(AnimatorKey.EHarvestType harvestType) => 
-            _animator.SetInteger(AnimatorKey.PARAM_HARVEST_TYPE, (int)harvestType);
-        [Button, ServerRpc] public void StopMine() => 
+        }
+
+        [Button, ServerRpc] public void StartMine(AnimatorKey.EHarvestType harvestType)
+        {
+            int type = (int)harvestType;
+            _animator.SetInteger(AnimatorKey.PARAM_HARVEST_TYPE, type);
+        
+            if (_tools.Length > type && type > 0)
+            {
+                _tools[type - 1].SetActive(true);
+                Debug.Log($"active tool {type - 1}");
+            }
+        }
+
+        [Button, ServerRpc] public void StopMine()
+        {
             _animator.SetInteger(AnimatorKey.PARAM_HARVEST_TYPE, 0);
+            _tools.FirstOrDefault(t => t.activeSelf)?.SetActive(false);
+        }
 
         [ServerRpc]
         private void _rotateServerRpc(float velocityX)
@@ -78,7 +99,6 @@ namespace CoreGame.Entities.Characters.Hero
             if (AnimatorKey.CHARACTER_STATES.ContainsKey(stateHash))
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
-                
             }
         }
 
@@ -87,7 +107,6 @@ namespace CoreGame.Entities.Characters.Hero
             if (AnimatorKey.CHARACTER_STATES.ContainsKey(stateHash))
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
-                
             }
         }
     }
