@@ -19,10 +19,10 @@ namespace CoreGame.Entities.Characters.Hero
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _viewBody;
         [SerializeField] private Rigidbody2D _rigidbody2D;
-        [SerializeField] private GameObject[] _tools;
 
         private Cache<Vector3> _velocityCache;
 
+        
         public UniTask Initialize()
         {
             if (!IsOwner)
@@ -67,18 +67,11 @@ namespace CoreGame.Entities.Characters.Hero
         {
             int type = (int)harvestType;
             _animator.SetInteger(AnimatorKey.PARAM_HARVEST_TYPE, type);
-        
-            if (_tools.Length > type && type > 0)
-            {
-                _tools[type - 1].SetActive(true);
-                Debug.Log($"active tool {type - 1}");
-            }
         }
 
         [Button, ServerRpc] public void StopMine()
         {
             _animator.SetInteger(AnimatorKey.PARAM_HARVEST_TYPE, 0);
-            _tools.FirstOrDefault(t => t.activeSelf)?.SetActive(false);
         }
 
         [ServerRpc]
