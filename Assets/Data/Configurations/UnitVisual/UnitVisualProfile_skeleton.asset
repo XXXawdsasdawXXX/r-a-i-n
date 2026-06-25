@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e5f3d02c6e41b8af4d8e9234567bc2, type: 3}
+  m_Name: UnitVisualProfile_skeleton
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: hero-skeleton
+  <DisplayMode>k__BackingField: 1
+  <SkeletonPrefab>k__BackingField: {fileID: 1823659631528741782, guid: b73449720ffa76b439e13815eed28537, type: 3}
+  <AnimatorController>k__BackingField: {fileID: 9100000, guid: ff04280fd7a31d848bd1f6956c9dab10, type: 2}
+  <ViewBodyChildName>k__BackingField: body
+  <StudioCameraSize>k__BackingField: 0.85
+  <StudioInstanceScale>k__BackingField: 1.2
+  <StudioInstanceOffset>k__BackingField: {x: 0, y: -0.6}
+  <UiDisplayScale>k__BackingField: 1.2
+  <StaticSprite>k__BackingField: {fileID: 0}

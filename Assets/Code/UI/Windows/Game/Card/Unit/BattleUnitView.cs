@@ -1,7 +1,9 @@
 ﻿using Core.Localization;
+using Core.ServiceLocator;
 using CoreGame.Card.Data;
 using UI.Components;
 using UI.Windows.Base;
+using UI.Windows.Game.Card.Unit.Visual;
 using UnityEngine;
 using System.Linq;
 using System;
@@ -9,6 +11,7 @@ using System.Collections.Generic;
 using TriInspector;
 using UI.Windows.Game.Card.Unit.Fx;
 using UI.Windows.Game.Card.Unit.Impacts;
+using UnityEngine.UI;
 
 namespace UI.Windows.Game.Card.Unit
 {
@@ -19,7 +22,23 @@ namespace UI.Windows.Game.Card.Unit
         public event Action<BattleUnitView> HoverExited;
 
         public UIHighlightMaterialController HighlightController { get; private set; }
-        public Material HighlightMaterialTemplate => BattleHighlightStyle.ResolveHighlightMaterial(Render?.Image?.material);
+        public Material HighlightMaterialTemplate =>
+            BattleHighlightStyle.ResolveHighlightMaterial(_resolveHighlightTemplateSource());
+
+        private Material _resolveHighlightTemplateSource()
+        {
+            if (_defaultHighlightMaterial != null && BattleHighlightStyle.IsHighlightCompatible(_defaultHighlightMaterial))
+            {
+                return _defaultHighlightMaterial;
+            }
+
+            if (Render?.Image?.material != null && BattleHighlightStyle.IsHighlightCompatible(Render.Image.material))
+            {
+                return Render.Image.material;
+            }
+
+            return BattleHighlightStyle.HighlightMaterial;
+        }
         [field: SerializeField] public UIImage Render { get; private set; }
         [SerializeField] private UIHighlightMaterialController.EType _highlightType = UIHighlightMaterialController.EType.Outline;
         
@@ -32,6 +51,9 @@ namespace UI.Windows.Game.Card.Unit
         [SerializeField] private UIText _companionInfo;
 
         [SerializeField] private UIButton _clickArea;
+        [SerializeField] private BattleUnitSkeletalDisplay _skeletalDisplay;
+        [SerializeField] private UnitVisualLibrary _visualLibrary;
+        [SerializeField] private UnitVisualProfile _fallbackHeroProfile;
 
         [Title("Play Card FX")]
         [SerializeField] private RectTransform _fxRoot;
@@ -50,11 +72,13 @@ namespace UI.Windows.Game.Card.Unit
         private Color _defaultRenderColor = Color.white;
         private bool _isRightSide;
         private BattleUnit _currentUnit;
+        private UnitVisualProfile _activeProfile;
+        private Material _defaultHighlightMaterial;
+        private Sprite _staticRenderSprite;
 
         public bool IsRightSide => _isRightSide;
+        public bool UsesSkeletalDisplay => _skeletalDisplay != null && _skeletalDisplay.IsActive;
 
-
-        
         public void Set(BattleUnit unit)
         {
             HighlightController?.Reset();
@@ -62,12 +86,15 @@ namespace UI.Windows.Game.Card.Unit
             
             if (unit == null)
             {
+                _skeletalDisplay?.Clear();
                 Close();
                 return;
             }
 
             Open();
+            _applyVisual(unit);
             _applyRenderMirror();
+            _refreshHighlightController();
 
             float maxHp = Mathf.Max(1f, unit.MaxHP);
             float hp = Mathf.Max(0f, unit.HP);
@@ -83,16 +110,18 @@ namespace UI.Windows.Game.Card.Unit
         public void SetSide(bool isRightSide)
         {
             _isRightSide = isRightSide;
+            _skeletalDisplay?.SetFacing(!isRightSide);
             _applyRenderMirror();
         }
 
         private void OnEnable()
         {
-            HighlightController = new UIHighlightMaterialController(Render.Image, _highlightType);
             _cacheRenderDefaults();
+            HighlightController = new UIHighlightMaterialController(_getHighlightGraphic(), _highlightType);
             _applyRenderMirror();
             _fxRunner = new UnitFxRunner(this);
             _initializeImpactDictionaries();
+            _ensureSkeletalDisplay();
 
             if (_clickArea != null)
             {
@@ -106,6 +135,7 @@ namespace UI.Windows.Game.Card.Unit
         {
             HighlightController?.Reset();
             _fxRunner?.Stop();
+            _skeletalDisplay?.Clear();
 
             if (_clickArea != null)
             {
@@ -257,11 +287,16 @@ namespace UI.Windows.Game.Card.Unit
             base.OnDestroy();
         }
 
-        public bool TryGetImpactTargets(out RectTransform fxRoot, out UnityEngine.UI.Image overlayImage)
+        public bool TryGetImpactTargets(out Graphic overlayGraphic)
         {
-            fxRoot = _fxRoot != null ? _fxRoot : transform as RectTransform;
-            overlayImage = Render != null ? Render.Image : null;
-            return fxRoot != null && overlayImage != null;
+            if (UsesSkeletalDisplay && _skeletalDisplay?.DisplayGraphic != null)
+            {
+                overlayGraphic = _skeletalDisplay.DisplayGraphic;
+                return true;
+            }
+
+            overlayGraphic = Render?.Image;
+            return overlayGraphic != null;
         }
 
         public void SetImpactScale(float scale)
@@ -283,6 +318,13 @@ namespace UI.Windows.Game.Card.Unit
                 target.localScale = Vector3.one;
             }
 
+            if (UsesSkeletalDisplay && _skeletalDisplay.RawImage != null)
+            {
+                _skeletalDisplay.RawImage.color = _defaultRenderColor;
+                _applyRenderMirror();
+                return;
+            }
+
             if (Render?.Image == null)
             {
                 return;
@@ -294,31 +336,196 @@ namespace UI.Windows.Game.Card.Unit
 
         public Color GetDefaultRenderColor()
         {
+            if (UsesSkeletalDisplay && _skeletalDisplay.RawImage != null)
+            {
+                return _skeletalDisplay.RawImage.color;
+            }
+
             return _defaultRenderColor;
         }
 
         private void _cacheRenderDefaults()
         {
-            if (Render?.Image == null)
+            if (UsesSkeletalDisplay && _skeletalDisplay.RawImage != null)
+            {
+                _defaultRenderColor = _skeletalDisplay.RawImage.color;
+            }
+            else if (Render?.Image != null)
+            {
+                _defaultRenderColor = Render.Image.color;
+            }
+
+            if (Render?.Image != null)
+            {
+                _staticRenderSprite = Render.Image.sprite;
+                _defaultHighlightMaterial = Render.Image.material;
+            }
+        }
+
+        private void _applyRenderMirror()
+        {
+            RectTransform mirrorTarget = _getMirrorTarget();
+            if (mirrorTarget == null)
             {
                 return;
             }
 
-            _defaultRenderColor = Render.Image.color;
+            Vector3 scale = mirrorTarget.localScale;
+            float x = Mathf.Abs(scale.x) > 0.001f ? Mathf.Abs(scale.x) : 1f;
+            scale.x = _isRightSide ? -x : x;
+            mirrorTarget.localScale = scale;
         }
 
-        private void _applyRenderMirror()
+        private RectTransform _getMirrorTarget()
+        {
+            if (UsesSkeletalDisplay && _skeletalDisplay.RawImage != null)
+            {
+                return _skeletalDisplay.RawImage.rectTransform;
+            }
+
+            return Render?.Image?.rectTransform;
+        }
+
+        private Graphic _getHighlightGraphic()
+        {
+            if (UsesSkeletalDisplay && _skeletalDisplay?.DisplayGraphic != null)
+            {
+                return _skeletalDisplay.DisplayGraphic;
+            }
+
+            return Render?.Image;
+        }
+
+        private void _applyVisual(BattleUnit unit)
+        {
+            _activeProfile = _resolveProfile(unit);
+            _skeletalDisplay?.Clear();
+            _restoreStaticRenderMaterial();
+
+            if (_activeProfile == null)
+            {
+                if (Render?.Image != null)
+                {
+                    Render.Image.enabled = true;
+                }
+
+                return;
+            }
+
+            if (_activeProfile.DisplayMode == UnitVisualProfile.EDisplayMode.Skeletal)
+            {
+                RectTransform displayParent = Render?.Image?.rectTransform ?? transform as RectTransform;
+                Material highlightTemplate = _resolveHighlightTemplateSource();
+                _skeletalDisplay?.Apply(_activeProfile, !_isRightSide, displayParent, highlightTemplate);
+
+                if (!UsesSkeletalDisplay)
+                {
+                    _restoreStaticRenderMaterial();
+                    return;
+                }
+
+                _syncClickRaycastForSkeletalDisplay();
+                _cacheRenderDefaults();
+                _refreshHighlightController();
+                return;
+            }
+
+            if (Render?.Image != null)
+            {
+                Render.Image.enabled = true;
+                Render.SetSprite(_activeProfile.StaticSprite);
+            }
+        }
+
+        private void _syncClickRaycastForSkeletalDisplay()
         {
             if (Render?.Image == null)
             {
                 return;
             }
 
-            RectTransform rect = Render.Image.rectTransform;
-            Vector3 scale = rect.localScale;
-            float x = Mathf.Abs(scale.x) > 0.001f ? Mathf.Abs(scale.x) : 1f;
-            scale.x = _isRightSide ? -x : x;
-            rect.localScale = scale;
+            // UIButton sits on the same object as this Image; disabling it breaks target selection clicks.
+            Render.Image.enabled = true;
+            Render.Image.raycastTarget = true;
+            Render.Image.color = Color.clear;
+            Render.Image.sprite = null;
+        }
+
+        private void _restoreStaticRenderMaterial()
+        {
+            if (Render?.Image == null)
+            {
+                return;
+            }
+
+            Render.Image.enabled = true;
+            Render.Image.raycastTarget = true;
+            Render.Image.color = _defaultRenderColor;
+
+            if (_staticRenderSprite != null)
+            {
+                Render.Image.sprite = _staticRenderSprite;
+            }
+
+            if (_defaultHighlightMaterial != null)
+            {
+                Render.Image.material = _defaultHighlightMaterial;
+            }
+        }
+
+        private void _refreshHighlightController()
+        {
+            HighlightController?.Dispose();
+            Graphic highlightGraphic = _getHighlightGraphic();
+            if (highlightGraphic != null)
+            {
+                HighlightController = new UIHighlightMaterialController(highlightGraphic, _highlightType);
+            }
+        }
+
+        private UnitVisualProfile _resolveProfile(BattleUnit unit)
+        {
+            UnitVisualLibrary library = _visualLibrary;
+            if (library == null && Container.Instance != null)
+            {
+                library = _tryGetVisualLibrary();
+            }
+
+            UnitVisualProfile profile = library != null
+                ? library.Resolve(unit.VisualProfileId, unit.IsCompanion)
+                : null;
+
+            if (profile != null)
+            {
+                return profile;
+            }
+
+            return unit.IsCompanion ? null : _fallbackHeroProfile;
+        }
+
+        private static UnitVisualLibrary _tryGetVisualLibrary()
+        {
+            try
+            {
+                return Container.Instance.GetSO<UnitVisualLibrary>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private void _ensureSkeletalDisplay()
+        {
+            if (_skeletalDisplay == null)
+            {
+                _skeletalDisplay = GetComponent<BattleUnitSkeletalDisplay>();
+            }
+
+            if (_skeletalDisplay == null)
+            {
+                _skeletalDisplay = gameObject.AddComponent<BattleUnitSkeletalDisplay>();
+            }
         }
 
         [Serializable]

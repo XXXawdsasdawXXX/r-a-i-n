@@ -220,6 +220,8 @@ MonoBehaviour:
     <Value>k__BackingField: {fileID: 3718962648467418002}
   _companionInfo: {fileID: 3134347525115389507}
   _clickArea: {fileID: 6817598098829027426}
+  _visualLibrary: {fileID: 11400000, guid: 25b3b64081bbf3f418a4f2c957d9511e, type: 2}
+  _fallbackHeroProfile: {fileID: 11400000, guid: 4a017645a88888146ace5f7db0cc8a70, type: 2}
   _fxRoot: {fileID: 1946657469870259831}
   _defaultCardImpactType: 0
   _defaultCardFxSettings:

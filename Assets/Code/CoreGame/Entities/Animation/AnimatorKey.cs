@@ -42,6 +42,8 @@ namespace CoreGame.Entities.Animation
         private static readonly int STATE_MINE = Animator.StringToHash("Mine");
         private static readonly int STATE_MINE_START = Animator.StringToHash("Mine-start");
         private static readonly int STATE_MINE_END = Animator.StringToHash("Mine-end");
+        private static readonly int STATE_ENTER = Animator.StringToHash("Enter");
+        private static readonly int STATE_EXIT = Animator.StringToHash("Exit");
         
         
         public static readonly Dictionary<int, ECharacterAnimationState> CHARACTER_STATES = new()
@@ -55,6 +57,8 @@ namespace CoreGame.Entities.Animation
             {STATE_HARVEST, ECharacterAnimationState.Harvest},
             {STATE_HARVEST_START, ECharacterAnimationState.Harvest},
             {STATE_HARVEST_END, ECharacterAnimationState.Harvest},
+            {STATE_ENTER, ECharacterAnimationState.Enter},
+            {STATE_EXIT, ECharacterAnimationState.Exit},
         };
     }
 }

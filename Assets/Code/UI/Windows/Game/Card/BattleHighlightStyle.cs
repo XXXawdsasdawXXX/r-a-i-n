@@ -13,7 +13,18 @@ namespace UI.Windows.Game.Card
 
     public static class BattleHighlightStyle
     {
-        public static readonly Material HighlightMaterial = Resources.Load<Material>("Graphics/Materials/UI/material-ui-hightline");
+        public static readonly Material HighlightMaterial = _loadHighlightMaterial();
+
+        private static Material _loadHighlightMaterial()
+        {
+            Material material = Resources.Load<Material>("material-ui-hightline");
+            if (material != null)
+            {
+                return material;
+            }
+
+            return Resources.Load<Material>("Graphics/Materials/UI/material-ui-hightline");
+        }
         public static readonly Material OccupiedHighlightMaterial = HighlightMaterial;
         private static readonly int _outlineColorId = Shader.PropertyToID("_OutlineColor");
         private static readonly int _innerOutlineColorId = Shader.PropertyToID("_InnerOutlineColor");
@@ -57,6 +68,20 @@ namespace UI.Windows.Game.Card
             }
 
             return ResolveHighlightMaterial(fallback);
+        }
+
+        public static Material CreateUiHighlightInstance(Material template = null)
+        {
+            Material source = ResolveHighlightMaterial(template) ?? HighlightMaterial;
+            if (source == null)
+            {
+                return null;
+            }
+
+            Material instance = new Material(source);
+            instance.mainTextureScale = Vector2.one;
+            instance.mainTextureOffset = Vector2.zero;
+            return instance;
         }
 
         public static bool IsHighlightCompatible(Material material)

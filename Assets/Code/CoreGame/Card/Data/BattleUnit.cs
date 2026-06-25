@@ -13,6 +13,7 @@ namespace CoreGame.Card.Data
         public string UnitId;
         public string OwnerId;      // кто владелец (для спутников)
         public bool IsCompanion;
+        public string VisualProfileId;
     
         public float HP;
         public float MaxHP;
@@ -52,6 +53,7 @@ namespace CoreGame.Card.Data
             {
                 UnitId = hero.HeroId,
                 OwnerId = string.Empty,
+                VisualProfileId = "hero-skeleton",
                 MaxHP = 100 + hero.Stats.Endurance * 10,
                 HP = hero.Health,
                 MaxEnergy = 100 + hero.Stats.Endurance * 5,

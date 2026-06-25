@@ -1,9 +1,9 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UI.Windows.Game.Card.Unit.Impacts;
 using UnityEngine.UI;
-using DG.Tweening;
 
 namespace UI.Windows.Game.Card.Unit.Fx
 {
@@ -18,7 +18,7 @@ namespace UI.Windows.Game.Card.Unit.Fx
 
         public async UniTask Play(UnitFxSettings settings, CancellationToken cancellationToken)
         {
-            if (_view == null || settings == null || !_view.TryGetImpactTargets(out RectTransform _, out Image overlayImage))
+            if (_view == null || settings == null || !_view.TryGetImpactTargets(out Graphic overlayGraphic))
             {
                 return;
             }
@@ -29,19 +29,19 @@ namespace UI.Windows.Game.Card.Unit.Fx
             Color toColor = settings.Color;
             toColor.a = baseColor.a;
 
-            overlayImage.color = baseColor;
+            overlayGraphic.color = baseColor;
             _view.SetImpactScale(1f);
 
             Sequence sequence = DOTween.Sequence()
                 .SetUpdate(true)
                 .Append(DOVirtual.Float(0f, 1f, duration * 0.4f, t =>
                 {
-                    overlayImage.color = Color.Lerp(baseColor, toColor, t);
+                    overlayGraphic.color = Color.Lerp(baseColor, toColor, t);
                     _view.SetImpactScale(Mathf.Lerp(1f, targetScale, t));
                 }))
                 .Append(DOVirtual.Float(0f, 1f, duration * 0.6f, t =>
                 {
-                    overlayImage.color = Color.Lerp(toColor, baseColor, t);
+                    overlayGraphic.color = Color.Lerp(toColor, baseColor, t);
                     _view.SetImpactScale(Mathf.Lerp(targetScale, 1f, t));
                 }))
                 .SetLink(_view.gameObject, LinkBehaviour.KillOnDisable);

@@ -10,12 +10,11 @@ namespace CoreGame.Card.Data
         
         public string BattleId;
         public EBattleMode Mode;
+        public bool IsCoOp => Mode == EBattleMode.CoOpPvE;
         
         public BattleSide SideA;
         public BattleSide SideB;
-        public BattleSide EnemySide;
-
-        public bool IsCoOp => Mode == EBattleMode.CoOpPvE;
+        public BattleSide EnemySide; // only for coop
 
         public int TurnNumber;
         public ReactiveProperty<float> TurnTimeRemaining;

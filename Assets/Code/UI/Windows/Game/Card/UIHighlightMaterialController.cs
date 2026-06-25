@@ -17,7 +17,7 @@ namespace UI.Windows.Game.Card
             Both = Outline | InnerOutline
         }
 
-        private readonly Image _targetImage;
+        private readonly Graphic _targetGraphic;
         private readonly Material _defaultMaterial;
         private readonly Dictionary<Material, Material> _runtimeMaterials = new();
 
@@ -42,10 +42,10 @@ namespace UI.Windows.Game.Card
             };
         }
 
-        public UIHighlightMaterialController(Image targetImage, EType type = EType.Outline)
+        public UIHighlightMaterialController(Graphic targetGraphic, EType type = EType.Outline)
         {
-            _targetImage = targetImage;
-            _defaultMaterial = targetImage != null ? targetImage.material : null;
+            _targetGraphic = targetGraphic;
+            _defaultMaterial = targetGraphic != null ? targetGraphic.material : null;
             _type = type;
         }
 
@@ -73,13 +73,13 @@ namespace UI.Windows.Game.Card
 
         public void Apply(Material materialTemplate)
         {
-            if (_targetImage == null || materialTemplate == null)
+            if (_targetGraphic == null || materialTemplate == null)
             {
                 return;
             }
 
             Material runtimeMaterial = _getOrCreateRuntimeMaterial(materialTemplate);
-            _targetImage.material = runtimeMaterial;
+            _targetGraphic.material = runtimeMaterial;
             _setTypeEnabled(runtimeMaterial, EType.Both, false);
             _applyHighlightColor(runtimeMaterial, _type, _highlightColor);
             _setTypeEnabled(runtimeMaterial, _type, true);
@@ -92,9 +92,9 @@ namespace UI.Windows.Game.Card
                 _setTypeEnabled(material, EType.Both, false);
             }
 
-            if (_targetImage != null)
+            if (_targetGraphic != null)
             {
-                _targetImage.material = _defaultMaterial;
+                _targetGraphic.material = _defaultMaterial;
             }
         }
 
@@ -119,6 +119,8 @@ namespace UI.Windows.Game.Card
             }
 
             runtimeMaterial = new Material(template);
+            runtimeMaterial.mainTextureScale = Vector2.one;
+            runtimeMaterial.mainTextureOffset = Vector2.zero;
             _setTypeEnabled(runtimeMaterial, EType.Both, false);
             _runtimeMaterials[template] = runtimeMaterial;
             return runtimeMaterial;

@@ -104,11 +104,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 598214100058112
-    m_Key: ui.core_game.hero_context.duel
+    m_Key: ui.core_game.hero_context_menu.duel
     m_Metadata:
       m_Items: []
   - m_Id: 598318022328320
-    m_Key: ui.core_game.hero_context.trade
+    m_Key: ui.core_game.hero_context_menu.trade
     m_Metadata:
       m_Items: []
   - m_Id: 2800401150541824

@@ -2,6 +2,7 @@
 using Core.Data;
 using Core.GameLoop;
 using CoreGame.Entities.Animation;
+using CoreGame.Entities.Characters;
 using CoreGame.Entities.Characters.Interfaces;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
@@ -15,14 +16,14 @@ namespace CoreGame.Entities.Characters.Hero
     {
         public bool IsInitialized { get; set; }
         [ShowInInspector] public AnimatorKey.ECharacterAnimationState CurrentState { get; private set; }
+        public CharacterSkeletonAnimator SkeletonAnimator => _skeletonAnimator;
         
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _viewBody;
         [SerializeField] private Rigidbody2D _rigidbody2D;
+        [SerializeField] private CharacterSkeletonAnimator _skeletonAnimator;
 
         private Cache<Vector3> _velocityCache;
-        private static readonly int Enter1 = Animator.StringToHash("Enter");
-
 
         public UniTask Initialize()
         {
@@ -32,6 +33,7 @@ namespace CoreGame.Entities.Characters.Hero
             }
             
             _velocityCache = new Cache<Vector3>();
+            _ensureSkeletonAnimator();
             
             return UniTask.CompletedTask;
         }
@@ -54,16 +56,26 @@ namespace CoreGame.Entities.Characters.Hero
             }
         }
 
+        public void RequestEnter()
+        {
+            Enter();
+        }
+
         [ServerRpc]
         public void Enter()
         {
-            _animator.SetTrigger(Enter1);
+            _enterObserversRpc();
+        }
+
+        public void RequestExit()
+        {
+            Exit();
         }
 
         [ServerRpc]
         public void Exit()
         {
-            
+            _exitObserversRpc();
         }
         
         [Button, ServerRpc] public void StartEat()
@@ -95,9 +107,24 @@ namespace CoreGame.Entities.Characters.Hero
         }
 
         [ObserversRpc]
+        private void _enterObserversRpc()
+        {
+            _ensureSkeletonAnimator();
+            _skeletonAnimator.TriggerEnter();
+        }
+
+        [ObserversRpc]
+        private void _exitObserversRpc()
+        {
+            _ensureSkeletonAnimator();
+            _skeletonAnimator.TriggerExit();
+        }
+
+        [ObserversRpc]
         private void _rotateObserversRpc(float forward)
         {
-            _viewBody.localScale = new Vector3(forward, 1, 1);
+            _ensureSkeletonAnimator();
+            _skeletonAnimator.SetFacing(forward > 0);
         }
 
         public void EnteredState(int stateHash)
@@ -106,6 +133,8 @@ namespace CoreGame.Entities.Characters.Hero
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
             }
+
+            _skeletonAnimator?.EnteredState(stateHash);
         }
 
         public void ExitedState(int stateHash)
@@ -114,6 +143,23 @@ namespace CoreGame.Entities.Characters.Hero
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
             }
+
+            _skeletonAnimator?.ExitedState(stateHash);
+        }
+
+        private void _ensureSkeletonAnimator()
+        {
+            if (_skeletonAnimator == null)
+            {
+                _skeletonAnimator = GetComponent<CharacterSkeletonAnimator>();
+            }
+
+            if (_skeletonAnimator == null)
+            {
+                _skeletonAnimator = gameObject.AddComponent<CharacterSkeletonAnimator>();
+            }
+
+            _skeletonAnimator.Bind(_animator, _viewBody);
         }
     }
 }

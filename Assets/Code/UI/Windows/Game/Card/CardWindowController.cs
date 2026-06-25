@@ -2,6 +2,7 @@
 using Core.ServiceLocator;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
+using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Game.Card.Hover;
 using UI.Windows.Game.Card.Map;
@@ -23,6 +24,7 @@ namespace UI.Windows.Game.Card
         [SerializeField] private CardUnitHoverView _unitHoverView;
 
         private BattleService _battleService;
+        private HeroBattleTransitionService _battleTransitionService;
         private CardWindowVisuals _visuals;
         private CardWindowInteractionService _interactionService;
         private CardUnitHoverController _unitHoverController;
@@ -32,6 +34,7 @@ namespace UI.Windows.Game.Card
         public override UniTask InitializeWindow(UIWindowManager manager)
         {
             _battleService = Container.Instance.GetService<BattleService>();
+            _battleTransitionService = Container.Instance.GetService<HeroBattleTransitionService>();
             _localization = Container.Instance.GetService<LocalizationService>();
 
             _visuals = new CardWindowVisuals(
@@ -138,6 +141,16 @@ namespace UI.Windows.Game.Card
 
         private void _onBattleStarted(BattleModel model)
         {
+            _openBattleAfterExit(model).Forget();
+        }
+
+        private async UniTaskVoid _openBattleAfterExit(BattleModel model)
+        {
+            if (_battleTransitionService != null)
+            {
+                await _battleTransitionService.EnsureExitBeforeBattleAsync();
+            }
+
             view.Open();
             view.ClearCommandMessage();
             _onBattleUpdated(model);

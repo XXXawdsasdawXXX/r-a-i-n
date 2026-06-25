@@ -36,6 +36,7 @@ namespace CoreGame
                 typeof(BattleStateMachine),
                 typeof(NetworkBattleService),
                 typeof(NetworkDuelService),
+                typeof(HeroBattleTransitionService),
             };
         }
     }

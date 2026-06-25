@@ -34,6 +34,7 @@ namespace CoreGame.Entities.InteractionObjects.Activators
         private BattleService _battleService;
         private NetworkBattleService _networkBattleService;
         private UserProvider _userProvider;
+        private HeroBattleTransitionService _battleTransitionService;
         
 
         public UniTask Initialize()
@@ -41,6 +42,7 @@ namespace CoreGame.Entities.InteractionObjects.Activators
             _battleService = Container.Instance.GetService<BattleService>();
             _networkBattleService = Container.Instance.GetService<NetworkBattleService>();
             _userProvider = Container.Instance.GetService<UserProvider>();
+            _battleTransitionService = Container.Instance.GetService<HeroBattleTransitionService>();
             
             return UniTask.CompletedTask;
         }
@@ -76,7 +78,7 @@ namespace CoreGame.Entities.InteractionObjects.Activators
                 return;
             }
 
-            _startLocalBattle(hero.Model);
+            _battleTransitionService.RunExitThen(() => _startLocalBattle(hero.Model));
         }
 
         private int _resolveMaxPlayers()

@@ -18,7 +18,7 @@ namespace UI.Windows.Game.Card.Unit.Fx
 
         public async UniTask Play(UnitFxSettings settings, CancellationToken cancellationToken)
         {
-            if (_view == null || settings == null || !_view.TryGetImpactTargets(out RectTransform _, out Image overlayImage))
+            if (_view == null || settings == null || !_view.TryGetImpactTargets(out Graphic overlayGraphic))
             {
                 return;
             }
@@ -29,29 +29,29 @@ namespace UI.Windows.Game.Card.Unit.Fx
             Color flashColor = settings.Color;
             flashColor.a = baseColor.a;
 
-            overlayImage.color = baseColor;
+            overlayGraphic.color = baseColor;
             _view.SetImpactScale(1f);
 
             Sequence sequence = DOTween.Sequence()
                 .SetUpdate(true)
                 .Append(DOVirtual.Float(0f, 1f, duration * 0.25f, t =>
                 {
-                    overlayImage.color = Color.Lerp(baseColor, flashColor, t);
+                    overlayGraphic.color = Color.Lerp(baseColor, flashColor, t);
                     _view.SetImpactScale(Mathf.Lerp(1f, maxScale, t));
                 }))
                 .Append(DOVirtual.Float(0f, 1f, duration * 0.25f, t =>
                 {
-                    overlayImage.color = Color.Lerp(flashColor, baseColor, t);
+                    overlayGraphic.color = Color.Lerp(flashColor, baseColor, t);
                     _view.SetImpactScale(Mathf.Lerp(maxScale, 1f, t));
                 }))
                 .Append(DOVirtual.Float(0f, 1f, duration * 0.25f, t =>
                 {
-                    overlayImage.color = Color.Lerp(baseColor, flashColor, t);
+                    overlayGraphic.color = Color.Lerp(baseColor, flashColor, t);
                     _view.SetImpactScale(Mathf.Lerp(1f, maxScale, t));
                 }))
                 .Append(DOVirtual.Float(0f, 1f, duration * 0.25f, t =>
                 {
-                    overlayImage.color = Color.Lerp(flashColor, baseColor, t);
+                    overlayGraphic.color = Color.Lerp(flashColor, baseColor, t);
                     _view.SetImpactScale(Mathf.Lerp(maxScale, 1f, t));
                 }))
                 .SetLink(_view.gameObject, LinkBehaviour.KillOnDisable);
