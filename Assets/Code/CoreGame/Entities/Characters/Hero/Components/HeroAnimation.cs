@@ -102,21 +102,17 @@ namespace CoreGame.Entities.Characters.Hero
 
         public void EnteredState(int stateHash)
         {
-            Debug.Log($"enter state {stateHash}");
             if (AnimatorKey.CHARACTER_STATES.ContainsKey(stateHash))
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
-                Debug.Log($"current animation state {CurrentState}");
             }
         }
 
         public void ExitedState(int stateHash)
         {
-            Debug.Log($"exit state {stateHash}");
             if (AnimatorKey.CHARACTER_STATES.ContainsKey(stateHash))
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
-                Debug.Log($"current animation state {CurrentState}");
             }
         }
     }
