@@ -11,6 +11,8 @@ namespace CoreGame.Entities.Animation
             Move,
             Harvest,
             Eat,
+            Enter,
+            Exit
         }
 
         public enum EHarvestType
@@ -26,22 +28,33 @@ namespace CoreGame.Entities.Animation
         public static readonly int PARAM_HARVEST_TYPE = Animator.StringToHash("HarvestType");
         public static readonly int PARAM_SPEED = Animator.StringToHash("Speed");
         public static readonly int PARAM_EAT = Animator.StringToHash("IsEat");
-
+        public static readonly int PARAM_ENTER = Animator.StringToHash("Enter");
+        public static readonly int PARAM_EXIT = Animator.StringToHash("Exit");
+        
         private static readonly int STATE_IDLE = Animator.StringToHash("Idle");
         private static readonly int STATE_MOVE = Animator.StringToHash("Move");
-        private static readonly int STATE_HARVEST = Animator.StringToHash("Harvest");
         private static readonly int STATE_EAT = Animator.StringToHash("Eat");
+        
+        private static readonly int STATE_HARVEST = Animator.StringToHash("Harvest");
+        private static readonly int STATE_HARVEST_START = Animator.StringToHash("Harvest-start");
+        private static readonly int STATE_HARVEST_END = Animator.StringToHash("Harvest-end");
+        
         private static readonly int STATE_MINE = Animator.StringToHash("Mine");
-        private static readonly int STATE_PICK_UP = Animator.StringToHash("PickUp");
+        private static readonly int STATE_MINE_START = Animator.StringToHash("Mine-start");
+        private static readonly int STATE_MINE_END = Animator.StringToHash("Mine-end");
+        
         
         public static readonly Dictionary<int, ECharacterAnimationState> CHARACTER_STATES = new()
         {
             {STATE_IDLE, ECharacterAnimationState.Idle},
             {STATE_MOVE, ECharacterAnimationState.Move},
-            {STATE_HARVEST, ECharacterAnimationState.Harvest},
-            {STATE_MINE, ECharacterAnimationState.Harvest},
-            {STATE_PICK_UP, ECharacterAnimationState.Harvest},
             {STATE_EAT, ECharacterAnimationState.Eat},
+            {STATE_MINE, ECharacterAnimationState.Harvest},
+            {STATE_MINE_START, ECharacterAnimationState.Harvest},
+            {STATE_MINE_END, ECharacterAnimationState.Harvest},
+            {STATE_HARVEST, ECharacterAnimationState.Harvest},
+            {STATE_HARVEST_START, ECharacterAnimationState.Harvest},
+            {STATE_HARVEST_END, ECharacterAnimationState.Harvest},
         };
     }
 }

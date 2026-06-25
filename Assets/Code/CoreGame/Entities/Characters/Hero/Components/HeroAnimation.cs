@@ -14,15 +14,16 @@ namespace CoreGame.Entities.Characters.Hero
     IInitializeListener, IUpdateListener
     {
         public bool IsInitialized { get; set; }
-        public AnimatorKey.ECharacterAnimationState CurrentState { get; private set; }
+        [ShowInInspector] public AnimatorKey.ECharacterAnimationState CurrentState { get; private set; }
         
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _viewBody;
         [SerializeField] private Rigidbody2D _rigidbody2D;
 
         private Cache<Vector3> _velocityCache;
+        private static readonly int Enter1 = Animator.StringToHash("Enter");
 
-        
+
         public UniTask Initialize()
         {
             if (!IsOwner)
@@ -51,6 +52,18 @@ namespace CoreGame.Entities.Characters.Hero
                     _rotateServerRpc(_rigidbody2D.velocity.x);
                 }
             }
+        }
+
+        [ServerRpc]
+        public void Enter()
+        {
+            _animator.SetTrigger(Enter1);
+        }
+
+        [ServerRpc]
+        public void Exit()
+        {
+            
         }
         
         [Button, ServerRpc] public void StartEat()
@@ -89,17 +102,21 @@ namespace CoreGame.Entities.Characters.Hero
 
         public void EnteredState(int stateHash)
         {
+            Debug.Log($"enter state {stateHash}");
             if (AnimatorKey.CHARACTER_STATES.ContainsKey(stateHash))
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
+                Debug.Log($"current animation state {CurrentState}");
             }
         }
 
         public void ExitedState(int stateHash)
         {
+            Debug.Log($"exit state {stateHash}");
             if (AnimatorKey.CHARACTER_STATES.ContainsKey(stateHash))
             {
                 CurrentState = AnimatorKey.CHARACTER_STATES[stateHash];
+                Debug.Log($"current animation state {CurrentState}");
             }
         }
     }

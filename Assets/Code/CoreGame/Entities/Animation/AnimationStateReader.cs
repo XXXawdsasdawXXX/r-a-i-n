@@ -23,7 +23,7 @@ namespace CoreGame.Entities.Animation
 
             _stateReader?.ExitedState(stateInfo.shortNameHash);
         }
-
+        
         private void FindReader(Animator animator)
         {
             if (_stateReader != null)
