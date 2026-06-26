@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.GameLoop;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
+using CoreGame.Entities.Animation;
 using UI.Windows.Game.Card.Map;
 using UI.Windows.Game.Card.Unit;
 using UnityEngine;
@@ -24,9 +25,9 @@ namespace UI.Windows.Game.Card
         private readonly BattleSideView _rightSideView;
         private readonly GameEventDispatcher _gameEventDispatcher;
 
-        private readonly Dictionary<BattleUnitView, string> _viewToUnitId = new Dictionary<BattleUnitView, string>();
-        private readonly List<BattleUnitView> _leftCompanionViews = new List<BattleUnitView>();
-        private readonly List<BattleUnitView> _rightCompanionViews = new List<BattleUnitView>();
+        private readonly Dictionary<BattleUnitView, string> _viewToUnitId = new();
+        private readonly List<BattleUnitView> _leftCompanionViews = new();
+        private readonly List<BattleUnitView> _rightCompanionViews = new();
         private BattleUnitView _hoveredUnitView;
 
         public CardWindowVisuals(
@@ -83,6 +84,27 @@ namespace UI.Windows.Game.Card
             _tryRefreshHoveredUnitTooltip();
         }
 
+        public void RefreshOccupiedCells(BattleModel battleModel)
+        {
+            if (battleModel == null)
+            {
+                return;
+            }
+
+            _leftSideView?.ClearOccupiedHighlights();
+            _rightSideView?.ClearOccupiedHighlights();
+            _markSideOccupiedCells(battleModel.SideA, _leftSideView);
+            if (battleModel.IsCoOp)
+            {
+                _markSideOccupiedCells(battleModel.SideB, _leftSideView);
+                _markSideOccupiedCells(battleModel.EnemySide, _rightSideView);
+            }
+            else
+            {
+                _markSideOccupiedCells(battleModel.SideB, _rightSideView);
+            }
+        }
+
         public void PlayCardEffect(string unitId, ECardType cardType)
         {
             if (string.IsNullOrEmpty(unitId))
@@ -102,6 +124,27 @@ namespace UI.Windows.Game.Card
 
             _tryPlayCompanionEffect(_leftCompanionViews, unitId, cardType);
             _tryPlayCompanionEffect(_rightCompanionViews, unitId, cardType);
+        }
+
+        public void PlayCastAnimation(string unitId, AnimatorKey.ECardCastAnimation castAnimation)
+        {
+            if (string.IsNullOrEmpty(unitId) || castAnimation == AnimatorKey.ECardCastAnimation.None)
+            {
+                return;
+            }
+
+            if (_tryPlayHeroCastAnimation(_leftHeroView, unitId, castAnimation))
+            {
+                return;
+            }
+
+            if (_tryPlayHeroCastAnimation(_rightHeroView, unitId, castAnimation))
+            {
+                return;
+            }
+
+            _tryPlayCompanionCastAnimation(_leftCompanionViews, unitId, castAnimation);
+            _tryPlayCompanionCastAnimation(_rightCompanionViews, unitId, castAnimation);
         }
 
         public void PlayReactionEffect(string unitId, EEffectType effectType)
@@ -152,43 +195,6 @@ namespace UI.Windows.Game.Card
             else
             {
                 _anchorCompanions(_rightCompanionViews, _rightSideView, battleModel.SideB);
-            }
-        }
-
-        private void _anchorCoOpAllyHero(BattleModel battleModel)
-        {
-            if (battleModel?.SideB?.Hero == null)
-            {
-                return;
-            }
-
-            int allyViewIndex = battleModel.SideA?.Companions.Count ?? 0;
-            if (allyViewIndex >= _leftCompanionViews.Count)
-            {
-                return;
-            }
-
-            _anchorHero(_leftCompanionViews[allyViewIndex], _leftSideView, battleModel.SideB.Hero);
-        }
-
-        public void RefreshOccupiedCells(BattleModel battleModel)
-        {
-            if (battleModel == null)
-            {
-                return;
-            }
-
-            _leftSideView?.ClearOccupiedHighlights();
-            _rightSideView?.ClearOccupiedHighlights();
-            _markSideOccupiedCells(battleModel.SideA, _leftSideView);
-            if (battleModel.IsCoOp)
-            {
-                _markSideOccupiedCells(battleModel.SideB, _leftSideView);
-                _markSideOccupiedCells(battleModel.EnemySide, _rightSideView);
-            }
-            else
-            {
-                _markSideOccupiedCells(battleModel.SideB, _rightSideView);
             }
         }
 
@@ -248,14 +254,6 @@ namespace UI.Windows.Game.Card
 
         public void ValidateInspectorBindings(UnityEngine.Object owner)
         {
-            if (_leftCompanionRoot == null || _rightCompanionRoot == null || _companionViewPrefab == null)
-            {
-            }
-
-            if (BattleHighlightStyle.HighlightMaterial == null)
-            {
-            }
-
             _validateOccupiedHighlight(owner, _leftSideView, EBattleSideUi.Left);
             _validateOccupiedHighlight(owner, _rightSideView, EBattleSideUi.Right);
         }
@@ -278,6 +276,22 @@ namespace UI.Windows.Game.Card
                 _hoveredUnitView = null;
                 UnitHoverExited?.Invoke();
             }
+        }
+
+        private void _anchorCoOpAllyHero(BattleModel battleModel)
+        {
+            if (battleModel?.SideB?.Hero == null)
+            {
+                return;
+            }
+
+            int allyViewIndex = battleModel.SideA?.Companions.Count ?? 0;
+            if (allyViewIndex >= _leftCompanionViews.Count)
+            {
+                return;
+            }
+
+            _anchorHero(_leftCompanionViews[allyViewIndex], _leftSideView, battleModel.SideB.Hero);
         }
 
         private void _updateCompanionViews(BattleModel battleModel)
@@ -483,6 +497,50 @@ namespace UI.Windows.Game.Card
 
             heroView.PlayCardFx(cardType);
             return true;
+        }
+
+        private bool _tryPlayHeroCastAnimation(
+            BattleUnitView heroView,
+            string unitId,
+            AnimatorKey.ECardCastAnimation castAnimation)
+        {
+            if (heroView == null || !_viewToUnitId.TryGetValue(heroView, out string heroUnitId))
+            {
+                return false;
+            }
+
+            if (heroUnitId != unitId)
+            {
+                return false;
+            }
+
+            heroView.PlayCastAnimation(castAnimation);
+            return true;
+        }
+
+        private void _tryPlayCompanionCastAnimation(
+            List<BattleUnitView> views,
+            string unitId,
+            AnimatorKey.ECardCastAnimation castAnimation)
+        {
+            if (views == null)
+            {
+                return;
+            }
+
+            foreach (BattleUnitView view in views)
+            {
+                if (view == null)
+                {
+                    continue;
+                }
+
+                if (_viewToUnitId.TryGetValue(view, out string mappedUnitId) && mappedUnitId == unitId)
+                {
+                    view.PlayCastAnimation(castAnimation);
+                    return;
+                }
+            }
         }
 
         private void _tryPlayCompanionEffect(List<BattleUnitView> views, string unitId, ECardType cardType)

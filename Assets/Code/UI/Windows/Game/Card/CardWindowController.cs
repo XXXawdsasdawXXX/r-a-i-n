@@ -1,7 +1,9 @@
-﻿using Core.Localization;
+﻿using System;
+using Core.Localization;
 using Core.ServiceLocator;
 using CoreGame.Card.Data;
 using CoreGame.Card.Logic;
+using CoreGame.Entities.Animation;
 using CoreGame.Entities.Characters.Hero;
 using Cysharp.Threading.Tasks;
 using UI.Windows.Game.Card.Hover;
@@ -30,7 +32,8 @@ namespace UI.Windows.Game.Card
         private CardUnitHoverController _unitHoverController;
         private LocalizationService _localization;
 
-        
+        private string _pendingCastActorUnitId;
+        private AnimatorKey.ECardCastAnimation _pendingCastAnimation = AnimatorKey.ECardCastAnimation.None;
         public override UniTask InitializeWindow(UIWindowManager manager)
         {
             _battleService = Container.Instance.GetService<BattleService>();
@@ -162,6 +165,7 @@ namespace UI.Windows.Game.Card
             view.ClearCommandMessage();
             _unitHoverController?.Hide();
             _interactionService?.ResetSelections();
+            _clearPendingCastAnimation();
         }
 
         private void _onBattleUpdated(BattleModel battleModel)
@@ -169,7 +173,7 @@ namespace UI.Windows.Game.Card
             _interactionService?.SetBattleModel(battleModel);
         }
 
-        private void _onCardPlayedDetailed(BattleCardPlayedEvent battleEvent)
+        private async void _onCardPlayedDetailed(BattleCardPlayedEvent battleEvent)
         {
             if (battleEvent?.Card?.Config == null)
             {
@@ -179,8 +183,10 @@ namespace UI.Windows.Game.Card
             string actorUnitId = !string.IsNullOrEmpty(battleEvent.Card.OwnerId)
                 ? battleEvent.Card.OwnerId
                 : battleEvent.ActorUnitId;
+            _queueCastAnimation(actorUnitId, battleEvent.Card.Config.Animation);
+            await _playPendingCastAnimationDeferred();
             _visuals?.PlayCardEffect(actorUnitId, battleEvent.Card.Config.Type);
-
+            
             if (!string.IsNullOrEmpty(battleEvent.TargetUnitId) && battleEvent.EffectTypes != null)
             {
                 foreach (EEffectType effectType in battleEvent.EffectTypes)
@@ -214,6 +220,43 @@ namespace UI.Windows.Game.Card
         private void _onCellClicked(BattleGridCellView cell)
         {
             _interactionService?.OnCellClicked(cell);
+        }
+
+        private void _queueCastAnimation(string actorUnitId, AnimatorKey.ECardCastAnimation castAnimation)
+        {
+            if (string.IsNullOrEmpty(actorUnitId) || castAnimation == AnimatorKey.ECardCastAnimation.None)
+            {
+                return;
+            }
+
+            _pendingCastActorUnitId = actorUnitId;
+            _pendingCastAnimation = castAnimation;
+        }
+
+        private void _flushPendingCastAnimation()
+        {
+            if (string.IsNullOrEmpty(_pendingCastActorUnitId)
+                || _pendingCastAnimation == AnimatorKey.ECardCastAnimation.None)
+            {
+                return;
+            }
+
+            _visuals?.PlayCastAnimation(_pendingCastActorUnitId, _pendingCastAnimation);
+            _clearPendingCastAnimation();
+        }
+
+        private void _clearPendingCastAnimation()
+        {
+            _pendingCastActorUnitId = null;
+            _pendingCastAnimation = AnimatorKey.ECardCastAnimation.None;
+        }
+
+        private async UniTask _playPendingCastAnimationDeferred()
+        {
+            // CardPlayed (and network sync) may refresh unit views in the same frame.
+            // Wait until UI settles, then trigger animation on the final skeleton session.
+            await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
+            _flushPendingCastAnimation();
         }
     }
 }

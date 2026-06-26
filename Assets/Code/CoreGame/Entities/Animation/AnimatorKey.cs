@@ -14,6 +14,16 @@ namespace CoreGame.Entities.Animation
             Enter,
             Exit
         }
+        
+        public enum ECardCastAnimation
+        {
+            None,
+            CastAttack,
+            CastSpell,
+            CastBuff,
+            CastHeal,
+            Summon
+        }
 
         public enum EHarvestType
         {
@@ -25,6 +35,12 @@ namespace CoreGame.Entities.Animation
         public static readonly int PARAM_ANIMATION_SPEED = Animator.StringToHash("AnimationSpeed");
         public static readonly int PARAM_RESOURCE_VALUE = Animator.StringToHash("ResourceValue");
 
+        public static readonly int PARAM_CAST_ATTACK = Animator.StringToHash("CastAttack");
+        public static readonly int PARAM_CAST_SPELL = Animator.StringToHash("CastSpell");
+        public static readonly int PARAM_CAST_BUFF = Animator.StringToHash("CastBuff");
+        public static readonly int PARAM_CAST_HEAL = Animator.StringToHash("CastHeal");
+        public static readonly int PARAM_CAST_SUMMON = Animator.StringToHash("CastSummon");
+        
         public static readonly int PARAM_HARVEST_TYPE = Animator.StringToHash("HarvestType");
         public static readonly int PARAM_SPEED = Animator.StringToHash("Speed");
         public static readonly int PARAM_EAT = Animator.StringToHash("IsEat");
@@ -59,6 +75,15 @@ namespace CoreGame.Entities.Animation
             {STATE_HARVEST_END, ECharacterAnimationState.Harvest},
             {STATE_ENTER, ECharacterAnimationState.Enter},
             {STATE_EXIT, ECharacterAnimationState.Exit},
+        };
+
+        public static readonly Dictionary<ECardCastAnimation, int> CAST_PARAMS = new()
+        {
+            { ECardCastAnimation.Summon , PARAM_CAST_SUMMON},
+            { ECardCastAnimation.CastAttack , PARAM_CAST_ATTACK},
+            { ECardCastAnimation.CastHeal , PARAM_CAST_HEAL},
+            { ECardCastAnimation.CastBuff , PARAM_CAST_BUFF},
+            { ECardCastAnimation.CastSpell , PARAM_CAST_SPELL},
         };
     }
 }

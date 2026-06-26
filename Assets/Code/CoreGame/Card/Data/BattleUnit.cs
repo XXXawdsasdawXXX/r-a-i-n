@@ -41,11 +41,11 @@ namespace CoreGame.Card.Data
         public EAutoActionType AutoActionType;
         public float AutoActionValue;
         public int CompanionCardsPerTurn = 1;
-
-
+        
         public List<CardBattleState> Hand = new();
         public List<CardBattleState> Deck = new();
         public List<CardBattleState> Discard = new();
+        
         
         public static BattleUnit FromHero(HeroModel hero, IEnumerable<string> deckCards, AllCardCollection library)
         {

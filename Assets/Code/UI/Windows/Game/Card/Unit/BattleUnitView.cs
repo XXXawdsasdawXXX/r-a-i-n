@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using CoreGame.Entities.Animation;
 using TriInspector;
 using UI.Windows.Game.Card.Unit.Fx;
 using UI.Windows.Game.Card.Unit.Impacts;
@@ -24,24 +25,13 @@ namespace UI.Windows.Game.Card.Unit
         public UIHighlightMaterialController HighlightController { get; private set; }
         public Material HighlightMaterialTemplate =>
             BattleHighlightStyle.ResolveHighlightMaterial(_resolveHighlightTemplateSource());
-
-        private Material _resolveHighlightTemplateSource()
-        {
-            if (_defaultHighlightMaterial != null && BattleHighlightStyle.IsHighlightCompatible(_defaultHighlightMaterial))
-            {
-                return _defaultHighlightMaterial;
-            }
-
-            if (Render?.Image?.material != null && BattleHighlightStyle.IsHighlightCompatible(Render.Image.material))
-            {
-                return Render.Image.material;
-            }
-
-            return BattleHighlightStyle.HighlightMaterial;
-        }
-        [field: SerializeField] public UIImage Render { get; private set; }
-        [SerializeField] private UIHighlightMaterialController.EType _highlightType = UIHighlightMaterialController.EType.Outline;
+        public bool UsesSkeletalDisplay => _skeletalDisplay != null && _skeletalDisplay.IsActive;
+        public bool IsRightSide => _isRightSide;
         
+        [field: SerializeField] public UIImage Render { get; private set; }
+
+        [SerializeField] private UIHighlightMaterialController.EType _highlightType = UIHighlightMaterialController.EType.Outline;
+
         [field: Title("Params")]
         [field: SerializeField] public UIImage HealthFill { get; private set; }
         [field: SerializeField] public UIText HealthText { get; private set; }
@@ -49,7 +39,6 @@ namespace UI.Windows.Game.Card.Unit
         [field: SerializeField] public UIBattleStateIcon Attack { get; private set; }
         
         [SerializeField] private UIText _companionInfo;
-
         [SerializeField] private UIButton _clickArea;
         [SerializeField] private BattleUnitSkeletalDisplay _skeletalDisplay;
         [SerializeField] private UnitVisualLibrary _visualLibrary;
@@ -68,6 +57,7 @@ namespace UI.Windows.Game.Card.Unit
 
         private readonly Dictionary<ECardImpactType, ICardImpact> _cardImpacts = new Dictionary<ECardImpactType, ICardImpact>();
         private readonly Dictionary<EUnitImpactType, IUnitImpact> _unitImpacts = new Dictionary<EUnitImpactType, IUnitImpact>();
+       
         private UnitFxRunner _fxRunner;
         private Color _defaultRenderColor = Color.white;
         private bool _isRightSide;
@@ -75,10 +65,41 @@ namespace UI.Windows.Game.Card.Unit
         private UnitVisualProfile _activeProfile;
         private Material _defaultHighlightMaterial;
         private Sprite _staticRenderSprite;
+        private string _appliedSkeletalUnitId;
+        private UnitVisualProfile _appliedSkeletalProfile;
+        
+        
+        private void OnEnable()
+        {
+            _cacheRenderDefaults();
+            HighlightController = new UIHighlightMaterialController(_getHighlightGraphic(), _highlightType);
+            _applyRenderMirror();
+            _fxRunner = new UnitFxRunner(this);
+            _initializeImpactDictionaries();
+            _ensureSkeletalDisplay();
 
-        public bool IsRightSide => _isRightSide;
-        public bool UsesSkeletalDisplay => _skeletalDisplay != null && _skeletalDisplay.IsActive;
+            if (_clickArea != null)
+            {
+                _clickArea.Clicked += _onClicked;
+                _clickArea.Selected += _onHoverEntered;
+                _clickArea.Deselected += _onHoverExited;
+            }
+        }
 
+        private void OnDisable()
+        {
+            HighlightController?.Reset();
+            _fxRunner?.Stop();
+            _skeletalDisplay?.Clear();
+
+            if (_clickArea != null)
+            {
+                _clickArea.Clicked -= _onClicked;
+                _clickArea.Selected -= _onHoverEntered;
+                _clickArea.Deselected -= _onHoverExited;
+            }
+        }
+        
         public void Set(BattleUnit unit)
         {
             HighlightController?.Reset();
@@ -113,36 +134,51 @@ namespace UI.Windows.Game.Card.Unit
             _skeletalDisplay?.SetFacing(!isRightSide);
             _applyRenderMirror();
         }
-
-        private void OnEnable()
+        
+        public void PlayCardFx(ECardType cardType)
         {
-            _cacheRenderDefaults();
-            HighlightController = new UIHighlightMaterialController(_getHighlightGraphic(), _highlightType);
-            _applyRenderMirror();
-            _fxRunner = new UnitFxRunner(this);
-            _initializeImpactDictionaries();
-            _ensureSkeletalDisplay();
-
-            if (_clickArea != null)
+            CardFxBinding binding = _resolveCardBinding(cardType);
+            ECardImpactType impactType = binding != null ? binding.ImpactType : _defaultCardImpactType;
+            if (_cardImpacts.TryGetValue(impactType, out ICardImpact impact))
             {
-                _clickArea.Clicked += _onClicked;
-                _clickArea.Selected += _onHoverEntered;
-                _clickArea.Deselected += _onHoverExited;
+                _fxRunner?.Play(impact, binding?.Settings ?? _defaultCardFxSettings);
             }
         }
 
-        private void OnDisable()
+        public void PlayReactionFx(EEffectType effectType)
         {
-            HighlightController?.Reset();
-            _fxRunner?.Stop();
-            _skeletalDisplay?.Clear();
-
-            if (_clickArea != null)
+            EffectReactionBinding binding = _resolveReactionBinding(effectType);
+            EUnitImpactType impactType = binding != null ? binding.ImpactType : _defaultUnitImpactType;
+            if (_unitImpacts.TryGetValue(impactType, out IUnitImpact impact))
             {
-                _clickArea.Clicked -= _onClicked;
-                _clickArea.Selected -= _onHoverEntered;
-                _clickArea.Deselected -= _onHoverExited;
+                _fxRunner?.Play(impact, binding?.Settings ?? _defaultReactionFxSettings);
             }
+        }
+
+        [Button]
+        public void PlayCastAnimation(AnimatorKey.ECardCastAnimation castAnimation)
+        {
+            if (castAnimation == AnimatorKey.ECardCastAnimation.None || _skeletalDisplay == null)
+            {
+                return;
+            }
+
+            _skeletalDisplay.PlayCastAnimation(castAnimation);
+        }
+        
+        private Material _resolveHighlightTemplateSource()
+        {
+            if (_defaultHighlightMaterial != null && BattleHighlightStyle.IsHighlightCompatible(_defaultHighlightMaterial))
+            {
+                return _defaultHighlightMaterial;
+            }
+
+            if (Render?.Image?.material != null && BattleHighlightStyle.IsHighlightCompatible(Render.Image.material))
+            {
+                return Render.Image.material;
+            }
+
+            return BattleHighlightStyle.HighlightMaterial;
         }
 
         private void _onClicked()
@@ -165,25 +201,7 @@ namespace UI.Windows.Game.Card.Unit
             HoverExited?.Invoke(this);
         }
 
-        public void PlayCardFx(ECardType cardType)
-        {
-            CardFxBinding binding = _resolveCardBinding(cardType);
-            ECardImpactType impactType = binding != null ? binding.ImpactType : _defaultCardImpactType;
-            if (_cardImpacts.TryGetValue(impactType, out ICardImpact impact))
-            {
-                _fxRunner?.Play(impact, binding?.Settings ?? _defaultCardFxSettings);
-            }
-        }
-
-        public void PlayReactionFx(EEffectType effectType)
-        {
-            EffectReactionBinding binding = _resolveReactionBinding(effectType);
-            EUnitImpactType impactType = binding != null ? binding.ImpactType : _defaultUnitImpactType;
-            if (_unitImpacts.TryGetValue(impactType, out IUnitImpact impact))
-            {
-                _fxRunner?.Play(impact, binding?.Settings ?? _defaultReactionFxSettings);
-            }
-        }
+       
 
         private CardFxBinding _resolveCardBinding(ECardType cardType)
         {
@@ -399,7 +417,16 @@ namespace UI.Windows.Game.Card.Unit
         private void _applyVisual(BattleUnit unit)
         {
             _activeProfile = _resolveProfile(unit);
+
+            if (_canKeepSkeletalSession(unit))
+            {
+                _skeletalDisplay.SetFacing(!_isRightSide);
+                return;
+            }
+
             _skeletalDisplay?.Clear();
+            _appliedSkeletalUnitId = null;
+            _appliedSkeletalProfile = null;
             _restoreStaticRenderMaterial();
 
             if (_activeProfile == null)
@@ -427,6 +454,8 @@ namespace UI.Windows.Game.Card.Unit
                 _syncClickRaycastForSkeletalDisplay();
                 _cacheRenderDefaults();
                 _refreshHighlightController();
+                _appliedSkeletalUnitId = unit.UnitId;
+                _appliedSkeletalProfile = _activeProfile;
                 return;
             }
 
@@ -435,6 +464,16 @@ namespace UI.Windows.Game.Card.Unit
                 Render.Image.enabled = true;
                 Render.SetSprite(_activeProfile.StaticSprite);
             }
+        }
+
+        private bool _canKeepSkeletalSession(BattleUnit unit)
+        {
+            return unit != null
+                   && _activeProfile != null
+                   && _activeProfile.DisplayMode == UnitVisualProfile.EDisplayMode.Skeletal
+                   && UsesSkeletalDisplay
+                   && unit.UnitId == _appliedSkeletalUnitId
+                   && ReferenceEquals(_activeProfile, _appliedSkeletalProfile);
         }
 
         private void _syncClickRaycastForSkeletalDisplay()

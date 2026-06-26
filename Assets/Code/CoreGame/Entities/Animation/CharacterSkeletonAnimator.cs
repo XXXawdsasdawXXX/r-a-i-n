@@ -1,6 +1,7 @@
 using CoreGame.Entities.Animation;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -14,9 +15,9 @@ namespace CoreGame.Entities.Characters
         [SerializeField] private Transform _viewBody;
 
         private AnimatorKey.ECharacterAnimationState _currentState = AnimatorKey.ECharacterAnimationState.Idle;
-
         public AnimatorKey.ECharacterAnimationState CurrentState => _currentState;
 
+            
         private void Awake()
         {
             _animator ??= GetComponentInChildren<Animator>();
@@ -42,6 +43,17 @@ namespace CoreGame.Entities.Characters
             _viewBody.localScale = scale;
         }
 
+        public void PlayCastAnimation(AnimatorKey.ECardCastAnimation key)
+        {
+            if (key is AnimatorKey.ECardCastAnimation.None || !AnimatorKey.CAST_PARAMS.ContainsKey(key))
+            {
+                return;
+            }
+            
+            _animator?.SetTrigger(AnimatorKey.CAST_PARAMS[key]);
+            _animator?.Update(0f);
+        }
+        
         public void TriggerEnter()
         {
             _animator?.SetTrigger(AnimatorKey.PARAM_ENTER);

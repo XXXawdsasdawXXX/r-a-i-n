@@ -14,7 +14,7 @@ namespace CoreGame.Card.Logic.StateMachine
         public EBattlePhase Phase => EBattlePhase.EnemyTurn;
         public bool IsInitialized { get; set; }
 
-        private const int AI_ACTION_DELAY_MS = 1000;
+        private const int AI_ACTION_DELAY_MS = 2000;
         private CancellationTokenSource _cts;
 
         public EnemyTurnState(BattleStateMachine machine)

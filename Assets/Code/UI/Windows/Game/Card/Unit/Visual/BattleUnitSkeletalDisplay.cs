@@ -1,5 +1,4 @@
-using CoreGame.Entities.Characters;
-using UI.Windows.Game.Card;
+using CoreGame.Entities.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,6 +71,16 @@ namespace UI.Windows.Game.Card.Unit.Visual
             _isActive = false;
         }
 
+        public void PlayCastAnimation(AnimatorKey.ECardCastAnimation castAnimation)
+        {
+            if (_session == null || _session.Animator == null)
+            {
+                return;
+            }
+            
+            _session.Animator.PlayCastAnimation(castAnimation);
+        }
+        
         private void OnDisable()
         {
             Clear();
